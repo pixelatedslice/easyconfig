@@ -6,4 +6,5 @@ dependencyResolutionManagement {
 }
 
 rootProject.name = "EasyConfig"
-include("config-api", "provider-api", "shared-api")
+include("api-definition", "api-implementation", "api-serialization-bukkit:definition")
+include("api-serialization-bukkit:implementation")
