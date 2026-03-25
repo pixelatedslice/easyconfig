@@ -1,9 +1,10 @@
 package com.pixelatedslice.easyconfig.api;
 
+import com.google.common.reflect.TypeToken;
 import com.pixelatedslice.easyconfig.api.fileformat.FileFormat;
 import com.pixelatedslice.easyconfig.api.fileformat.FileFormatProvider;
 import com.pixelatedslice.easyconfig.api.serialization.Serializer;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 import java.util.Map;
 import java.util.Optional;
@@ -27,6 +28,10 @@ public interface EasyConfig {
      */
     Pattern KEY_REGEX = Pattern.compile("^[a-zA-Z0-9._-]*[a-zA-Z0-9]$");
 
+    static boolean isSimpleTypeToken(TypeToken<?> typeToken) {
+        return typeToken.getType() instanceof Class<?>;
+    }
+
     /**
      * Creates and returns a new copy of the current {@code EasyConfig} instance.
      * The returned copy will have the same configurations and registered serializers
@@ -35,7 +40,7 @@ public interface EasyConfig {
      *
      * @return a non-null {@code EasyConfig} instance that is a copy of the current instance.
      */
-    @NotNull EasyConfig copy();
+    @NonNull EasyConfig copy();
 
     /**
      * Retrieves a map of serializers associated with their respective target classes.
@@ -44,7 +49,7 @@ public interface EasyConfig {
      * serializers responsible for handling the serialization and deserialization
      * of objects of those classes.
      */
-    @NotNull Map<@NotNull Class<?>, @NotNull Serializer<?>> serializers();
+    @NonNull Map<@NonNull Class<?>, @NonNull Serializer<?>> serializers();
 
     /**
      * Retrieves an {@link Optional} containing the {@link Serializer} associated with the specified class.
@@ -58,7 +63,7 @@ public interface EasyConfig {
      * none is found; never null
      * @throws NullPointerException if the {@code clazz} parameter is null
      */
-    <T> @NotNull Optional<@NotNull Serializer<T>> serializer(@NotNull Class<T> clazz);
+    <T> @NonNull Optional<@NonNull Serializer<T>> serializer(@NonNull Class<T> clazz);
 
     /**
      * Registers one or more {@link Serializer} instances for use within the configuration system.
@@ -69,7 +74,7 @@ public interface EasyConfig {
      *                    must not be null or contain null elements.
      * @throws NullPointerException if the {@code serializers} array or any of its elements is null.
      */
-    void registerSerializers(@NotNull Serializer<?>... serializers);
+    void registerSerializers(@NonNull Serializer<?>... serializers);
 
     /**
      * Unregisters one or more serializers associated with the specified classes.
@@ -82,7 +87,7 @@ public interface EasyConfig {
      *                or contain null elements.
      * @throws NullPointerException if the {@code classes} array or any of its elements is null.
      */
-    void unregisterSerializers(@NotNull Class<?>... classes);
+    void unregisterSerializers(@NonNull Class<?>... classes);
 
     /**
      * Retrieves a map of registered file format providers associated with their respective file format classes.
@@ -93,7 +98,7 @@ public interface EasyConfig {
      * are non-null instances of {@link FileFormatProvider} responsible for handling the associated file formats.
      * @throws NullPointerException if any key or value in the map is null.
      */
-    @NotNull Map<@NotNull Class<? extends FileFormat>, @NotNull FileFormatProvider<?, ?>> providers();
+    @NonNull Map<@NonNull Class<? extends FileFormat>, @NonNull FileFormatProvider<?, ?>> providers();
 
     /**
      * Retrieves an {@link Optional} containing the {@link FileFormatProvider} for the specified
@@ -107,8 +112,8 @@ public interface EasyConfig {
      * never null
      * @throws NullPointerException if the {@code fileFormatClass} parameter is null
      */
-    @NotNull Optional<@NotNull FileFormatProvider<?, ?>> provider(
-            @NotNull Class<? extends FileFormat> fileFormatClass
+    @NonNull Optional<@NonNull FileFormatProvider<?, ?>> provider(
+            @NonNull Class<? extends FileFormat> fileFormatClass
     );
 
     /**
@@ -120,7 +125,7 @@ public interface EasyConfig {
      *                  must not be null or contain null elements.
      * @throws NullPointerException if the {@code providers} array or any of its elements is null.
      */
-    void registerProviders(@NotNull FileFormatProvider<?, ?>... providers);
+    void registerProviders(@NonNull FileFormatProvider<?, ?>... providers);
 
     /**
      * Unregisters one or more {@link FileFormatProvider} instances from the configuration system.
@@ -130,5 +135,5 @@ public interface EasyConfig {
      *                  must not be null or contain null elements.
      * @throws NullPointerException if the {@code providers} array or any of its elements is null.
      */
-    void unregisterProviders(@NotNull FileFormatProvider<?, ?>... providers);
+    void unregisterProviders(@NonNull FileFormatProvider<?, ?>... providers);
 }

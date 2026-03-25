@@ -1,9 +1,10 @@
 package com.pixelatedslice.easyconfig.api.config.node;
 
+import com.google.common.reflect.TypeToken;
 import com.pixelatedslice.easyconfig.api.config.Commentable;
 import com.pixelatedslice.easyconfig.api.config.section.ConfigSection;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Optional;
 
@@ -22,7 +23,7 @@ public interface ConfigNode<T> extends Commentable {
      *
      * @return the non-null key of this configuration node
      */
-    @NotNull String key();
+    @NonNull String key();
 
     /**
      * Retrieves the optional value associated with this configuration node.
@@ -32,7 +33,7 @@ public interface ConfigNode<T> extends Commentable {
      * @return an {@link Optional} containing the value if it is present, or an empty {@link Optional} if no value is
      * set
      */
-    @NotNull Optional<T> value();
+    @NonNull Optional<@NonNull T> value();
 
     /**
      * Sets the value associated with this configuration node.
@@ -42,12 +43,16 @@ public interface ConfigNode<T> extends Commentable {
     void setValue(@Nullable T value);
 
     /**
-     * Retrieves the class of the value associated with this configuration node.
-     * The returned class represents the type parameter {@code T} of this node.
+     * Creates and returns a {@link TypeToken} instance that represents the type of this node.
+     * The returned {@code TypeToken} reflects the generic type {@code T} associated with the
+     * implementation's class, providing type information for runtime usage.
      *
-     * @return the non-null class of the value associated with this node
+     * @return a {@code TypeToken} representing the generic type {@code T} of this configuration node
      */
-    @NotNull Class<@NotNull T> valueClass();
+    default @NonNull TypeToken<@NonNull T> typeToken() {
+        return new TypeToken<>(this.getClass()) {
+        };
+    }
 
     /**
      * Retrieves the parent configuration section of this configuration node, if present.
@@ -58,7 +63,7 @@ public interface ConfigNode<T> extends Commentable {
      * or an empty {@link Optional} if this node has no parent
      * @throws NullPointerException if the parent configuration section is null
      */
-    @NotNull Optional<@NotNull ConfigSection> parent();
+    @NonNull Optional<@NonNull ConfigSection> parent();
 
     /**
      * Sets the parent configuration section for this configuration node.

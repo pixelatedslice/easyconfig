@@ -1,15 +1,15 @@
 package com.pixelatedslice.easyconfig.impl.serialization.builtin.bukkit;
 
+import com.google.common.reflect.TypeToken;
 import com.pixelatedslice.easyconfig.api.config.node.ConfigNode;
-import com.pixelatedslice.easyconfig.api.config.node.ConfigNodeBuilder;
 import com.pixelatedslice.easyconfig.api.config.section.ConfigSection;
 import com.pixelatedslice.easyconfig.api.config.section.ConfigSectionBuilder;
 import com.pixelatedslice.easyconfig.api.serialization.builtin.bukkit.LocationSerializer;
 import com.pixelatedslice.easyconfig.impl.config.section.ConfigSectionBuilderImpl;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.jetbrains.annotations.NotNull;
 import org.jspecify.annotations.NonNull;
+
 
 public final class LocationSerializerImpl implements LocationSerializer {
     private static volatile LocationSerializerImpl INSTANCE;
@@ -30,36 +30,24 @@ public final class LocationSerializerImpl implements LocationSerializer {
     }
 
     @Override
-    public @NotNull ConfigSection serialize(@NotNull Location value) {
-        ConfigSectionBuilder section = new ConfigSectionBuilderImpl();
+    public @NonNull ConfigSection serialize(@NonNull Location value) {
+        ConfigSectionBuilder sectionBuilder = new ConfigSectionBuilderImpl();
 
         if (value.getWorld() != null) {
-            section.node("world", String.class, (ConfigNodeBuilder<String> builder) -> {
-                builder.value(value.getWorld().getName());
-            });
+            sectionBuilder.node("world", value.getWorld().getName(), TypeToken.of(String.class));
         }
 
-        section.node("x", Double.class, (ConfigNodeBuilder<Double> builder) -> {
-            builder.value(value.getX());
-        });
-        section.node("y", Double.class, (ConfigNodeBuilder<Double> builder) -> {
-            builder.value(value.getY());
-        });
-        section.node("z", Double.class, (ConfigNodeBuilder<Double> builder) -> {
-            builder.value(value.getZ());
-        });
-        section.node("yaw", Float.class, (ConfigNodeBuilder<Float> builder) -> {
-            builder.value(value.getYaw());
-        });
-        section.node("pitch", Float.class, (ConfigNodeBuilder<Float> builder) -> {
-            builder.value(value.getPitch());
-        });
+        sectionBuilder.node("x", value.getX());
+        sectionBuilder.node("y", value.getY());
+        sectionBuilder.node("z", value.getZ());
+        sectionBuilder.node("yaw", value.getYaw());
+        sectionBuilder.node("pitch", value.getPitch());
 
-        return section.build();
+        return sectionBuilder.build();
     }
 
     @Override
-    public @NonNull Location deserialize(@NotNull ConfigSection section) {
+    public @NonNull Location deserialize(@NonNull ConfigSection section) {
         var world = section
                 .childNode(String.class, "world")
                 .flatMap(ConfigNode::value)

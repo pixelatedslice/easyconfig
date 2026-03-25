@@ -3,7 +3,8 @@ package com.pixelatedslice.easyconfig.api.serialization.builtin.bukkit;
 import com.pixelatedslice.easyconfig.api.config.section.ConfigSection;
 import com.pixelatedslice.easyconfig.api.serialization.builtin.BuiltInBukkitSerializer;
 import org.bukkit.Location;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
+
 
 /**
  * An interface for serializing and deserializing {@link Location} objects into and from
@@ -23,7 +24,7 @@ public interface LocationSerializer extends BuiltInBukkitSerializer<Location> {
      *                              which should not occur because the implementation guarantees non-nullity.
      */
     @Override
-    default @NotNull Class<Location> forClass() {
+    default @NonNull Class<Location> forClass() {
         return Location.class;
     }
 }

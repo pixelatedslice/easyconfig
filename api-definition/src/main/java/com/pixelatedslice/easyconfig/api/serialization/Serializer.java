@@ -2,7 +2,7 @@ package com.pixelatedslice.easyconfig.api.serialization;
 
 import com.pixelatedslice.easyconfig.api.config.section.ConfigSection;
 import com.pixelatedslice.easyconfig.api.serialization.builtin.BuiltInSerializer;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 /**
  * Represents a contract for serializing and deserializing objects of a specific type.
@@ -20,7 +20,7 @@ public interface Serializer<T> {
      * otherwise.
      * @throws NullPointerException if the provided {@code serializer} is {@code null}.
      */
-    static <T> boolean isBuiltIn(@NotNull Serializer<T> serializer) {
+    static <T> boolean isBuiltIn(@NonNull Serializer<T> serializer) {
         return serializer instanceof BuiltInSerializer<T>;
     }
 
@@ -29,7 +29,7 @@ public interface Serializer<T> {
      *
      * @return the {@link Class} object corresponding to the type {@code T}; never {@code null}.
      */
-    @NotNull Class<@NotNull T> forClass();
+    @NonNull Class<@NonNull T> forClass();
 
     /**
      * Serializes the provided value into a {@link ConfigSection}.
@@ -38,7 +38,7 @@ public interface Serializer<T> {
      * @return the non-null {@link ConfigSection} representation of the serialized value
      * @throws NullPointerException if the provided {@code value} is {@code null}
      */
-    @NotNull ConfigSection serialize(@NotNull T value);
+    @NonNull ConfigSection serialize(@NonNull T value);
 
     /**
      * Deserializes the provided configuration section into an object of type {@code T}.
@@ -48,5 +48,5 @@ public interface Serializer<T> {
      * @return the deserialized object of type {@code T}.
      * @throws NullPointerException if the provided {@code section} is {@code null}.
      */
-    @NotNull T deserialize(@NotNull ConfigSection section);
+    @NonNull T deserialize(@NonNull ConfigSection section);
 }

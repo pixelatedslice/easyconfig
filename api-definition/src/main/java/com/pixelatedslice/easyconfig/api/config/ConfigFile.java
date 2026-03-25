@@ -1,7 +1,7 @@
 package com.pixelatedslice.easyconfig.api.config;
 
 import com.pixelatedslice.easyconfig.api.config.section.ConfigSection;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 import java.io.IOException;
 import java.nio.file.Path;
@@ -25,9 +25,9 @@ public interface ConfigFile extends ConfigSection {
      *
      * @return the file path as a {@link Path} object
      */
-    @NotNull Path filePath();
+    @NonNull Path filePath();
 
-    /*da*
+    /**
      * Persists the current state of the configuration to the underlying storage.
      * This method writes all the modifications made to the configuration nodes
      * and their values back to the storage medium (e.g., file, database) associated

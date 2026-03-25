@@ -1,5 +1,6 @@
 open module com.pixelatedslice.easyconfig.api {
-    requires org.jetbrains.annotations;
+    requires com.google.common;
+    requires org.jspecify;
 
     exports com.pixelatedslice.easyconfig.api.serialization.builtin to com.pixelatedslice.easyconfig.api.serialization.builtin.bukkit;
 

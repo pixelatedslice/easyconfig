@@ -1,6 +1,6 @@
 package com.pixelatedslice.easyconfig.api.exception;
 
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 import java.util.Collection;
 
@@ -13,11 +13,11 @@ import java.util.Collection;
  * the unregistering attempt was made.
  */
 public class BuiltInSerializerUnregisterException extends RuntimeException {
-    public BuiltInSerializerUnregisterException(@NotNull Collection<@NotNull Class<?>> classes) {
+    public BuiltInSerializerUnregisterException(@NonNull Collection<@NonNull Class<?>> classes) {
         super(message(classes));
     }
 
-    private static String message(@NotNull Collection<@NotNull Class<?>> classes) {
+    private static String message(@NonNull Collection<@NonNull Class<?>> classes) {
         return "The built-in serializers cannot be unregistered!\n" +
                 "Tried unregistering the serializers for the classes: " +
                 String.join("\", \"", classes.stream().map(Class::getName).toList());

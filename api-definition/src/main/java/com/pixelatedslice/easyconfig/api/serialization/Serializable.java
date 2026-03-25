@@ -1,6 +1,7 @@
 package com.pixelatedslice.easyconfig.api.serialization;
 
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
+
 
 /**
  * Defines a contract for objects that can be serialized and deserialized while also
@@ -25,7 +26,7 @@ public interface Serializable<T extends Serializable<T>> extends Serializer<T> {
      */
     @SuppressWarnings("unchecked")
     @Override
-    default @NotNull Class<T> forClass() {
+    default @NonNull Class<T> forClass() {
         return (Class<T>) this.getClass();
     }
 }

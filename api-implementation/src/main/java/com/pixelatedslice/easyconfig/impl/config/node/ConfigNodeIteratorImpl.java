@@ -3,8 +3,8 @@ package com.pixelatedslice.easyconfig.impl.config.node;
 import com.pixelatedslice.easyconfig.api.config.node.ConfigNode;
 import com.pixelatedslice.easyconfig.api.config.node.ConfigNodeIterator;
 import com.pixelatedslice.easyconfig.api.config.section.ConfigSection;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 import java.util.LinkedList;
 import java.util.NoSuchElementException;
@@ -33,7 +33,7 @@ public class ConfigNodeIteratorImpl implements ConfigNodeIterator {
      * The queue ensures proper order of processing for nested sections and provides a mechanism
      * for managing traversal at different levels of the configuration hierarchy.
      */
-    private final @NotNull Queue<@NotNull ConfigSection> sectionQueue = new LinkedList<>();
+    private final @NonNull Queue<@NonNull ConfigSection> sectionQueue = new LinkedList<>();
     /**
      * A queue that maintains {@link ConfigNode} instances to be processed in a
      * breadth-first manner. This queue is used internally by the {@code ConfigNodeIteratorImpl}
@@ -50,7 +50,7 @@ public class ConfigNodeIteratorImpl implements ConfigNodeIterator {
      * This queue operates as a core structure for managing configuration node traversal
      * state within the {@code ConfigNodeIteratorImpl}.
      */
-    private final @NotNull Queue<@NotNull ConfigNode<?>> nodeQueue = new LinkedList<>();
+    private final @NonNull Queue<@NonNull ConfigNode<?>> nodeQueue = new LinkedList<>();
 
     /**
      * Creates an instance of {@code ConfigNodeIteratorImpl} and initializes it
@@ -61,7 +61,7 @@ public class ConfigNodeIteratorImpl implements ConfigNodeIterator {
      *                      will begin traversing the configuration nodes
      * @throws NullPointerException if {@code rootContainer} is null
      */
-    public ConfigNodeIteratorImpl(@NotNull ConfigSection rootContainer) {
+    public ConfigNodeIteratorImpl(@NonNull ConfigSection rootContainer) {
         Objects.requireNonNull(rootContainer);
         this.enqueueSection(rootContainer);
     }
@@ -72,7 +72,7 @@ public class ConfigNodeIteratorImpl implements ConfigNodeIterator {
      * @param container the non-null {@code ConfigSection} to be added to the section queue
      * @throws NullPointerException if {@code container} is null
      */
-    private void enqueueSection(@NotNull ConfigSection container) {
+    private void enqueueSection(@NonNull ConfigSection container) {
         this.sectionQueue.add(container);
     }
 

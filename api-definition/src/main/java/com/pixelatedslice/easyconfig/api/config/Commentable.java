@@ -1,6 +1,6 @@
 package com.pixelatedslice.easyconfig.api.config;
 
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 import java.util.Collection;
 
@@ -16,7 +16,7 @@ public interface Commentable {
      * @return a collection of comments as {@link Collection<String>}
      * @throws NullPointerException if a null value is encountered
      */
-    @NotNull Collection<String> comments();
+    @NonNull Collection<String> comments();
 
     /**
      * Adds a comment to the collection of comments.
@@ -24,7 +24,7 @@ public interface Commentable {
      * @param comment the comment to be added, must not be null
      * @throws NullPointerException if the comment is null
      */
-    void addComment(@NotNull String comment);
+    void addComment(@NonNull String comment);
 
     /**
      * Removes the specified comment from the collection of comments.
@@ -33,7 +33,7 @@ public interface Commentable {
      * @param comment the comment to be removed, must not be null
      * @throws NullPointerException if the provided comment is null
      */
-    void removeComment(@NotNull String comment);
+    void removeComment(@NonNull String comment);
 
     /**
      * Removes the comment at the specified index within the collection of comments.

@@ -1,7 +1,8 @@
 package com.pixelatedslice.easyconfig.api.fileformat;
 
 import com.pixelatedslice.easyconfig.api.fileformat.builtin.BuiltInFileFormat;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
+
 
 /**
  * Represents a file format by defining a method to retrieve its associated file extension.
@@ -23,7 +24,7 @@ public interface FileFormat {
      * {@code false} otherwise
      * @throws NullPointerException if {@code fileFormat} is null
      */
-    static boolean isBuiltIn(@NotNull FileFormat fileFormat) {
+    static boolean isBuiltIn(@NonNull FileFormat fileFormat) {
         return fileFormat instanceof BuiltInFileFormat;
     }
 

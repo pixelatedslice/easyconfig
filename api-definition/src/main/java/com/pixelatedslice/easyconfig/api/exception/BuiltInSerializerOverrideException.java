@@ -1,7 +1,7 @@
 package com.pixelatedslice.easyconfig.api.exception;
 
 import com.pixelatedslice.easyconfig.api.serialization.Serializer;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 import java.util.Map;
 
@@ -16,17 +16,17 @@ import java.util.Map;
 public class BuiltInSerializerOverrideException extends RuntimeException {
     private static final String FORMAT = "- %s: %s -> %s\n";
 
-    public BuiltInSerializerOverrideException(@NotNull Map<
-            ? extends @NotNull Serializer<?>, /* Built-in Serializer*/
-            ? extends @NotNull Serializer<?> /* Overriding Serializer */
+    public BuiltInSerializerOverrideException(@NonNull Map<
+            ? extends @NonNull Serializer<?>, /* Built-in Serializer*/
+            ? extends @NonNull Serializer<?> /* Overriding Serializer */
             > serializers
     ) {
         super(message(serializers));
     }
 
-    private static String message(@NotNull Map<
-            ? extends @NotNull Serializer<?>, /* Built-in Serializer*/
-            ? extends @NotNull Serializer<?> /* Overriding Serializer */
+    private static String message(@NonNull Map<
+            ? extends @NonNull Serializer<?>, /* Built-in Serializer*/
+            ? extends @NonNull Serializer<?> /* Overriding Serializer */
             > serializers
     ) {
         var builder = new StringBuilder();

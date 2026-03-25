@@ -13,7 +13,6 @@ subprojects {
 
 
     dependencies {
-        compileOnly("org.jetbrains:annotations:26.1.0")
     }
 
     tasks.test {

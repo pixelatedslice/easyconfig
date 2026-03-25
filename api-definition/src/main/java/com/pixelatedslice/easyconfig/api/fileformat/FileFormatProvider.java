@@ -1,7 +1,7 @@
 package com.pixelatedslice.easyconfig.api.fileformat;
 
 import com.pixelatedslice.easyconfig.api.config.ConfigFile;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 import java.nio.file.Path;
 
@@ -47,7 +47,7 @@ public interface FileFormatProvider<T, F extends FileFormat> {
      * @param configFile the configuration file to be written to the target path
      * @throws NullPointerException if {@code path} or {@code configFile} is {@code null}
      */
-    void write(@NotNull Path path, @NotNull ConfigFile configFile);
+    void write(@NonNull Path path, @NonNull ConfigFile configFile);
 
     /**
      * Reads a configuration file from the specified file path and returns a {@link ConfigFile}
@@ -57,7 +57,7 @@ public interface FileFormatProvider<T, F extends FileFormat> {
      * @return the {@link ConfigFile} object representing the loaded configuration
      * @throws NullPointerException if the provided {@code path} is null
      */
-    ConfigFile read(@NotNull Path path);
+    ConfigFile read(@NonNull Path path);
 
     /**
      * Reads a configuration file from the specified path and returns an instance of the given configuration class.
@@ -68,7 +68,7 @@ public interface FileFormatProvider<T, F extends FileFormat> {
      * @return an instance of the specified {@link ConfigFile} subclass representing the loaded configuration
      * @throws NullPointerException if {@code path} or {@code configClass} is {@code null}
      */
-    <C extends ConfigFile> C read(@NotNull Path path, @NotNull Class<C> configClass);
+    <C extends ConfigFile> C read(@NonNull Path path, @NonNull Class<C> configClass);
 
     /**
      * Generates a new {@link Path} by appending the file extension associated with this file format
@@ -78,7 +78,7 @@ public interface FileFormatProvider<T, F extends FileFormat> {
      * @return a new {@link Path} instance with the file extension appended to the file name
      * @throws NullPointerException if the provided {@code path} is {@code null}
      */
-    default Path pathWithExtension(@NotNull Path path) {
+    default Path pathWithExtension(@NonNull Path path) {
         return path.resolve(path.getFileName() + "." + this.fileFormatInstance().fileExtension());
     }
 }

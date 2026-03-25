@@ -2,7 +2,7 @@ package com.pixelatedslice.easyconfig.api.config.section;
 
 import com.pixelatedslice.easyconfig.api.EasyConfig;
 import com.pixelatedslice.easyconfig.api.exception.BrokenNodeKeyException;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 import java.util.*;
 
@@ -23,9 +23,9 @@ public interface ConfigSectionIterator extends Iterator<ConfigSection> {
      * or an empty {@link Optional} if no matching section is found
      * @throws NullPointerException if {@code nestedSections} or {@code providedKeys} is null
      */
-    static @NotNull Optional<@NotNull ConfigSection> findSection(
-            @NotNull List<@NotNull ConfigSection> nestedSections,
-            @NotNull String... providedKeys
+    static @NonNull Optional<@NonNull ConfigSection> findSection(
+            @NonNull List<@NonNull ConfigSection> nestedSections,
+            @NonNull String... providedKeys
     ) {
         Objects.requireNonNull(nestedSections);
         Objects.requireNonNull(providedKeys);
@@ -77,9 +77,9 @@ public interface ConfigSectionIterator extends Iterator<ConfigSection> {
      *                                EasyConfig.KEY_REGEX}
      */
     @SuppressWarnings("DuplicatedCode")
-    static @NotNull Optional<@NotNull ConfigSection> findSectionButInTheBukkitAPIStyle(
-            @NotNull List<@NotNull ConfigSection> nestedSections,
-            @NotNull String key
+    static @NonNull Optional<@NonNull ConfigSection> findSectionButInTheBukkitAPIStyle(
+            @NonNull List<@NonNull ConfigSection> nestedSections,
+            @NonNull String key
     ) {
         Objects.requireNonNull(nestedSections);
         Objects.requireNonNull(key);
@@ -109,6 +109,6 @@ public interface ConfigSectionIterator extends Iterator<ConfigSection> {
      * @throws NoSuchElementException if the next element is null
      */
     @Override
-    @NotNull
+    @NonNull
     ConfigSection next();
 }

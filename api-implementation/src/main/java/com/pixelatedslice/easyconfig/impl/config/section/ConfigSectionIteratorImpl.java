@@ -3,7 +3,7 @@ package com.pixelatedslice.easyconfig.impl.config.section;
 import com.pixelatedslice.easyconfig.api.config.node.ConfigNodeIterator;
 import com.pixelatedslice.easyconfig.api.config.section.ConfigSection;
 import com.pixelatedslice.easyconfig.api.config.section.ConfigSectionIterator;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 import java.util.*;
 
@@ -22,7 +22,7 @@ public class ConfigSectionIteratorImpl implements ConfigSectionIterator {
      * @param rootSection the non-null root configuration section from which traversal begins
      * @throws NullPointerException if {@code rootSection} is null
      */
-    public ConfigSectionIteratorImpl(@NotNull ConfigSection rootSection) {
+    public ConfigSectionIteratorImpl(@NonNull ConfigSection rootSection) {
         Objects.requireNonNull(rootSection);
         this.nodeStack = new ArrayDeque<>(rootSection.nestedSections());
     }
@@ -44,13 +44,13 @@ public class ConfigSectionIteratorImpl implements ConfigSectionIterator {
      * reverse order to the stack.
      */
     @Override
-    public @NotNull ConfigSection next() {
+    public @NonNull ConfigSection next() {
         if (!this.hasNext()) {
             throw new NoSuchElementException();
         }
 
-        @NotNull ConfigSection current = this.nodeStack.pop();
-        List<@NotNull ConfigSection> children = current.nestedSections();
+        ConfigSection current = this.nodeStack.pop();
+        List<@NonNull ConfigSection> children = current.nestedSections();
 
         if (!children.isEmpty()) {
             for (int i = children.size() - 1; i >= 0; i--) {

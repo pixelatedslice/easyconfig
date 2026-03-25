@@ -1,6 +1,6 @@
 package com.pixelatedslice.easyconfig.api.config.section;
 
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 import java.util.Iterator;
 import java.util.List;
@@ -20,7 +20,7 @@ public interface WithNestedConfigSection {
      * @return a non-null list of non-null {@link ConfigSection} instances representing the nested sections
      * @throws NullPointerException if the method implementation tries to return a null list
      */
-    @NotNull List<@NotNull ConfigSection> nestedSections();
+    @NonNull List<@NonNull ConfigSection> nestedSections();
 
     /**
      * Retrieves a nested configuration section based on the provided keys.
@@ -33,7 +33,7 @@ public interface WithNestedConfigSection {
      * or an empty {@link Optional} if no matching section exists
      * @throws NullPointerException if the {@code providedKeys} array or any of its elements is null
      */
-    default @NotNull Optional<@NotNull ConfigSection> nestedSection(@NotNull String... providedKeys) {
+    default @NonNull Optional<@NonNull ConfigSection> nestedSection(@NonNull String... providedKeys) {
         return ConfigSectionIterator.findSection(this.nestedSections(), providedKeys);
     }
 
@@ -46,7 +46,7 @@ public interface WithNestedConfigSection {
      * matching the given key, or an empty {@link Optional} if no match is found
      * @throws NullPointerException if the provided {@code key} is null
      */
-    default @NotNull Optional<@NotNull ConfigSection> nestedSectionButInTheBukkitAPIStyle(@NotNull String key) {
+    default @NonNull Optional<@NonNull ConfigSection> nestedSectionButInTheBukkitAPIStyle(@NonNull String key) {
         return ConfigSectionIterator.findSectionButInTheBukkitAPIStyle(this.nestedSections(), key);
     }
 
@@ -56,7 +56,7 @@ public interface WithNestedConfigSection {
      * @param section the non-null configuration section to be added as a nested section
      * @throws NullPointerException if the provided {@code section} is null
      */
-    void addNestedSection(@NotNull ConfigSection section);
+    void addNestedSection(@NonNull ConfigSection section);
 
     /**
      * Removes a nested configuration section identified by the specified key.
@@ -66,7 +66,7 @@ public interface WithNestedConfigSection {
      * with the given key was found or removal was not possible
      * @throws NullPointerException if the {@code key} is null
      */
-    void removeNestedSection(@NotNull String key);
+    void removeNestedSection(@NonNull String key);
 
     /**
      * Provides an iterator to traverse through the nested configuration sections associated
@@ -77,5 +77,5 @@ public interface WithNestedConfigSection {
      * @throws NullPointerException if the method is called on a null context or if any
      *                              required non-null parameter is null
      */
-    @NotNull ConfigSectionIterator sectionIterator();
+    @NonNull ConfigSectionIterator sectionIterator();
 }

@@ -1,7 +1,8 @@
 package com.pixelatedslice.easyconfig.api.config.node;
 
+import com.google.common.reflect.TypeToken;
 import com.pixelatedslice.easyconfig.api.config.section.ConfigSection;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 import java.util.List;
 import java.util.Optional;
@@ -21,28 +22,29 @@ public interface WithConfigNodeChildren {
      * of this node container
      * @throws NullPointerException if the implementing instance returns a null list or contains any null elements
      */
-    @NotNull List<@NotNull ConfigNode<?>> childNodes();
+    @NonNull List<@NonNull ConfigNode<?>> childNodes();
 
     /**
      * Attempts to locate a child configuration node within the specified root section, based on
-     * the provided keys and the expected type of the node value.
+     * the provided keys and the expected typeToken of the node value.
      *
-     * @param <T>          the type of the value associated with the desired child configuration node
+     * @param <T>          the typeToken of the value associated with the desired child configuration node
      * @param rootSection  the root {@link ConfigSection} from which to begin the search; must be non-null
-     * @param type         the {@link Class} representing the type of the value expected in the located node; must be
+     * @param typeToken    the {@link Class} representing the typeToken of the value expected in the located node;
+     *                     must be
      *                     non-null
      * @param providedKeys an array of keys representing the path to the desired node within the hierarchical
      *                     structure; must be non-null
      * @return an {@link Optional} containing the located {@link ConfigNode} if found, or an empty {@link Optional}
      * if no matching node exists
-     * @throws NullPointerException if any of {@code rootSection}, {@code type}, or {@code providedKeys} is null
+     * @throws NullPointerException if any of {@code rootSection}, {@code typeToken}, or {@code providedKeys} is null
      */
-    default <T> @NotNull Optional<@NotNull ConfigNode<T>> childNode(
-            @NotNull ConfigSection rootSection,
-            @NotNull Class<@NotNull T> type,
-            @NotNull String... providedKeys
+    default <T> @NonNull Optional<@NonNull ConfigNode<T>> childNode(
+            @NonNull ConfigSection rootSection,
+            @NonNull TypeToken<@NonNull T> typeToken,
+            @NonNull String... providedKeys
     ) {
-        return ConfigNodeIterator.findNode(rootSection, type, providedKeys);
+        return ConfigNodeIterator.findNode(rootSection, typeToken, providedKeys);
     }
 
     /**
@@ -50,20 +52,20 @@ public interface WithConfigNodeChildren {
      * aligned with the Bukkit API style. This method searches for a single key instead of a path consisting
      * of multiple keys.
      *
-     * @param <T>         the type of the value associated with the configuration node
+     * @param <T>         the typeToken of the value associated with the configuration node
      * @param rootSection the root configuration section in which to search; must not be null
-     * @param type        the class type of the value expected to be associated with the node; must not be null
+     * @param typeToken   the class typeToken of the value expected to be associated with the node; must not be null
      * @param key         the key identifying the child node to be located; must not be null
      * @return an {@link Optional} containing the located {@link ConfigNode} if found, or an empty {@link Optional}
      * if no matching node is found
-     * @throws NullPointerException if any of the rootSection, type, or key arguments are null
+     * @throws NullPointerException if any of the rootSection, typeToken, or key arguments are null
      */
-    default <T> @NotNull Optional<@NotNull ConfigNode<T>> childNodeButInTheBukkitAPIStyle(
-            @NotNull ConfigSection rootSection,
-            @NotNull Class<@NotNull T> type,
-            @NotNull String key
+    default <T> @NonNull Optional<@NonNull ConfigNode<T>> childNodeButInTheBukkitAPIStyle(
+            @NonNull ConfigSection rootSection,
+            @NonNull TypeToken<@NonNull T> typeToken,
+            @NonNull String key
     ) {
-        return ConfigNodeIterator.findNodeButInTheBukkitAPIStyle(rootSection, type, key);
+        return ConfigNodeIterator.findNodeButInTheBukkitAPIStyle(rootSection, typeToken, key);
     }
 
     /**
@@ -75,7 +77,7 @@ public interface WithConfigNodeChildren {
      *              of the current node; must not be null
      * @throws NullPointerException if the {@code child} argument is null
      */
-    void addChildNode(@NotNull ConfigNode<?> child);
+    void addChildNode(@NonNull ConfigNode<?> child);
 
     /**
      * Removes a child configuration node associated with the specified key.
@@ -84,11 +86,9 @@ public interface WithConfigNodeChildren {
      *
      * @param key the non-null key identifying the child configuration node to be removed.
      *            The key must refer to an existing child node for successful removal.
-     * @return {@code true} if a child node was successfully removed;
-     * {@code false} if no matching node was found.
      * @throws NullPointerException if the {@code key} argument is null.
      */
-    void removeChildNode(@NotNull String key);
+    void removeChildNode(@NonNull String key);
 
     /**
      * Provides an iterator over the child configuration nodes.
@@ -99,5 +99,5 @@ public interface WithConfigNodeChildren {
      * @throws NullPointerException if the implementing class fails to uphold
      *                              the non-null constraint for any element in the iterator
      */
-    @NotNull ConfigNodeIterator nodeIterator();
+    @NonNull ConfigNodeIterator nodeIterator();
 }

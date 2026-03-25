@@ -1,14 +1,16 @@
 package com.pixelatedslice.easyconfig.impl.config.node;
 
+import com.google.common.reflect.TypeToken;
 import com.pixelatedslice.easyconfig.api.config.node.ConfigNode;
 import com.pixelatedslice.easyconfig.api.config.node.ConfigNodeBuilder;
 import com.pixelatedslice.easyconfig.api.config.section.ConfigSection;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Implementation of the {@link ConfigNodeBuilder} interface for constructing instances
@@ -39,6 +41,7 @@ public class ConfigNodeBuilderImpl<T> implements ConfigNodeBuilder<T> {
      * It may be {@code null} to indicate that no specific value is assigned to the node.
      */
     private T value;
+    private TypeToken<T> typeToken;
     /**
      * Represents the parent configuration section associated with the current configuration node.
      * The parent section serves as the immediate higher level in the configuration hierarchy,
@@ -58,7 +61,8 @@ public class ConfigNodeBuilderImpl<T> implements ConfigNodeBuilder<T> {
      * @throws NullPointerException if the provided {@code key} is null
      */
     @Override
-    public ConfigNodeBuilder<T> key(@NotNull String key) {
+    public ConfigNodeBuilder<T> key(@NonNull String key) {
+        Objects.requireNonNull(key);
         this.key = key;
         return this;
     }
@@ -71,7 +75,15 @@ public class ConfigNodeBuilderImpl<T> implements ConfigNodeBuilder<T> {
      */
     @Override
     public ConfigNodeBuilder<T> value(@Nullable T value) {
+        Objects.requireNonNull(value);
         this.value = value;
+        return this;
+    }
+
+    @Override
+    public ConfigNodeBuilder<T> typeToken(@NonNull TypeToken<T> typeToken) {
+        Objects.requireNonNull(typeToken);
+        this.typeToken = typeToken;
         return this;
     }
 
@@ -85,7 +97,8 @@ public class ConfigNodeBuilderImpl<T> implements ConfigNodeBuilder<T> {
      * @throws NullPointerException if {@code parent} is null
      */
     @Override
-    public ConfigNodeBuilder<T> parent(@NotNull ConfigSection parent) {
+    public ConfigNodeBuilder<T> parent(@NonNull ConfigSection parent) {
+        Objects.requireNonNull(parent);
         this.parent = parent;
         return this;
     }
@@ -99,21 +112,26 @@ public class ConfigNodeBuilderImpl<T> implements ConfigNodeBuilder<T> {
      * @throws NullPointerException if the {@code comment} argument is null
      */
     @Override
-    public ConfigNodeBuilder<T> comment(@NotNull String... comment) {
+    public ConfigNodeBuilder<T> comment(@NonNull String... comment) {
+        Objects.requireNonNull(comment);
         Collections.addAll(this.comments, comment);
         return this;
     }
 
     /**
-     * Builds and returns a new instance of {@link ConfigNode} based on the properties
-     * configured within this builder. The resulting {@link ConfigNode} will have the
-     * key, value, parent, and comments as defined during the builder's configuration.
-     *
-     * @return a non-null instance of {@link ConfigNode} with the configured properties
-     * @throws NullPointerException if the key or parent properties are null
+     * {@inheritDoc}
+     * <p>
+     * <b>Implementation Details:</b> This method constructs a new instance of {@code ConfigNodeImpl} with the
+     * specified properties.
      */
     @Override
-    public @NotNull ConfigNode<T> build() {
-        return new ConfigNodeImpl<>(this.key, this.value, this.parent, this.comments);
+    public @NonNull ConfigNode<T> build() {
+        return new ConfigNodeImpl<>(
+                Objects.requireNonNull(this.key),
+                this.value,
+                Objects.requireNonNull(this.typeToken),
+                this.parent,
+                this.comments
+        );
     }
 }

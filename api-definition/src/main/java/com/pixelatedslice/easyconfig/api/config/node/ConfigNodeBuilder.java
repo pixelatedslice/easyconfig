@@ -1,8 +1,9 @@
 package com.pixelatedslice.easyconfig.api.config.node;
 
+import com.google.common.reflect.TypeToken;
 import com.pixelatedslice.easyconfig.api.config.section.ConfigSection;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 public interface ConfigNodeBuilder<T> {
     /**
@@ -13,7 +14,7 @@ public interface ConfigNodeBuilder<T> {
      * @return the current instance of {@code ConfigNodeBuilder}, allowing method chaining
      * @throws NullPointerException if the provided {@code key} is null
      */
-    ConfigNodeBuilder<T> key(@NotNull String key);
+    ConfigNodeBuilder<T> key(@NonNull String key);
 
     /**
      * Sets the value associated with the configuration node being built.
@@ -24,6 +25,17 @@ public interface ConfigNodeBuilder<T> {
     ConfigNodeBuilder<T> value(@Nullable T value);
 
     /**
+     * Sets the type token associated with the configuration node being built.
+     * The type token defines the type of the value stored in the configuration node,
+     * enabling the use of generic types.
+     *
+     * @param typeToken the type token representing the type of the value; must not be null
+     * @return the current {@code ConfigNodeBuilder} instance for method chaining
+     * @throws NullPointerException if the {@code typeToken} argument is null
+     */
+    ConfigNodeBuilder<T> typeToken(@NonNull TypeToken<T> typeToken);
+
+    /**
      * Sets the parent {@link ConfigSection} for this configuration node builder.
      * The parent configuration section establishes the hierarchical structure for
      * the node being built.
@@ -32,7 +44,7 @@ public interface ConfigNodeBuilder<T> {
      * @return the current instance of {@code ConfigNodeBuilder} for method chaining
      * @throws NullPointerException if {@code parent} is null
      */
-    ConfigNodeBuilder<T> parent(@NotNull ConfigSection parent);
+    ConfigNodeBuilder<T> parent(@NonNull ConfigSection parent);
 
     /**
      * Sets comments for the configuration node being built. Comments are meant to provide
@@ -42,7 +54,7 @@ public interface ConfigNodeBuilder<T> {
      * @return the current {@link ConfigNodeBuilder} instance for method chaining
      * @throws NullPointerException if the {@code comment} argument is null
      */
-    ConfigNodeBuilder<T> comment(@NotNull String... comment);
+    ConfigNodeBuilder<T> comment(@NonNull String... comment);
 
     /**
      * Builds and returns a configured {@link ConfigNode} instance based on the properties
@@ -50,8 +62,8 @@ public interface ConfigNodeBuilder<T> {
      * necessary configurations are applied to the returned node.
      *
      * @return a non-null configured {@link ConfigNode} instance
-     * @throws NullPointerException if any required properties annotated with {@link NotNull}
+     * @throws NullPointerException if any required properties annotated with {@link NonNull}
      *                              were omitted during construction
      */
-    @NotNull ConfigNode<T> build();
+    @NonNull ConfigNode<T> build();
 }
