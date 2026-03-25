@@ -6,4 +6,5 @@ module com.pixelatedslice.easyconfig.impl {
     exports com.pixelatedslice.easyconfig.impl;
     exports com.pixelatedslice.easyconfig.impl.config.node;
     exports com.pixelatedslice.easyconfig.impl.config.section;
+    exports com.pixelatedslice.easyconfig.impl.config.file;
 }

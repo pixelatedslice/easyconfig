@@ -1,22 +1,25 @@
 package com.pixelatedslice.easyconfig.api.fileformat.builtin;
 
-import com.pixelatedslice.easyconfig.api.fileformat.FileFormat;
+public final class YamlFileFormat implements BuiltInFileFormat {
+    private static volatile YamlFileFormat INSTANCE;
 
-/**
- * Represents a YAML file format by providing the associated file extension for YAML files.
- * <br>
- * This interface extends {@link FileFormat} and supplies the specific implementation
- * details for YAML file handling, such as providing the ".yml" extension. It is intended
- * to standardize the usage of YAML files across the system.
- */
-public non-sealed interface YamlFileFormat extends BuiltInFileFormat {
-    /**
-     * {@inheritDoc}
-     * <p>
-     * <b>Implementation Details:</b> This method returns the file extension for YAML files.
-     */
+    private YamlFileFormat() {
+    }
+
+    public static YamlFileFormat instance() {
+        if (INSTANCE == null) {
+            synchronized (YamlFileFormat.class) {
+                if (INSTANCE == null) {
+                    INSTANCE = new YamlFileFormat();
+                }
+            }
+        }
+
+        return INSTANCE;
+    }
+
     @Override
-    default String fileExtension() {
+    public String fileExtension() {
         return "yml";
     }
 }

@@ -1,21 +1,25 @@
 package com.pixelatedslice.easyconfig.api.fileformat.builtin;
 
-import com.pixelatedslice.easyconfig.api.fileformat.FileFormat;
+public final class JsonFileFormat implements BuiltInFileFormat {
+    private static volatile JsonFileFormat INSTANCE;
 
-/**
- * Represents a JSON file format by providing the associated file extension for JSON files.
- * This interface is intended to standardize the handling of JSON files across the system
- * by extending the {@link FileFormat} interface. It defines the specific file extension
- * used for JSON file types.
- */
-public non-sealed interface JsonFileFormat extends BuiltInFileFormat {
-    /**
-     * {@inheritDoc}
-     * <p>
-     * <b>Implementation Details:</b> This method returns the file extension for JSON files.
-     */
+    private JsonFileFormat() {
+    }
+
+    public static JsonFileFormat instance() {
+        if (INSTANCE == null) {
+            synchronized (JsonFileFormat.class) {
+                if (INSTANCE == null) {
+                    INSTANCE = new JsonFileFormat();
+                }
+            }
+        }
+
+        return INSTANCE;
+    }
+
     @Override
-    default String fileExtension() {
+    public String fileExtension() {
         return "json";
     }
 }

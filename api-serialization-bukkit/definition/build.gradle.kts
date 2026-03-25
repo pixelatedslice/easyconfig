@@ -13,6 +13,4 @@ dependencies {
     implementation(project(":api-definition"))
 }
 
-tasks.test {
-    useJUnitPlatform()
-}
+tasks.test { useJUnitPlatform() }

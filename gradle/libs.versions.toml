@@ -1,9 +1,11 @@
 [versions]
 junit = "5.10.0"
 guava = "33.5.0-jre"
+yaml = "2.2"
 
 [libraries]
 junit-bom = { group = "org.junit", name = "junit-bom", version.ref = "junit" }
 junit-jupiter = { group = "org.junit.jupiter", name = "junit-jupiter" }
 junit-platformLauncher = { group = "org.junit.platform", name = "junit-platform-launcher" }
 guava = { group = "com.google.guava", name = "guava", version.ref = "guava" }
+snakeyaml = { group = "org.yaml", name = "snakeyaml", version.ref = "yaml" }

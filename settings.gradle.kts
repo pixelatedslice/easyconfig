@@ -6,5 +6,10 @@ dependencyResolutionManagement {
 }
 
 rootProject.name = "EasyConfig"
-include("api-definition", "api-implementation", "api-serialization-bukkit:definition")
-include("api-serialization-bukkit:implementation")
+include(
+    "api-definition",
+    "api-implementation",
+    "api-serialization-bukkit:definition",
+    "api-serialization-bukkit:implementation",
+    "api-fileformat:yaml:1.1:implementation"
+)

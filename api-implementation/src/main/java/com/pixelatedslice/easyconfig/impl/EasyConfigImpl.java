@@ -11,7 +11,8 @@ import org.jspecify.annotations.NonNull;
 import java.util.*;
 
 public class EasyConfigImpl implements EasyConfig {
-    private final Map<Class<? extends FileFormat>, FileFormatProvider<?, ?>> providers;
+    private static volatile EasyConfigImpl INSTANCE;
+    private final Map<Class<? extends FileFormat>, FileFormatProvider<?>> providers;
     private final Map<Class<?>, Serializer<?>> serializers;
 
     public EasyConfigImpl() {
@@ -20,40 +21,39 @@ public class EasyConfigImpl implements EasyConfig {
     }
 
     private EasyConfigImpl(
-            @NonNull Map<@NonNull Class<? extends FileFormat>, @NonNull FileFormatProvider<?, ?>> providers,
+            @NonNull Map<@NonNull Class<? extends FileFormat>, @NonNull FileFormatProvider<?>> providers,
             @NonNull Map<@NonNull Class<?>, @NonNull Serializer<?>> serializers
     ) {
         this.providers = Objects.requireNonNull(providers);
         this.serializers = Objects.requireNonNull(serializers);
     }
 
-    /**
-     * {@inheritDoc}
-     * <p>
-     * <b>Implementation Details:</b> This method returns a new instance of {@code EasyConfigImpl} with the same
-     * internal state.
-     */
+    public static EasyConfigImpl instance() {
+        if (INSTANCE == null) {
+            synchronized (EasyConfigImpl.class) {
+                if (INSTANCE == null) {
+                    INSTANCE = new EasyConfigImpl();
+                }
+            }
+        }
+
+        return INSTANCE;
+    }
+
+
     @NonNull
-    public EasyConfigImpl copy() {
+    public EasyConfig copy() {
         return new EasyConfigImpl(this.providers, this.serializers);
     }
 
-    /**
-     * {@inheritDoc}
-     * <p>
-     * <b>Implementation Details:</b> This method returns the internal map of serializers.
-     */
+
     @Override
     @NonNull
     public Map<@NonNull Class<?>, @NonNull Serializer<?>> serializers() {
         return this.serializers;
     }
 
-    /**
-     * {@inheritDoc}
-     * <p>
-     * <b>Implementation Details:</b> This method returns the serializer associated with the specified class type.
-     */
+
     @SuppressWarnings("unchecked")
     @Override
     @NonNull
@@ -61,11 +61,7 @@ public class EasyConfigImpl implements EasyConfig {
         return Optional.ofNullable((Serializer<T>) this.serializers.get(Objects.requireNonNull(clazz)));
     }
 
-    /**
-     * {@inheritDoc}
-     * <p>
-     * <b>Implementation Details:</b> This method adds the specified serializers to the internal map.
-     */
+
     @Override
     public void registerSerializers(@NonNull Serializer<?>... serializers) {
         Objects.requireNonNull(serializers);
@@ -90,11 +86,7 @@ public class EasyConfigImpl implements EasyConfig {
         }
     }
 
-    /**
-     * {@inheritDoc}
-     * <p>
-     * <b>Implementation Details:</b> This method removes the specified serializers from the internal map.
-     */
+
     @Override
     public void unregisterSerializers(@NonNull Class<?>... classes) {
         Objects.requireNonNull(classes);
@@ -123,55 +115,39 @@ public class EasyConfigImpl implements EasyConfig {
         }
     }
 
-    /**
-     * {@inheritDoc}
-     * <p>
-     * <b>Implementation Details:</b> This method returns the internal map of providers.
-     */
+
     @Override
     @NonNull
-    public Map<@NonNull Class<? extends FileFormat>, @NonNull FileFormatProvider<?, ?>> providers() {
+    public Map<@NonNull Class<? extends FileFormat>, @NonNull FileFormatProvider<?>> providers() {
         return this.providers;
     }
 
-    /**
-     * {@inheritDoc}
-     * <p>
-     * <b>Implementation Details:</b> This method returns the provider associated with the specified file format class.
-     */
+
     @Override
-    public @NonNull Optional<@NonNull FileFormatProvider<?, ?>> provider(
+    public @NonNull Optional<@NonNull FileFormatProvider<?>> provider(
             @NonNull Class<? extends FileFormat> fileFormatClass
     ) {
         return Optional.ofNullable(this.providers.get(Objects.requireNonNull(fileFormatClass)));
     }
 
-    /**
-     * {@inheritDoc}
-     * <p>
-     * <b>Implementation Details:</b> This method adds the specified providers to the internal map.
-     */
+
     @Override
-    public void registerProviders(@NonNull FileFormatProvider<?, ?>... providers) {
+    public void registerProviders(@NonNull FileFormatProvider<?>... providers) {
         Objects.requireNonNull(providers);
 
-        var map = new HashMap<Class<? extends FileFormat>, FileFormatProvider<?, ?>>();
-        for (FileFormatProvider<?, ?> provider : providers) {
+        var map = new HashMap<Class<? extends FileFormat>, FileFormatProvider<?>>();
+        for (FileFormatProvider<?> provider : providers) {
             map.put(provider.fileFormatClass(), provider);
         }
         this.providers.putAll(map);
     }
 
-    /**
-     * {@inheritDoc}
-     * <p>
-     * <b>Implementation Details:</b> This method removes the specified providers from the internal map.
-     */
+
     @Override
-    public void unregisterProviders(@NonNull FileFormatProvider<?, ?>... providers) {
+    public void unregisterProviders(@NonNull FileFormatProvider<?>... providers) {
         Objects.requireNonNull(providers);
 
-        for (FileFormatProvider<?, ?> provider : providers) {
+        for (FileFormatProvider<?> provider : providers) {
             this.providers.remove(provider.fileFormatClass());
         }
     }
