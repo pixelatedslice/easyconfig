@@ -30,7 +30,7 @@ public class ConfigSectionIteratorImpl implements ConfigSectionIterator {
         }
 
         ConfigSection current = this.nodeStack.pop();
-        List<@NonNull ConfigSection> children = current.sections();
+        List<ConfigSection> children = new ArrayList<>(current.sections());
 
         if (!children.isEmpty()) {
             for (int i = children.size() - 1; i >= 0; i--) {

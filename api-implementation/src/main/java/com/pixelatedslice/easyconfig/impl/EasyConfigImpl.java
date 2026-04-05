@@ -5,6 +5,10 @@ import com.pixelatedslice.easyconfig.api.exception.BuiltInSerializerOverrideExce
 import com.pixelatedslice.easyconfig.api.exception.BuiltInSerializerUnregisterException;
 import com.pixelatedslice.easyconfig.api.fileformat.FileFormat;
 import com.pixelatedslice.easyconfig.api.fileformat.FileFormatProvider;
+import com.pixelatedslice.easyconfig.api.fileformat.builtin.HoconFileFormat;
+import com.pixelatedslice.easyconfig.api.fileformat.builtin.JsonFileFormat;
+import com.pixelatedslice.easyconfig.api.fileformat.builtin.TomlFileFormat;
+import com.pixelatedslice.easyconfig.api.fileformat.builtin.YamlFileFormat;
 import com.pixelatedslice.easyconfig.api.serialization.Serializer;
 import org.jspecify.annotations.NonNull;
 
@@ -12,12 +16,14 @@ import java.util.*;
 
 public class EasyConfigImpl implements EasyConfig {
     private static volatile EasyConfigImpl INSTANCE;
+    private final CommonFormatProviders commonFormatProviders;
     private final Map<Class<? extends FileFormat>, FileFormatProvider<?>> providers;
     private final Map<Class<?>, Serializer<?>> serializers;
 
-    public EasyConfigImpl() {
+    private EasyConfigImpl() {
         this.providers = new HashMap<>();
         this.serializers = new HashMap<>();
+        this.commonFormatProviders = new CommonFormatProvidersImpl(this);
     }
 
     private EasyConfigImpl(
@@ -26,6 +32,7 @@ public class EasyConfigImpl implements EasyConfig {
     ) {
         this.providers = Objects.requireNonNull(providers);
         this.serializers = Objects.requireNonNull(serializers);
+        this.commonFormatProviders = new CommonFormatProvidersImpl(this);
     }
 
     public static EasyConfigImpl instance() {
@@ -63,7 +70,7 @@ public class EasyConfigImpl implements EasyConfig {
 
 
     @Override
-    public void registerSerializers(@NonNull Serializer<?>... serializers) {
+    public void registerSerializers(@NonNull Serializer<?> @NonNull ... serializers) {
         Objects.requireNonNull(serializers);
 
         Map<Serializer<?>, Serializer<?>> illegal = null;
@@ -88,7 +95,7 @@ public class EasyConfigImpl implements EasyConfig {
 
 
     @Override
-    public void unregisterSerializers(@NonNull Class<?>... classes) {
+    public void unregisterSerializers(@NonNull Class<?> @NonNull ... classes) {
         Objects.requireNonNull(classes);
 
         List<Class<?>> illegal = null;
@@ -123,16 +130,25 @@ public class EasyConfigImpl implements EasyConfig {
     }
 
 
+    @SuppressWarnings("unchecked")
     @Override
-    public @NonNull Optional<@NonNull FileFormatProvider<?>> provider(
-            @NonNull Class<? extends FileFormat> fileFormatClass
+    public <T extends FileFormat> @NonNull Optional<@NonNull FileFormatProvider<T>> provider(
+            @NonNull Class<T> fileFormatClass
     ) {
-        return Optional.ofNullable(this.providers.get(Objects.requireNonNull(fileFormatClass)));
+        var found = this.providers.get(Objects.requireNonNull(fileFormatClass));
+        if (found == null) {
+            return Optional.empty();
+        }
+
+        return found.fileFormatClass().equals(fileFormatClass)
+                ? Optional.of((FileFormatProvider<T>) found)
+                : Optional.empty();
+
     }
 
 
     @Override
-    public void registerProviders(@NonNull FileFormatProvider<?>... providers) {
+    public void registerProviders(@NonNull FileFormatProvider<?> @NonNull ... providers) {
         Objects.requireNonNull(providers);
 
         var map = new HashMap<Class<? extends FileFormat>, FileFormatProvider<?>>();
@@ -144,11 +160,49 @@ public class EasyConfigImpl implements EasyConfig {
 
 
     @Override
-    public void unregisterProviders(@NonNull FileFormatProvider<?>... providers) {
+    public void unregisterProviders(@NonNull FileFormatProvider<?> @NonNull ... providers) {
         Objects.requireNonNull(providers);
 
         for (FileFormatProvider<?> provider : providers) {
             this.providers.remove(provider.fileFormatClass());
+        }
+    }
+
+    @Override
+    public @NonNull CommonFormatProviders commonFormatProviders() {
+        return this.commonFormatProviders;
+    }
+
+    static class CommonFormatProvidersImpl implements CommonFormatProviders {
+        private final EasyConfig easyConfig;
+
+        CommonFormatProvidersImpl(EasyConfig easyConfig) {
+            this.easyConfig = easyConfig;
+        }
+
+        @Override
+        public @NonNull Optional<@NonNull FileFormatProvider<HoconFileFormat>> hocon() {
+            return this.easyConfig.provider(HoconFileFormat.class);
+        }
+
+        @Override
+        public @NonNull Optional<@NonNull FileFormatProvider<JsonFileFormat>> json() {
+            return this.easyConfig.provider(JsonFileFormat.class);
+        }
+
+        @Override
+        public @NonNull Optional<@NonNull FileFormatProvider<TomlFileFormat>> toml() {
+            return this.easyConfig.provider(TomlFileFormat.class);
+        }
+
+        @Override
+        public @NonNull Optional<@NonNull FileFormatProvider<YamlFileFormat>> yaml() {
+            return this.easyConfig.provider(YamlFileFormat.class);
+        }
+
+        @Override
+        public void reloadFormatProviderInstances() {
+
         }
     }
 }

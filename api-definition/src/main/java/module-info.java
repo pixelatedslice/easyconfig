@@ -32,5 +32,5 @@ open module com.pixelatedslice.easyconfig.api {
     exports com.pixelatedslice.easyconfig.api.serialization;
 
     exports com.pixelatedslice.easyconfig.api.serialization.builtin
-            to com.pixelatedslice.easyconfig.api.serialization.builtin.bukkit;
+            to com.pixelatedslice.easyconfig.impl.serialization.builtin.bukkit;
 }

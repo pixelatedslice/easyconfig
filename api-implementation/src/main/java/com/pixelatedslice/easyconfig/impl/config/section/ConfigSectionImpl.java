@@ -1,156 +1,86 @@
 package com.pixelatedslice.easyconfig.impl.config.section;
 
 import com.pixelatedslice.easyconfig.api.config.node.ConfigNode;
-import com.pixelatedslice.easyconfig.api.config.node.ConfigNodeIterator;
+import com.pixelatedslice.easyconfig.api.config.node.WithConfigNodeChildren;
 import com.pixelatedslice.easyconfig.api.config.section.ConfigSection;
-import com.pixelatedslice.easyconfig.api.config.section.ConfigSectionIterator;
-import com.pixelatedslice.easyconfig.impl.config.node.ConfigNodeIteratorImpl;
+import com.pixelatedslice.easyconfig.api.config.section.WithNestedConfigSection;
+import com.pixelatedslice.easyconfig.api.descriptor.WithDescriptor;
+import com.pixelatedslice.easyconfig.api.descriptor.config.node.ConfigNodeDescriptor;
+import com.pixelatedslice.easyconfig.api.descriptor.config.section.ConfigSectionDescriptor;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
-import java.util.*;
+import java.util.List;
+import java.util.Optional;
 
 public class ConfigSectionImpl implements ConfigSection {
+    private final @NonNull ConfigSectionDescriptor descriptor;
+    private final @NonNull List<@NonNull ConfigNode<?>> nodes;
+    private final @NonNull List<@NonNull ConfigSection> sections;
+    private @Nullable ConfigSection parent;
 
-    private final String key;
-
-    private final List<ConfigNode<?>> childNodes = new ArrayList<>();
-
-    private final List<ConfigSection> nestedSections = new ArrayList<>();
-
-    private final List<String> comments;
-
-    private ConfigSection parent;
-
-
-    public ConfigSectionImpl(@NonNull String key, @Nullable ConfigSection parent,
-            @NonNull Collection<@NonNull ConfigNode<?>> childNodes,
-            @NonNull Collection<@NonNull ConfigSection> nestedSections, @NonNull List<@NonNull String> comments) {
-        this.key = key;
-        this.parent = parent;
-        this.childNodes.addAll(childNodes);
-        this.nestedSections.addAll(nestedSections);
-        this.comments = comments;
+    ConfigSectionImpl(
+            @NonNull ConfigSectionDescriptor descriptor,
+            @Nullable ConfigSection parent,
+            @NonNull List<@NonNull ConfigNode<?>> nodes,
+            @NonNull List<@NonNull ConfigSection> sections
+    ) {
+        this.descriptor = descriptor;
+        this.nodes = nodes;
+        this.sections = sections;
     }
-
-    protected ConfigSectionImpl(@NonNull String key, @Nullable ConfigSection parent,
-            @NonNull Iterable<@NonNull ConfigNode<?>> childNodes,
-            @NonNull Collection<@NonNull ConfigSection> nestedSections, @NonNull List<@NonNull String> comments,
-            boolean fromBuilder) {
-        this.key = key;
-        this.parent = parent;
-
-        for (ConfigNode<?> node : childNodes) {
-            node.setParent(this);
-            this.childNodes.add(node);
-        }
-
-        this.nestedSections.addAll(nestedSections);
-        this.comments = comments;
-    }
-
 
     @Override
-    public @NonNull String key() {
-        return this.key;
+    public @NonNull List<@NonNull ConfigNode<?>> nodes() {
+        return this.nodes;
     }
 
+    @Override
+    public @NonNull WithConfigNodeChildren addNode(@NonNull ConfigNode<?> child) {
+        this.nodes.add(child);
+        return this;
+    }
+
+    @Override
+    public @NonNull WithConfigNodeChildren removeNode(@NonNull String key) {
+        this.nodes.removeIf((WithDescriptor<ConfigNodeDescriptor<?>> node) -> node.descriptor().key().equals(key));
+        return this;
+    }
+
+    @Override
+    public @NonNull List<@NonNull ConfigSection> sections() {
+        return this.sections;
+    }
+
+    @Override
+    public @NonNull WithNestedConfigSection addSection(@NonNull ConfigSection section) {
+        this.sections.add(section);
+        return this;
+    }
+
+    @Override
+    public @NonNull WithNestedConfigSection removeSection(@NonNull String key) {
+        this.sections.removeIf((WithDescriptor<ConfigSectionDescriptor> section) -> section
+                .descriptor()
+                .key()
+                .equals(key)
+        );
+        return this;
+    }
+
+    @Override
+    public @NonNull ConfigSectionDescriptor descriptor() {
+        return this.descriptor;
+    }
 
     @Override
     public @NonNull Optional<@NonNull ConfigSection> parent() {
         return Optional.ofNullable(this.parent);
     }
 
-
     @Override
-    public ConfigSection setParent(@Nullable ConfigSection parent) {
+    public void setParent(@Nullable ConfigSection parent) {
         this.parent = parent;
-        return this;
-    }
-
-
-    @Override
-    public @NonNull List<@NonNull ConfigNode<?>> nodes() {
-        return Collections.unmodifiableList(this.childNodes);
-    }
-
-
-    @Override
-    public ConfigSection addNode(@NonNull ConfigNode<?> child) {
-        this.childNodes.add(child);
-        return this;
-    }
-
-
-    @Override
-    public ConfigSection removeNode(@NonNull String key) {
-        this.childNodes.removeIf((ConfigNode<?> node) -> node.key().equals(key));
-        return this;
-    }
-
-
-    @Override
-    public @NonNull ConfigNodeIterator nodeIterator() {
-        return new ConfigNodeIteratorImpl(this);
-    }
-
-
-    @Override
-    public @NonNull List<@NonNull ConfigSection> sections() {
-        return Collections.unmodifiableList(this.nestedSections);
-    }
-
-
-    @Override
-    public ConfigSection addSection(@NonNull ConfigSection section) {
-        this.nestedSections.add(section);
-        return this;
-    }
-
-
-    @Override
-    public ConfigSection removeSection(@NonNull String key) {
-        this.nestedSections.removeIf((ConfigSection section) -> section.key().equals(key));
-        return this;
-    }
-
-
-    @Override
-    public @NonNull ConfigSectionIterator sectionIterator() {
-        return new ConfigSectionIteratorImpl(this);
-    }
-
-
-    @Override
-    public @NonNull Collection<String> comments() {
-        return Collections.unmodifiableCollection(this.comments);
-    }
-
-
-    @Override
-    public ConfigSection addComment(@NonNull String comment) {
-        this.comments.add(comment);
-        return this;
-    }
-
-
-    @Override
-    public ConfigSection removeComment(@NonNull String comment) {
-        this.comments.remove(comment);
-        return this;
-    }
-
-
-    @Override
-    public ConfigSection removeComment(int index) {
-        this.comments.remove(index);
-        return this;
-    }
-
-
-    @Override
-    public ConfigSection clearComments() {
-        this.comments.clear();
-        return this;
+        this.descriptor.setParent((parent != null) ? parent.descriptor() : null);
     }
 }
