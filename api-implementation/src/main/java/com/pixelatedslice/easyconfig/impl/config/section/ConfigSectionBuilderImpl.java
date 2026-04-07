@@ -2,29 +2,35 @@ package com.pixelatedslice.easyconfig.impl.config.section;
 
 import com.google.auto.service.AutoService;
 import com.google.common.reflect.TypeToken;
-import com.pixelatedslice.easyconfig.api.EasyConfig;
-import com.pixelatedslice.easyconfig.api.config.node.ConfigNode;
 import com.pixelatedslice.easyconfig.api.config.node.ConfigNodeBuilder;
 import com.pixelatedslice.easyconfig.api.config.section.ConfigSection;
 import com.pixelatedslice.easyconfig.api.config.section.ConfigSectionBuilder;
 import com.pixelatedslice.easyconfig.api.descriptor.config.section.ConfigSectionDescriptorBuilder;
 import com.pixelatedslice.easyconfig.api.exception.ComplexInsteadOfSimpleTypeUsedException;
+import com.pixelatedslice.easyconfig.api.utils.type_token.TypeTokenUtils;
 import com.pixelatedslice.easyconfig.impl.config.node.ConfigNodeBuilderImpl;
 import com.pixelatedslice.easyconfig.impl.descriptor.section.ConfigSectionDescriptorBuilderImpl;
 import org.jspecify.annotations.NonNull;
 
 import java.util.ArrayList;
-import java.util.List;
+import java.util.Collection;
 import java.util.Objects;
 import java.util.function.Consumer;
 
 @AutoService(ConfigSectionBuilder.class)
 public class ConfigSectionBuilderImpl implements ConfigSectionBuilder {
     private final ConfigSectionDescriptorBuilder descriptorBuilder = new ConfigSectionDescriptorBuilderImpl();
-    private final List<ConfigNode<?>> childNodes = new ArrayList<>();
-    private final List<ConfigSection> nestedSections = new ArrayList<>();
-    private final List<String> comments = new ArrayList<>();
-    private ConfigSection parent;
+    private final Collection<ConfigNodeBuilder<?>> childNodes = new ArrayList<>();
+    private final Collection<ConfigSectionBuilder> nestedSections = new ArrayList<>();
+    private ConfigSection parentSection;
+
+    public ConfigSectionBuilderImpl(@NonNull ConfigSection parentSection) {
+        Objects.requireNonNull(parentSection);
+        this.parentSection = parentSection;
+    }
+
+    private ConfigSectionBuilderImpl() {
+    }
 
     @Override
     public @NonNull ConfigSectionBuilder key(@NonNull String key) {
@@ -34,7 +40,7 @@ public class ConfigSectionBuilderImpl implements ConfigSectionBuilder {
 
     @Override
     public @NonNull ConfigSectionBuilder parent(@NonNull ConfigSection parent) {
-        this.parent = parent;
+        this.parentSection = parent;
         this.descriptorBuilder.parent(parent.descriptor());
         return this;
     }
@@ -44,7 +50,7 @@ public class ConfigSectionBuilderImpl implements ConfigSectionBuilder {
             @NonNull Consumer<ConfigNodeBuilder<T>> nodeBuilder) {
         var typeToken = TypeToken.of(simpleType);
 
-        if (!EasyConfig.isSimpleTypeToken(typeToken)) {
+        if (!TypeTokenUtils.isSimpleTypeToken(typeToken)) {
             throw new ComplexInsteadOfSimpleTypeUsedException();
         }
 
@@ -58,14 +64,14 @@ public class ConfigSectionBuilderImpl implements ConfigSectionBuilder {
         nodeBuilder.accept(builder);
         builder.key(key);
         builder.typeToken(typeToken);
-        this.node(builder.build());
+        this.node(builder);
 
         return this;
     }
 
     @Override
     public <T> @NonNull ConfigSectionBuilder node(@NonNull String key, @NonNull TypeToken<T> typeToken) {
-        this.node(new ConfigNodeBuilderImpl<T>().key(key).typeToken(typeToken).build());
+        this.node(new ConfigNodeBuilderImpl<T>().key(key).typeToken(typeToken));
         return this;
     }
 
@@ -73,7 +79,7 @@ public class ConfigSectionBuilderImpl implements ConfigSectionBuilder {
     public <T> @NonNull ConfigSectionBuilder node(@NonNull String key, @NonNull Class<T> simpleType) {
         var typeToken = TypeToken.of(simpleType);
 
-        if (!EasyConfig.isSimpleTypeToken(typeToken)) {
+        if (!TypeTokenUtils.isSimpleTypeToken(typeToken)) {
             throw new ComplexInsteadOfSimpleTypeUsedException();
         }
 
@@ -83,14 +89,14 @@ public class ConfigSectionBuilderImpl implements ConfigSectionBuilder {
     @Override
     public <T> @NonNull ConfigSectionBuilder node(@NonNull String key, @NonNull T value,
             @NonNull TypeToken<T> typeToken) {
-        this.node(new ConfigNodeBuilderImpl<T>().key(key).value(value).typeToken(typeToken).build());
+        this.node(new ConfigNodeBuilderImpl<T>().key(key).value(value).typeToken(typeToken));
         return this;
     }
 
     @Override
     public <T> @NonNull ConfigSectionBuilder node(@NonNull String key, @NonNull T valueWithSimpleType) {
         var typeToken = TypeToken.of(valueWithSimpleType.getClass());
-        if (!EasyConfig.isSimpleTypeToken(typeToken)) {
+        if (!TypeTokenUtils.isSimpleTypeToken(typeToken)) {
             throw new ComplexInsteadOfSimpleTypeUsedException();
         }
         return this.node(key, typeToken);
@@ -102,7 +108,7 @@ public class ConfigSectionBuilderImpl implements ConfigSectionBuilder {
         var builder = new ConfigNodeBuilderImpl<T>();
         nodeBuilder.accept(builder);
         builder.key(key);
-        this.node(builder.build());
+        this.node(builder);
         return this;
     }
 
@@ -112,7 +118,7 @@ public class ConfigSectionBuilderImpl implements ConfigSectionBuilder {
         var builder = new ConfigNodeBuilderImpl<T>();
         nodeBuilder.accept(builder);
         builder.typeToken(typeToken);
-        this.node(builder.build());
+        this.node(builder);
         return this;
     }
 
@@ -120,21 +126,25 @@ public class ConfigSectionBuilderImpl implements ConfigSectionBuilder {
     public <T> @NonNull ConfigSectionBuilder node(@NonNull Consumer<? super ConfigNodeBuilder<T>> nodeBuilder) {
         var builder = new ConfigNodeBuilderImpl<T>();
         nodeBuilder.accept(builder);
-        this.node(builder.build());
+        this.node(builder);
         return this;
     }
 
-    @Override
-    public @NonNull <T> ConfigSectionBuilder node(@NonNull ConfigNode<T> node) {
-        this.childNodes.add(node);
-        this.descriptorBuilder.addNode(node.descriptor());
-        return this;
+    private void node(@NonNull ConfigNodeBuilder<?> nodeBuilder) {
+        this.childNodes.add(nodeBuilder);
     }
 
     @Override
     public @NonNull ConfigSectionBuilder comments(@NonNull String @NonNull ... comments) {
         Objects.requireNonNull(comments);
         this.descriptorBuilder.comments(comments);
+        return this;
+    }
+
+    @Override
+    public @NonNull ConfigSectionBuilder addComment(@NonNull String comment) {
+        Objects.requireNonNull(comment);
+        this.descriptorBuilder.addComment(comment);
         return this;
     }
 
@@ -146,7 +156,7 @@ public class ConfigSectionBuilderImpl implements ConfigSectionBuilder {
         var builder = new ConfigSectionBuilderImpl();
         nestedSectionBuilder.accept(builder);
         builder.key(key);
-        this.section(builder.build());
+        this.section(builder);
         return this;
     }
 
@@ -155,25 +165,34 @@ public class ConfigSectionBuilderImpl implements ConfigSectionBuilder {
         Objects.requireNonNull(nestedSectionBuilder);
         var builder = new ConfigSectionBuilderImpl();
         nestedSectionBuilder.accept(builder);
-        this.section(builder.build());
+        this.section(builder);
         return this;
     }
 
-    @Override
-    public @NonNull ConfigSectionBuilder section(@NonNull ConfigSection nestedSection) {
-        Objects.requireNonNull(nestedSection);
-        this.nestedSections.add(nestedSection);
-        this.descriptorBuilder.addSection(nestedSection.descriptor());
-        return this;
+    private void section(@NonNull ConfigSectionBuilder nestedSectionBuilder) {
+        Objects.requireNonNull(nestedSectionBuilder);
+        this.nestedSections.add(nestedSectionBuilder);
     }
 
     @Override
     public @NonNull ConfigSection build() {
-        return new ConfigSectionImpl(
+        var section = new ConfigSectionImpl(
                 Objects.requireNonNull(this.descriptorBuilder.build()),
-                this.parent,
-                Objects.requireNonNull(this.childNodes),
-                Objects.requireNonNull(this.nestedSections)
+                this.parentSection,
+                new ArrayList<>(),
+                new ArrayList<>()
         );
+
+        for (var childNode : this.childNodes) {
+            childNode.parent(section);
+            section.addNodes(childNode.build());
+        }
+
+        for (var nestedSection : this.nestedSections) {
+            nestedSection.parent(section);
+            section.addSections(nestedSection.build());
+        }
+
+        return section;
     }
 }

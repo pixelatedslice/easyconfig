@@ -17,4 +17,8 @@ public interface FileFormat {
 
     String fileExtension();
 
+
+    default Path pathWithExtension(@NonNull Path path) {
+        return path.resolveSibling(path.getFileName() + "." + this.fileExtension());
+    }
 }

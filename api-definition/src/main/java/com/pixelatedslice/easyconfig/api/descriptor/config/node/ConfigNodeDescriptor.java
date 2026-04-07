@@ -1,6 +1,6 @@
 package com.pixelatedslice.easyconfig.api.descriptor.config.node;
 
-import com.pixelatedslice.easyconfig.api.config.Commentable;
+import com.pixelatedslice.easyconfig.api.comments.Commentable;
 import com.pixelatedslice.easyconfig.api.descriptor.Descriptor;
 import com.pixelatedslice.easyconfig.api.descriptor.config.DescriptorWithKey;
 import com.pixelatedslice.easyconfig.api.descriptor.config.DescriptorWithParent;
@@ -25,4 +25,14 @@ public interface ConfigNodeDescriptor<T>
     @NonNull Optional<T> defaultValue();
 
     void setDefaultValue(@Nullable T defaultValue);
+
+    @Override
+    default void setKey(@NonNull String key) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    default void setParent(@Nullable ConfigSectionDescriptor parent) {
+        throw new UnsupportedOperationException();
+    }
 }

@@ -8,8 +8,7 @@ import com.pixelatedslice.easyconfig.api.serialization.builtin.BuiltInBukkitSeri
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.jspecify.annotations.NonNull;
-
-import java.util.ServiceLoader;
+import org.jspecify.annotations.Nullable;
 
 public final class LocationSerializerImpl implements BuiltInBukkitSerializer<Location> {
     private static volatile LocationSerializerImpl INSTANCE;
@@ -29,8 +28,11 @@ public final class LocationSerializerImpl implements BuiltInBukkitSerializer<Loc
     }
 
     @Override
-    public @NonNull ConfigSection serialize(@NonNull Location value) {
-        ConfigSectionBuilder sectionBuilder = ServiceLoader.load(ConfigSectionBuilder.class).findFirst().orElseThrow();
+    public void serialize(@Nullable Location value, @NonNull ConfigSectionBuilder sectionBuilder) {
+        if (value == null) {
+            return;
+        }
+
         if (value.getWorld() != null) {
             sectionBuilder.node("world", value.getWorld().getName(), TypeToken.of(String.class));
         }
@@ -39,7 +41,6 @@ public final class LocationSerializerImpl implements BuiltInBukkitSerializer<Loc
         sectionBuilder.node("z", value.getZ());
         sectionBuilder.node("yaw", value.getYaw());
         sectionBuilder.node("pitch", value.getPitch());
-        return sectionBuilder.build();
     }
 
     @Override

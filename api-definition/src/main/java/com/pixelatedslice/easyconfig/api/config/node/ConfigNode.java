@@ -9,30 +9,6 @@ import org.jspecify.annotations.Nullable;
 import java.util.Optional;
 import java.util.ServiceLoader;
 
-/**
- * public interface ConfigNode<T> extends Commentable, WithDescriptor<ConfigNodeDescriptor<T>> {
- *
- * @SuppressWarnings("unchecked") static <T> @NonNull ConfigNodeBuilder<T> builder() {
- * final var builderLoader = ServiceLoader.load(ConfigNodeBuilder.class);
- * return (ConfigNodeBuilder<T>) builderLoader.findFirst().orElseThrow();
- * }
- * @NonNull String key();
- * @NonNull Optional<@ NonNull T> value();
- * <p>
- * ConfigNode<T> setValue(@Nullable T value);
- * @NonNull Optional<@ NonNull T> defaultValue();
- * <p>
- * ConfigNode<T> setDefaultValue(@Nullable T defaultValue);
- * <p>
- * default @NonNull TypeToken<T> typeToken() {
- * return new TypeToken<>(this.getClass()) {
- * };
- * }
- * @NonNull Optional<@ NonNull ConfigSection> parent();
- * @NonNull ConfigNode<T> setParent(@Nullable ConfigSection parent);
- * }
- */
-
 public interface ConfigNode<T> extends WithDescriptor<ConfigNodeDescriptor<T>> {
     @SuppressWarnings("unchecked")
     static <T> @NonNull ConfigNodeBuilder<T> builder() {
@@ -49,6 +25,4 @@ public interface ConfigNode<T> extends WithDescriptor<ConfigNodeDescriptor<T>> {
     void setDefaultValue(@Nullable T defaultValue);
 
     @NonNull Optional<@NonNull ConfigSection> parent();
-
-    void setParent(@Nullable ConfigSection parent);
 }

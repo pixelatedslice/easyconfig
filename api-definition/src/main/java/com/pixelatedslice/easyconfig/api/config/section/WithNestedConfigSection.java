@@ -3,23 +3,29 @@ package com.pixelatedslice.easyconfig.api.config.section;
 import org.jspecify.annotations.NonNull;
 
 import java.util.Collection;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.ServiceLoader;
 
 public interface WithNestedConfigSection {
     default @NonNull Optional<@NonNull ConfigSection> section(@NonNull String @NonNull ... providedKeys) {
-        return ConfigSectionIterator.findSection(this.sections(), providedKeys);
+        Objects.requireNonNull(providedKeys);
+        if (providedKeys.length == 0) {
+            return Optional.empty();
+        }
+
+        return ((providedKeys.length == 1) && providedKeys[0].contains("."))
+                ? ConfigSectionIterator.findSectionButInTheBukkitAPIStyle(this.sections(), providedKeys[0])
+                : ConfigSectionIterator.findSection(this.sections(), providedKeys);
     }
 
     @NonNull Collection<@NonNull ConfigSection> sections();
 
-    default @NonNull Optional<@NonNull ConfigSection> nestedSectionButInTheBukkitAPIStyle(@NonNull String key) {
-        return ConfigSectionIterator.findSectionButInTheBukkitAPIStyle(this.sections(), key);
-    }
+    void addSections(@NonNull ConfigSection @NonNull ... sections);
 
-    @NonNull WithNestedConfigSection addSection(@NonNull ConfigSection section);
+    void removeSections(@NonNull String @NonNull ... keys);
 
-    @NonNull WithNestedConfigSection removeSection(@NonNull String key);
+    void clearSections();
 
     default @NonNull ConfigSectionIterator sectionIterator() {
         return ServiceLoader.load(ConfigSectionIterator.class).findFirst().orElseThrow();

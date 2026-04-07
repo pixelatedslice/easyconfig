@@ -4,7 +4,6 @@ import com.pixelatedslice.easyconfig.api.config.file.ConfigFile;
 import org.jspecify.annotations.NonNull;
 
 import java.io.IOException;
-import java.nio.file.Path;
 import java.text.ParseException;
 
 public interface FileFormatProvider<F extends FileFormat> {
@@ -12,13 +11,9 @@ public interface FileFormatProvider<F extends FileFormat> {
 
     F fileFormatInstance();
 
-    <C extends ConfigFile> void write(@NonNull Path path, @NonNull C configFile) throws IOException, ParseException;
+    <C extends ConfigFile> void write(@NonNull C configFile) throws IOException, ParseException;
 
-    <C extends ConfigFile> @NonNull C load(@NonNull Path path) throws IOException, ParseException;
+    <C extends ConfigFile> void load(@NonNull C configFile) throws IOException, ParseException;
 
-    <C extends ConfigFile> void reload(C config) throws IOException, ParseException;
-
-    default Path pathWithExtension(@NonNull Path path) {
-        return path.resolveSibling(path.getFileName() + "." + this.fileFormatInstance().fileExtension());
-    }
+    <C extends ConfigFile> void reload(@NonNull C configFile) throws IOException, ParseException;
 }

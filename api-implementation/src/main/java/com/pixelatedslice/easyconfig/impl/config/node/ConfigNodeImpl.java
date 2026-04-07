@@ -1,16 +1,20 @@
 package com.pixelatedslice.easyconfig.impl.config.node;
 
+import com.google.common.reflect.TypeToken;
 import com.pixelatedslice.easyconfig.api.config.node.ConfigNode;
 import com.pixelatedslice.easyconfig.api.config.section.ConfigSection;
 import com.pixelatedslice.easyconfig.api.descriptor.config.node.ConfigNodeDescriptor;
+import com.pixelatedslice.easyconfig.impl.descriptor.node.ConfigNodeDescriptorImpl;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
+import java.util.ArrayList;
+import java.util.Objects;
 import java.util.Optional;
 
 public class ConfigNodeImpl<T> implements ConfigNode<T> {
     private final @NonNull ConfigNodeDescriptor<T> descriptor;
-    private @Nullable ConfigSection parent;
+    private final @Nullable ConfigSection parent;
     private @Nullable T value;
 
     public ConfigNodeImpl(
@@ -21,6 +25,11 @@ public class ConfigNodeImpl<T> implements ConfigNode<T> {
         this.descriptor = descriptor;
         this.value = value;
         this.parent = parent;
+    }
+
+    public static <T> ConfigNode<T> of(@NonNull String key, @NonNull TypeToken<T> typeToken, ConfigSection parent) {
+        var descriptor = new ConfigNodeDescriptorImpl<>(typeToken, key, null, parent.descriptor(), new ArrayList<>());
+        return new ConfigNodeImpl<>(descriptor, null, parent);
     }
 
     @Override
@@ -49,13 +58,22 @@ public class ConfigNodeImpl<T> implements ConfigNode<T> {
     }
 
     @Override
-    public void setParent(@Nullable ConfigSection parent) {
-        this.parent = parent;
-        this.descriptor.setParent((parent == null) ? null : parent.descriptor());
+    public @NonNull ConfigNodeDescriptor<T> descriptor() {
+        return this.descriptor;
     }
 
     @Override
-    public @NonNull ConfigNodeDescriptor<T> descriptor() {
-        return this.descriptor;
+    public boolean equals(Object o) {
+        return (this == o)
+                || ((o instanceof ConfigNodeImpl<?> that)
+                && this.descriptor.equals(that.descriptor)
+                && Objects.equals(this.parent, that.parent)
+        );
+
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(this.descriptor, this.parent);
     }
 }

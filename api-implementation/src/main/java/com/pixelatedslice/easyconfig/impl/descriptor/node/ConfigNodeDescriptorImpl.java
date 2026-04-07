@@ -8,22 +8,28 @@ import org.jspecify.annotations.Nullable;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 public class ConfigNodeDescriptorImpl<T> implements ConfigNodeDescriptor<T> {
     private final @NonNull TypeToken<T> typeToken;
     private final @NonNull String key;
     private final @NonNull List<@NonNull String> comments;
+    private final @NonNull ConfigSectionDescriptor parent;
     private @Nullable T defaultValue;
-    private @Nullable ConfigSectionDescriptor parent;
 
-    ConfigNodeDescriptorImpl(
+    public ConfigNodeDescriptorImpl(
             @NonNull TypeToken<T> typeToken,
             @NonNull String key,
             @Nullable T defaultValue,
-            @Nullable ConfigSectionDescriptor parent,
+            @NonNull ConfigSectionDescriptor parent,
             @NonNull List<@NonNull String> comments
     ) {
+        Objects.requireNonNull(typeToken);
+        Objects.requireNonNull(key);
+        Objects.requireNonNull(parent);
+        Objects.requireNonNull(comments);
+
         this.typeToken = typeToken;
         this.key = key;
         this.defaultValue = defaultValue;
@@ -48,11 +54,13 @@ public class ConfigNodeDescriptorImpl<T> implements ConfigNodeDescriptor<T> {
 
     @Override
     public void addComment(@NonNull String comment) {
+        Objects.requireNonNull(comment);
         this.comments.add(comment);
     }
 
     @Override
     public void removeComment(@NonNull String comment) {
+        Objects.requireNonNull(comment);
         this.comments.remove(comment);
     }
 
@@ -77,17 +85,24 @@ public class ConfigNodeDescriptorImpl<T> implements ConfigNodeDescriptor<T> {
     }
 
     @Override
-    public void setKey(@NonNull String key) {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
     public @NonNull Optional<@NonNull ConfigSectionDescriptor> parent() {
-        return Optional.ofNullable(this.parent);
+        return Optional.of(this.parent);
     }
 
     @Override
-    public void setParent(@Nullable ConfigSectionDescriptor parent) {
-        this.parent = parent;
+    public boolean equals(Object o) {
+        return (this == o)
+                || ((o instanceof ConfigNodeDescriptorImpl<?> that)
+                && this.key.equals(that.key())
+                && this.typeToken().orElseThrow().equals(that.typeToken().orElseThrow())
+                && Objects.equals(this.defaultValue, that.defaultValue().orElse(null))
+                && this.parent.equals(that.parent().orElse(null))
+                && (this.comments.size() == that.comments().size())
+        );
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(this.key, this.parent, this.typeToken);
     }
 }

@@ -27,6 +27,4 @@ public interface BuilderWithConfigNodes {
             @NonNull Consumer<? super ConfigNodeBuilder<T>> nodeBuilder);
 
     <T> @NonNull BuilderWithConfigNodes node(@NonNull Consumer<? super ConfigNodeBuilder<T>> nodeBuilder);
-
-    <T> @NonNull BuilderWithConfigNodes node(@NonNull ConfigNode<T> node);
 }

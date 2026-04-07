@@ -35,7 +35,7 @@ public class ConfigSectionDescriptorBuilderImpl implements ConfigSectionDescript
 
     @Override
     public @NonNull ConfigSectionDescriptorBuilder sections(@NonNull ConfigSectionDescriptor @NonNull ... sections) {
-        this.sections = List.of(sections);
+        this.sections = new ArrayList<>(List.of(sections));
         return this;
     }
 
@@ -57,7 +57,7 @@ public class ConfigSectionDescriptorBuilderImpl implements ConfigSectionDescript
 
     @Override
     public @NonNull ConfigSectionDescriptorBuilder nodes(@NonNull ConfigNodeDescriptor<?> @NonNull ... nodes) {
-        this.nodes = List.of(nodes);
+        this.nodes = new ArrayList<>(List.of(nodes));
         return this;
     }
 

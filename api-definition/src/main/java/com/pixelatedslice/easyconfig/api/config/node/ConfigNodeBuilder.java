@@ -1,12 +1,17 @@
 package com.pixelatedslice.easyconfig.api.config.node;
 
 import com.google.common.reflect.TypeToken;
+import com.pixelatedslice.easyconfig.api.comments.BuilderWithComments;
 import com.pixelatedslice.easyconfig.api.config.section.ConfigSection;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
-public interface ConfigNodeBuilder<T> {
+public interface ConfigNodeBuilder<T> extends BuilderWithComments {
+    @Override
     @NonNull ConfigNodeBuilder<T> comments(@NonNull String @NonNull ... comment);
+
+    @Override
+    @NonNull ConfigNodeBuilder<T> addComment(@NonNull String comment);
 
     @NonNull ConfigNodeBuilder<T> key(@NonNull String key);
 

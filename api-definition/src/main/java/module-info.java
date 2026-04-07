@@ -19,7 +19,6 @@ open module com.pixelatedslice.easyconfig.api {
     uses ConfigSectionIterator;
 
     exports com.pixelatedslice.easyconfig.api;
-    exports com.pixelatedslice.easyconfig.api.config;
     exports com.pixelatedslice.easyconfig.api.config.file;
     exports com.pixelatedslice.easyconfig.api.config.node;
     exports com.pixelatedslice.easyconfig.api.config.section;
@@ -33,4 +32,6 @@ open module com.pixelatedslice.easyconfig.api {
 
     exports com.pixelatedslice.easyconfig.api.serialization.builtin
             to com.pixelatedslice.easyconfig.impl.serialization.builtin.bukkit;
+    exports com.pixelatedslice.easyconfig.api.comments;
+    exports com.pixelatedslice.easyconfig.api.utils.type_token;
 }

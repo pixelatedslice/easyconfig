@@ -1,9 +1,11 @@
 package com.pixelatedslice.easyconfig.api.descriptor.config.node;
 
+import com.google.common.reflect.TypeToken;
 import com.pixelatedslice.easyconfig.api.descriptor.Descriptor;
 import com.pixelatedslice.easyconfig.api.descriptor.config.DescriptorBuilderWithComments;
 import com.pixelatedslice.easyconfig.api.descriptor.config.DescriptorBuilderWithConfigSectionParent;
 import com.pixelatedslice.easyconfig.api.descriptor.config.DescriptorBuilderWithKey;
+import com.pixelatedslice.easyconfig.api.descriptor.config.section.ConfigSectionDescriptor;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
@@ -11,5 +13,18 @@ public interface ConfigNodeDescriptorBuilder<T> extends Descriptor.Builder<T, Co
         DescriptorBuilderWithKey, DescriptorBuilderWithConfigSectionParent, DescriptorBuilderWithComments {
     @NonNull ConfigNodeDescriptorBuilder<T> defaultValue(@Nullable T defaultValue);
 
-    @NonNull ConfigNodeDescriptor<T> build();
+    @Override
+    @NonNull ConfigNodeDescriptorBuilder<T> typeToken(@NonNull TypeToken<T> typeToken);
+
+    @Override
+    @NonNull ConfigNodeDescriptorBuilder<T> comments(@NonNull String @NonNull ... comments);
+
+    @Override
+    @NonNull ConfigNodeDescriptorBuilder<T> addComment(@NonNull String comment);
+
+    @Override
+    @NonNull ConfigNodeDescriptorBuilder<T> parent(@Nullable ConfigSectionDescriptor parent);
+
+    @Override
+    @NonNull ConfigNodeDescriptorBuilder<T> key(@NonNull String key);
 }

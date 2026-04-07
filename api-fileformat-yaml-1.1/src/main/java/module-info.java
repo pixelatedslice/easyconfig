@@ -1,4 +1,4 @@
-open module com.pixelatedslice.easyconfig.impl.fileformat {
+open module com.pixelatedslice.easyconfig.impl.fileformaty.yaml {
     requires com.google.common;
     requires org.jspecify;
     requires org.yaml.snakeyaml;

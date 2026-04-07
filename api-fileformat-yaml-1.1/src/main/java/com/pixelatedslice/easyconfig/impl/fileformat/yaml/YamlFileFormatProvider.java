@@ -1,26 +1,56 @@
 package com.pixelatedslice.easyconfig.impl.fileformat.yaml;
 
 import com.pixelatedslice.easyconfig.api.config.file.ConfigFile;
-import com.pixelatedslice.easyconfig.api.fileformat.FileFormat;
 import com.pixelatedslice.easyconfig.api.fileformat.FileFormatProvider;
 import com.pixelatedslice.easyconfig.api.fileformat.builtin.YamlFileFormat;
-import com.pixelatedslice.easyconfig.impl.config.file.ConfigFileBuilderImpl;
 import org.jspecify.annotations.NonNull;
-import org.jspecify.annotations.Nullable;
-import org.yaml.snakeyaml.Yaml;
+import org.yaml.snakeyaml.DumperOptions;
+import org.yaml.snakeyaml.LoaderOptions;
+import org.yaml.snakeyaml.emitter.Emitter;
+import org.yaml.snakeyaml.events.DocumentEndEvent;
+import org.yaml.snakeyaml.events.DocumentStartEvent;
+import org.yaml.snakeyaml.events.StreamEndEvent;
+import org.yaml.snakeyaml.events.StreamStartEvent;
+import org.yaml.snakeyaml.parser.ParserImpl;
+import org.yaml.snakeyaml.reader.StreamReader;
 
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.text.ParseException;
-import java.util.Map;
 
 public final class YamlFileFormatProvider implements FileFormatProvider<YamlFileFormat> {
+    private static final YamlFileFormat fileFormatInstance = YamlFileFormat.instance();
     private static volatile YamlFileFormatProvider INSTANCE;
-    private final Yaml yaml;
+    private final DumperOptions dumperOptions = dumperOptions();
+    private final LoaderOptions loaderOptions = loaderOptions();
 
     private YamlFileFormatProvider() {
-        this.yaml = new Yaml();
+    }
+
+    private static @NonNull DumperOptions dumperOptions() {
+        var dumperOptions = new DumperOptions();
+        dumperOptions.setIndent(2);
+        dumperOptions.setIndicatorIndent(2);
+        dumperOptions.setIndentWithIndicator(true);
+        dumperOptions.setWidth(120);
+        dumperOptions.setSplitLines(false);
+        dumperOptions.setDefaultScalarStyle(DumperOptions.ScalarStyle.DOUBLE_QUOTED);
+        dumperOptions.setAllowUnicode(true);
+        dumperOptions.setProcessComments(true);
+        dumperOptions.setExplicitStart(false);
+        dumperOptions.setExplicitEnd(false);
+        return dumperOptions;
+    }
+
+    private static @NonNull LoaderOptions loaderOptions() {
+        var loaderOptions = new LoaderOptions();
+        loaderOptions.setAllowDuplicateKeys(false);
+        loaderOptions.setMaxAliasesForCollections(50);
+        loaderOptions.setCodePointLimit(10_000_000);
+        loaderOptions.setProcessComments(true);
+        loaderOptions.setEnumCaseSensitive(false);
+        loaderOptions.setAllowRecursiveKeys(false);
+        return loaderOptions;
     }
 
     public static YamlFileFormatProvider instance() {
@@ -42,43 +72,54 @@ public final class YamlFileFormatProvider implements FileFormatProvider<YamlFile
 
     @Override
     public YamlFileFormat fileFormatInstance() {
-        return YamlFileFormat.instance();
+        return fileFormatInstance;
     }
 
     @Override
-    public <C extends ConfigFile> void write(@NonNull Path path, @NonNull C configFile
+    public <C extends ConfigFile> void write(@NonNull C configFile
     ) throws IOException, ParseException {
+        var path = fileFormatInstance.pathWithExtension(configFile.filePathWithoutExtension());
 
+        Files.createDirectories(path.getParent());
+        if (!Files.exists(path)) {
+            Files.createFile(path);
+        }
+
+        try (var writer = Files.newBufferedWriter(path)) {
+            var emitter = new Emitter(writer, this.dumperOptions);
+
+            emitter.emit(new StreamStartEvent(null, null));
+            emitter.emit(new DocumentStartEvent(null, null, false, null, null));
+
+            YamlFileFormatProviderEmitter.emitSection(emitter, configFile.rootSection());
+
+            emitter.emit(new DocumentEndEvent(null, null, false));
+            emitter.emit(new StreamEndEvent(null, null));
+        }
     }
 
     @SuppressWarnings("unchecked")
     @Override
-    public @Nullable <C extends ConfigFile> C load(@NonNull Path path)
+    public <C extends ConfigFile> void load(@NonNull C configFile)
             throws IOException, ParseException {
+        var path = fileFormatInstance.pathWithExtension(configFile.filePathWithoutExtension());
         if (!Files.exists(path)) {
             throw new IOException("The File does not exist!");
         }
-        var metaFilePath = FileFormat.toMetaFilePath(path);
-        if (!Files.exists(metaFilePath)) {
-            throw new IOException("The Meta File does not exist! Without it, the Config File cannot be loaded!");
-        }
 
-        Map<String, Object> metaMap = this.yaml.load(Files.newInputStream(metaFilePath));
-        Map<String, Object> fileMap = this.yaml.load(Files.newInputStream(path));
+        try (var reader = Files.newBufferedReader(path)) {
+            var parser = new ParserImpl(new StreamReader(reader), this.loaderOptions);
 
-        if (metaMap == null) {
-            throw new ParseException("The Meta File content is invalid YAML", 0);
-        }
-        if (fileMap == null) {
-            throw new ParseException("The File content is invalid YAML", 0);
-        }
+            // Skip StreamStart and DocumentStart
+            parser.getEvent();
+            parser.getEvent();
 
-        var builder = new ConfigFileBuilderImpl().filePath(path);
-        return (C) builder.build();
+        }
     }
 
     @Override
-    public <C extends ConfigFile> void reload(C config) throws IOException, ParseException {
-
+    public <C extends ConfigFile> void reload(@NonNull C configFile) throws IOException, ParseException {
+        configFile.rootSection().clearNodes();
+        configFile.rootSection().clearSections();
     }
 }

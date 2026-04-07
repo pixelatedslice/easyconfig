@@ -15,14 +15,11 @@ public interface WithConfigNodeChildren {
             @NonNull String... providedKeys
     );
 
-    <T> @NonNull Optional<@NonNull ConfigNode<T>> nodeButInTheBukkitAPIStyle(
-            @NonNull TypeToken<@NonNull T> typeToken,
-            @NonNull String key
-    );
+    void addNodes(@NonNull ConfigNode<?> @NonNull ... children);
 
-    @NonNull WithConfigNodeChildren addNode(@NonNull ConfigNode<?> child);
+    void removeNodes(@NonNull String @NonNull ... keys);
 
-    @NonNull WithConfigNodeChildren removeNode(@NonNull String key);
+    void clearNodes();
 
     default @NonNull ConfigNodeIterator nodeIterator() {
         return ServiceLoader.load(ConfigNodeIterator.class).findFirst().orElseThrow();

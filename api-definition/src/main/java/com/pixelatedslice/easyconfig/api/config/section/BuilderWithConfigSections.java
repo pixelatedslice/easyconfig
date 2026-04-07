@@ -9,6 +9,4 @@ public interface BuilderWithConfigSections {
             @NonNull Consumer<? super ConfigSectionBuilder> nestedSectionBuilder);
 
     @NonNull BuilderWithConfigSections section(@NonNull Consumer<? super ConfigSectionBuilder> nestedSectionBuilder);
-
-    @NonNull BuilderWithConfigSections section(@NonNull ConfigSection nestedSection);
 }

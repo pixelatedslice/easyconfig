@@ -33,12 +33,8 @@ public class ConfigNodeIteratorImpl implements ConfigNodeIterator {
         while (this.nodeQueue.isEmpty() && !this.sectionQueue.isEmpty()) {
             ConfigSection current = this.sectionQueue.poll();
 
-            for (ConfigNode<?> node : current.nodes()) {
-                if (node.value().isPresent()) {
-                    this.nodeQueue.add(node);
-                }
-            }
-
+            this.nodeQueue.addAll(current.nodes());
+            
             for (ConfigSection nested : current.sections()) {
                 this.enqueueSection(nested);
             }

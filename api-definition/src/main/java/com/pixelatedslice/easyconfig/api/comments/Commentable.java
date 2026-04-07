@@ -1,4 +1,4 @@
-package com.pixelatedslice.easyconfig.api.config;
+package com.pixelatedslice.easyconfig.api.comments;
 
 import org.jspecify.annotations.NonNull;
 

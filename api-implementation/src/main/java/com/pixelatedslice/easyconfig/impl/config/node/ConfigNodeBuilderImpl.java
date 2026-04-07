@@ -9,16 +9,22 @@ import com.pixelatedslice.easyconfig.impl.descriptor.node.ConfigNodeDescriptorBu
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
 @AutoService(ConfigNodeBuilder.class)
 public class ConfigNodeBuilderImpl<T> implements ConfigNodeBuilder<T> {
     private final ConfigNodeDescriptorBuilderImpl<T> descriptorBuilder = new ConfigNodeDescriptorBuilderImpl<>();
-    private final List<String> comments = new ArrayList<>();
     private T value;
     private ConfigSection parent;
+
+    public ConfigNodeBuilderImpl(@NonNull TypeToken<T> typeToken, @NonNull ConfigSection parent) {
+        Objects.requireNonNull(parent);
+        this.parent = parent;
+        this.descriptorBuilder.typeToken(typeToken);
+    }
+
+    public ConfigNodeBuilderImpl() {
+    }
 
     @Override
     public @NonNull ConfigNodeBuilder<T> key(@NonNull String key) {
@@ -61,6 +67,13 @@ public class ConfigNodeBuilderImpl<T> implements ConfigNodeBuilder<T> {
     public @NonNull ConfigNodeBuilder<T> comments(@NonNull String @NonNull ... comment) {
         Objects.requireNonNull(comment);
         this.descriptorBuilder.comments(comment);
+        return this;
+    }
+
+    @Override
+    public @NonNull ConfigNodeBuilder<T> addComment(@NonNull String comment) {
+        Objects.requireNonNull(comment);
+        this.descriptorBuilder.addComment(comment);
         return this;
     }
 
