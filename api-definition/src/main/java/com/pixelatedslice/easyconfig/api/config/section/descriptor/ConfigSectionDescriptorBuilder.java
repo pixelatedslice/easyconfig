@@ -1,13 +1,10 @@
-package com.pixelatedslice.easyconfig.api.descriptor.config.section;
+package com.pixelatedslice.easyconfig.api.config.section.descriptor;
 
 import com.google.common.reflect.TypeToken;
+import com.pixelatedslice.easyconfig.api.builder.descriptor.*;
+import com.pixelatedslice.easyconfig.api.config.node.descriptor.ConfigNodeDescriptor;
+import com.pixelatedslice.easyconfig.api.config.node.descriptor.ConfigNodeDescriptorBuilder;
 import com.pixelatedslice.easyconfig.api.descriptor.Descriptor;
-import com.pixelatedslice.easyconfig.api.descriptor.config.DescriptorBuilderWithComments;
-import com.pixelatedslice.easyconfig.api.descriptor.config.DescriptorBuilderWithConfigSectionParent;
-import com.pixelatedslice.easyconfig.api.descriptor.config.DescriptorBuilderWithKey;
-import com.pixelatedslice.easyconfig.api.descriptor.config.node.ConfigNodeDescriptor;
-import com.pixelatedslice.easyconfig.api.descriptor.config.node.ConfigNodeDescriptorBuilder;
-import com.pixelatedslice.easyconfig.api.descriptor.config.node.DescriptorBuilderWithNodeChildren;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 

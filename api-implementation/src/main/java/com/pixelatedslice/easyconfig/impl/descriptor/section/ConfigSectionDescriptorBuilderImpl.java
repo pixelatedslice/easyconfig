@@ -1,9 +1,9 @@
 package com.pixelatedslice.easyconfig.impl.descriptor.section;
 
-import com.pixelatedslice.easyconfig.api.descriptor.config.node.ConfigNodeDescriptor;
-import com.pixelatedslice.easyconfig.api.descriptor.config.node.ConfigNodeDescriptorBuilder;
-import com.pixelatedslice.easyconfig.api.descriptor.config.section.ConfigSectionDescriptor;
-import com.pixelatedslice.easyconfig.api.descriptor.config.section.ConfigSectionDescriptorBuilder;
+import com.pixelatedslice.easyconfig.api.config.node.descriptor.ConfigNodeDescriptor;
+import com.pixelatedslice.easyconfig.api.config.node.descriptor.ConfigNodeDescriptorBuilder;
+import com.pixelatedslice.easyconfig.api.config.section.descriptor.ConfigSectionDescriptor;
+import com.pixelatedslice.easyconfig.api.config.section.descriptor.ConfigSectionDescriptorBuilder;
 import com.pixelatedslice.easyconfig.impl.descriptor.node.ConfigNodeDescriptorBuilderImpl;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;

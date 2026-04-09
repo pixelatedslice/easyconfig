@@ -1,7 +1,7 @@
 package com.pixelatedslice.easyconfig.api.config.file;
 
-import com.pixelatedslice.easyconfig.api.config.node.BuilderWithConfigNodes;
-import com.pixelatedslice.easyconfig.api.config.section.BuilderWithConfigSections;
+import com.pixelatedslice.easyconfig.api.builder.config.BuilderWithConfigNodes;
+import com.pixelatedslice.easyconfig.api.builder.config.BuilderWithConfigSections;
 import org.jspecify.annotations.NonNull;
 
 import java.nio.file.Path;

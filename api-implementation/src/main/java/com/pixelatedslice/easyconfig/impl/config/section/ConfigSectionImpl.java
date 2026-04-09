@@ -2,8 +2,8 @@ package com.pixelatedslice.easyconfig.impl.config.section;
 
 import com.pixelatedslice.easyconfig.api.config.node.ConfigNode;
 import com.pixelatedslice.easyconfig.api.config.section.ConfigSection;
+import com.pixelatedslice.easyconfig.api.config.section.descriptor.ConfigSectionDescriptor;
 import com.pixelatedslice.easyconfig.api.descriptor.WithDescriptor;
-import com.pixelatedslice.easyconfig.api.descriptor.config.section.ConfigSectionDescriptor;
 import com.pixelatedslice.easyconfig.impl.descriptor.section.ConfigSectionDescriptorImpl;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;

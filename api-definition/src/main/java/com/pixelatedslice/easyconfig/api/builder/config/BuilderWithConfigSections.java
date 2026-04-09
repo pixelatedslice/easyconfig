@@ -1,5 +1,6 @@
-package com.pixelatedslice.easyconfig.api.config.section;
+package com.pixelatedslice.easyconfig.api.builder.config;
 
+import com.pixelatedslice.easyconfig.api.config.section.ConfigSectionBuilder;
 import org.jspecify.annotations.NonNull;
 
 import java.util.function.Consumer;

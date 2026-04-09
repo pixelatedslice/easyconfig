@@ -34,7 +34,7 @@ public class ConfigNodeIteratorImpl implements ConfigNodeIterator {
             ConfigSection current = this.sectionQueue.poll();
 
             this.nodeQueue.addAll(current.nodes());
-            
+
             for (ConfigSection nested : current.sections()) {
                 this.enqueueSection(nested);
             }

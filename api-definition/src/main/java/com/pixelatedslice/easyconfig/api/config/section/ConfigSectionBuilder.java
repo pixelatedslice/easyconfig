@@ -1,8 +1,9 @@
 package com.pixelatedslice.easyconfig.api.config.section;
 
 import com.google.common.reflect.TypeToken;
+import com.pixelatedslice.easyconfig.api.builder.config.BuilderWithConfigNodes;
+import com.pixelatedslice.easyconfig.api.builder.config.BuilderWithConfigSections;
 import com.pixelatedslice.easyconfig.api.comments.BuilderWithComments;
-import com.pixelatedslice.easyconfig.api.config.node.BuilderWithConfigNodes;
 import com.pixelatedslice.easyconfig.api.config.node.ConfigNodeBuilder;
 import org.jspecify.annotations.NonNull;
 

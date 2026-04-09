@@ -2,8 +2,8 @@ package com.pixelatedslice.easyconfig.impl.config.node;
 
 import com.google.common.reflect.TypeToken;
 import com.pixelatedslice.easyconfig.api.config.node.ConfigNode;
+import com.pixelatedslice.easyconfig.api.config.node.descriptor.ConfigNodeDescriptor;
 import com.pixelatedslice.easyconfig.api.config.section.ConfigSection;
-import com.pixelatedslice.easyconfig.api.descriptor.config.node.ConfigNodeDescriptor;
 import com.pixelatedslice.easyconfig.impl.descriptor.node.ConfigNodeDescriptorImpl;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;

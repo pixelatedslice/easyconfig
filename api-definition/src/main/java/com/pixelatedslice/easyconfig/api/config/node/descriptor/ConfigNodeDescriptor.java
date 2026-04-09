@@ -1,10 +1,10 @@
-package com.pixelatedslice.easyconfig.api.descriptor.config.node;
+package com.pixelatedslice.easyconfig.api.config.node.descriptor;
 
 import com.pixelatedslice.easyconfig.api.comments.Commentable;
+import com.pixelatedslice.easyconfig.api.config.section.descriptor.ConfigSectionDescriptor;
 import com.pixelatedslice.easyconfig.api.descriptor.Descriptor;
-import com.pixelatedslice.easyconfig.api.descriptor.config.DescriptorWithKey;
-import com.pixelatedslice.easyconfig.api.descriptor.config.DescriptorWithParent;
-import com.pixelatedslice.easyconfig.api.descriptor.config.section.ConfigSectionDescriptor;
+import com.pixelatedslice.easyconfig.api.descriptor.DescriptorWithKey;
+import com.pixelatedslice.easyconfig.api.descriptor.DescriptorWithParent;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
@@ -23,8 +23,6 @@ public interface ConfigNodeDescriptor<T>
     }
 
     @NonNull Optional<T> defaultValue();
-
-    void setDefaultValue(@Nullable T defaultValue);
 
     @Override
     default void setKey(@NonNull String key) {

@@ -1,4 +1,4 @@
-package com.pixelatedslice.easyconfig.api.descriptor.config;
+package com.pixelatedslice.easyconfig.api.builder.descriptor;
 
 import org.jspecify.annotations.NonNull;
 

@@ -7,13 +7,13 @@ import java.util.Collection;
 import java.util.Optional;
 import java.util.ServiceLoader;
 
-public interface WithConfigNodeChildren {
-    @NonNull Collection<@NonNull ConfigNode<?>> nodes();
-
-    <T> @NonNull Optional<@NonNull ConfigNode<T>> node(
+public interface WithConfigNodeChildren<N extends ConfigNode<?>> {
+    <T> @NonNull Optional<? extends ConfigNode<T>> node(
             @NonNull TypeToken<@NonNull T> typeToken,
             @NonNull String... providedKeys
     );
+
+    @NonNull Collection<@NonNull N> nodes();
 
     void addNodes(@NonNull ConfigNode<?> @NonNull ... children);
 
@@ -21,8 +21,10 @@ public interface WithConfigNodeChildren {
 
     void clearNodes();
 
-    default @NonNull ConfigNodeIterator nodeIterator() {
+    @NonNull
+    default ConfigNodeIterator nodeIterator() {
         return ServiceLoader.load(ConfigNodeIterator.class).findFirst().orElseThrow();
     }
+
 }
 

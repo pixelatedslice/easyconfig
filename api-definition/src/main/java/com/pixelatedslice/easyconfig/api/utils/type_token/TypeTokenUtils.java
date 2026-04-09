@@ -19,6 +19,10 @@ public final class TypeTokenUtils {
         return TypeTokenTypeComparer.hasCorrectType(value, typeToken);
     }
 
+    public static boolean matches(@NonNull TypeToken<?> typeTokenOne, @NonNull TypeToken<?> typeTokenTwo) {
+        return typeTokenOne.equals(typeTokenTwo);
+    }
+
     public static <T> boolean matchingClass(
             @NonNull Class<T> targetType,
             @NonNull TypeToken<?> typeToken,

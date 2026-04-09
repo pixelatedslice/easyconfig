@@ -5,7 +5,7 @@ import com.google.common.reflect.TypeToken;
 import com.pixelatedslice.easyconfig.api.config.node.ConfigNodeBuilder;
 import com.pixelatedslice.easyconfig.api.config.section.ConfigSection;
 import com.pixelatedslice.easyconfig.api.config.section.ConfigSectionBuilder;
-import com.pixelatedslice.easyconfig.api.descriptor.config.section.ConfigSectionDescriptorBuilder;
+import com.pixelatedslice.easyconfig.api.config.section.descriptor.ConfigSectionDescriptorBuilder;
 import com.pixelatedslice.easyconfig.api.exception.ComplexInsteadOfSimpleTypeUsedException;
 import com.pixelatedslice.easyconfig.api.utils.type_token.TypeTokenUtils;
 import com.pixelatedslice.easyconfig.impl.config.node.ConfigNodeBuilderImpl;
@@ -29,7 +29,7 @@ public class ConfigSectionBuilderImpl implements ConfigSectionBuilder {
         this.parentSection = parentSection;
     }
 
-    private ConfigSectionBuilderImpl() {
+    public ConfigSectionBuilderImpl() {
     }
 
     @Override

@@ -1,5 +1,7 @@
-package com.pixelatedslice.easyconfig.api.descriptor.config.section;
+package com.pixelatedslice.easyconfig.api.builder.descriptor;
 
+import com.pixelatedslice.easyconfig.api.config.section.descriptor.ConfigSectionDescriptor;
+import com.pixelatedslice.easyconfig.api.config.section.descriptor.ConfigSectionDescriptorBuilder;
 import org.jspecify.annotations.NonNull;
 
 import java.util.function.Consumer;

@@ -1,5 +1,7 @@
+import com.pixelatedslice.easyconfig.api.config.section.ConfigSectionBuilder;
+
 module com.pixelatedslice.easyconfig.impl.serialization.builtin.bukkit {
-    uses com.pixelatedslice.easyconfig.api.config.section.ConfigSectionBuilder;
+    uses ConfigSectionBuilder;
     requires org.bukkit;
     requires com.pixelatedslice.easyconfig.api;
     requires org.jspecify;
