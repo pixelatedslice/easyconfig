@@ -8,8 +8,8 @@ import java.util.Optional;
 import java.util.ServiceLoader;
 
 @FunctionalInterface
-public interface WithNestedConfigSection<S extends ConfigSection> {
-    default @NonNull Optional<@NonNull S> section(@NonNull String @NonNull ... providedKeys) {
+public interface WithNestedConfigSection {
+    default @NonNull Optional<@NonNull ConfigSection> section(@NonNull String @NonNull ... providedKeys) {
         Objects.requireNonNull(providedKeys);
         if (providedKeys.length == 0) {
             return Optional.empty();
@@ -20,7 +20,7 @@ public interface WithNestedConfigSection<S extends ConfigSection> {
                 : ConfigSectionIterator.findSection(this.sections(), providedKeys);
     }
 
-    @NonNull Collection<@NonNull S> sections();
+    @NonNull Collection<@NonNull ConfigSection> sections();
 
     @NonNull
     default ConfigSectionIterator sectionIterator() {

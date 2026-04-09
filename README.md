@@ -30,7 +30,7 @@ class MyConfigFile extends ConfigFileImpl {
         super(Path.of("my", "config"));
     }
 
-    public MyConfigFile(@NonNull Collection<ConfigNode<?>> childNodes,
+    public MyConfigFile(@NonNull Collection<ConfigNode<?, ?>> childNodes,
             @NonNull Collection<ConfigSection> nestedSections, @NonNull Collection<String> comments) {
         super(Path.of("my", "config"), childNodes, nestedSections, comments);
     }

@@ -6,27 +6,24 @@ import com.pixelatedslice.easyconfig.api.config.node.ConfigNodeIterator;
 import com.pixelatedslice.easyconfig.api.config.node.WithConfigNodeChildren;
 import com.pixelatedslice.easyconfig.api.config.section.descriptor.ConfigSectionDescriptor;
 import com.pixelatedslice.easyconfig.api.descriptor.WithDescriptor;
-import com.pixelatedslice.easyconfig.api.mutability.ImmutableVariant;
+import com.pixelatedslice.easyconfig.api.mutability.immutable.ImmutableVariant;
 import org.jspecify.annotations.NonNull;
 
 import java.util.Objects;
 import java.util.Optional;
 import java.util.ServiceLoader;
 
-public interface ConfigSection<
-        S extends ConfigSection<S, N>,
-        N extends ConfigNode<?>
-        >
-        extends WithConfigNodeChildren<N>, WithNestedConfigSection<S>,
+public interface ConfigSection
+        extends WithConfigNodeChildren, WithNestedConfigSection,
         WithDescriptor<ConfigSectionDescriptor>, ImmutableVariant {
     static @NonNull ConfigSectionBuilder builder() {
         return ServiceLoader.load(ConfigSectionBuilder.class).findFirst().orElseThrow();
     }
 
-    @NonNull Optional<@NonNull S> parent();
+    @NonNull Optional<@NonNull ConfigSection> parent();
 
     @Override
-    default @NonNull <T> Optional<? extends ConfigNode<T>> node(
+    default @NonNull <T> Optional<ConfigNode<T>> node(
             @NonNull TypeToken<T> typeToken,
             @NonNull String... providedKeys
     ) {

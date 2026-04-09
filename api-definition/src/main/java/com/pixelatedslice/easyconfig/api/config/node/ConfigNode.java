@@ -1,10 +1,9 @@
 package com.pixelatedslice.easyconfig.api.config.node;
 
 import com.pixelatedslice.easyconfig.api.config.node.descriptor.ConfigNodeDescriptor;
-import com.pixelatedslice.easyconfig.api.config.node.mutable.MutableConfigNode;
 import com.pixelatedslice.easyconfig.api.config.section.ConfigSection;
 import com.pixelatedslice.easyconfig.api.descriptor.WithDescriptor;
-import com.pixelatedslice.easyconfig.api.mutability.WithMutableVariant;
+import com.pixelatedslice.easyconfig.api.mutability.mutable.WithMutableVariant;
 import org.jspecify.annotations.NonNull;
 
 import java.util.Optional;
@@ -18,5 +17,7 @@ public interface ConfigNode<T>
         return (ConfigNodeBuilder<T>) builderLoader.findFirst().orElseThrow();
     }
 
-    @NonNull Optional<@NonNull ConfigSection> parent();
+    @NonNull Optional<@NonNull T> value();
+
+    @NonNull Optional<? extends @NonNull ConfigSection> parent();
 }

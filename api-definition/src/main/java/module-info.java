@@ -33,8 +33,6 @@ open module com.pixelatedslice.easyconfig.api {
     exports com.pixelatedslice.easyconfig.api.config.node.descriptor;
     exports com.pixelatedslice.easyconfig.api.builder.config;
     exports com.pixelatedslice.easyconfig.api.builder.descriptor;
-    exports com.pixelatedslice.easyconfig.api.config.section.immutable;
-    exports com.pixelatedslice.easyconfig.api.config.section.mutable;
-    exports com.pixelatedslice.easyconfig.api.config.node.mutable;
-    exports com.pixelatedslice.easyconfig.api.config.node.immutable;
+    exports com.pixelatedslice.easyconfig.api.mutability.immutable;
+    exports com.pixelatedslice.easyconfig.api.mutability.mutable;
 }

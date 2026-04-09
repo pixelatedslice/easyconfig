@@ -7,19 +7,13 @@ import java.util.Collection;
 import java.util.Optional;
 import java.util.ServiceLoader;
 
-public interface WithConfigNodeChildren<N extends ConfigNode<?>> {
-    <T> @NonNull Optional<? extends ConfigNode<T>> node(
+public interface WithConfigNodeChildren {
+    <T> @NonNull Optional<ConfigNode<T>> node(
             @NonNull TypeToken<@NonNull T> typeToken,
             @NonNull String... providedKeys
     );
 
-    @NonNull Collection<@NonNull N> nodes();
-
-    void addNodes(@NonNull ConfigNode<?> @NonNull ... children);
-
-    void removeNodes(@NonNull String @NonNull ... keys);
-
-    void clearNodes();
+    @NonNull Collection<@NonNull ConfigNode<?>> nodes();
 
     @NonNull
     default ConfigNodeIterator nodeIterator() {

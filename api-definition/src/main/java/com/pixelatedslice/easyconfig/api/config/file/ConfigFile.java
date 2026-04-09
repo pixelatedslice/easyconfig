@@ -6,12 +6,12 @@ import org.jspecify.annotations.NonNull;
 import java.nio.file.Path;
 import java.util.ServiceLoader;
 
-public interface ConfigFile<S extends ConfigSection<S, ?>> {
+public interface ConfigFile {
     static @NonNull ConfigFileBuilder builder() {
         return ServiceLoader.load(ConfigFileBuilder.class).findFirst().orElseThrow();
     }
 
-    @NonNull S rootSection();
+    @NonNull ConfigSection rootSection();
 
     @NonNull Path filePathWithoutExtension();
 }

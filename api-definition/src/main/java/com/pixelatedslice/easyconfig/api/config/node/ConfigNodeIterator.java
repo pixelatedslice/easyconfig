@@ -2,8 +2,8 @@ package com.pixelatedslice.easyconfig.api.config.node;
 
 import com.google.common.reflect.TypeToken;
 import com.pixelatedslice.easyconfig.api.EasyConfig;
-import com.pixelatedslice.easyconfig.api.config.section.ConfigSection;
 import com.pixelatedslice.easyconfig.api.config.section.ConfigSectionIterator;
+import com.pixelatedslice.easyconfig.api.config.section.WithNestedConfigSection;
 import com.pixelatedslice.easyconfig.api.exception.BrokenNodeKeyException;
 import org.jspecify.annotations.NonNull;
 
@@ -11,9 +11,9 @@ import java.util.*;
 
 public interface ConfigNodeIterator extends Iterator<ConfigNode<?>> {
     @SuppressWarnings("unchecked")
-    static <T>
-    @NonNull Optional<? extends @NonNull ConfigNode<T>> find(
-            @NonNull ConfigSection<?, ?> rootContainer,
+    static <T, C extends WithConfigNodeChildren & WithNestedConfigSection>
+    @NonNull Optional<@NonNull ConfigNode<T>> find(
+            @NonNull C rootContainer,
             @NonNull TypeToken<@NonNull T> typeToken, @NonNull String @NonNull ... providedKeys
     ) {
         Objects.requireNonNull(rootContainer);
@@ -41,13 +41,14 @@ public interface ConfigNodeIterator extends Iterator<ConfigNode<?>> {
         String[] parentKeys = Arrays.copyOf(providedKeys, providedKeys.length - 1);
         var nodeKey = providedKeys[providedKeys.length - 1];
         var sectionOptional = ConfigSectionIterator.findSection(rootContainer.sections(), parentKeys);
-        return sectionOptional.flatMap(section -> section.node(typeToken, nodeKey));
+        return sectionOptional.flatMap((@NonNull WithConfigNodeChildren section) -> section.node(typeToken, nodeKey));
     }
 
     @SuppressWarnings("DuplicatedCode")
-    static <T>
-    @NonNull Optional<? extends @NonNull ConfigNode<T>> findButInTheBukkitAPIStyle(
-            @NonNull ConfigSection<?, ?> rootContainer, @NonNull TypeToken<@NonNull T> typeToken, @NonNull String key) {
+    static <T, C extends WithConfigNodeChildren & WithNestedConfigSection>
+    @NonNull Optional<@NonNull ConfigNode<T>> findButInTheBukkitAPIStyle(
+            @NonNull C rootContainer, @NonNull TypeToken<@NonNull T> typeToken,
+            @NonNull String key) {
         Objects.requireNonNull(rootContainer);
         Objects.requireNonNull(typeToken);
         Objects.requireNonNull(key);

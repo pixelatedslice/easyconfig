@@ -7,8 +7,8 @@ import org.jspecify.annotations.NonNull;
 import java.util.*;
 
 public interface ConfigSectionIterator extends Iterator<ConfigSection> {
-    static <S extends ConfigSection> @NonNull Optional<@NonNull S> findSection(
-            @NonNull Collection<? extends @NonNull S> nestedSections,
+    static @NonNull Optional<@NonNull ConfigSection> findSection(
+            @NonNull Collection<? extends @NonNull ConfigSection> nestedSections,
             @NonNull String... providedKeys
     ) {
         Objects.requireNonNull(nestedSections);
@@ -21,8 +21,8 @@ public interface ConfigSectionIterator extends Iterator<ConfigSection> {
         int last = keys.size() - 1;
         for (int i = 0; i <= last; i++) {
             String wanted = keys.get(i);
-            S next = null;
-            for (S section : currentNestedSections) {
+            ConfigSection next = null;
+            for (ConfigSection section : currentNestedSections) {
                 if (section.descriptor().key().equals(wanted)) {
                     next = section;
                     break;
@@ -34,14 +34,14 @@ public interface ConfigSectionIterator extends Iterator<ConfigSection> {
             if (i == last) {
                 return Optional.of(next);
             }
-            currentNestedSections = (Collection<? extends S>) next.sections();
+            currentNestedSections = next.sections();
         }
         return Optional.empty();
     }
 
     @SuppressWarnings("DuplicatedCode")
-    static <S extends ConfigSection> @NonNull Optional<@NonNull S> findButInTheBukkitAPIStyle(
-            @NonNull Collection<? extends @NonNull S> nestedSections, @NonNull String key) {
+    static @NonNull Optional<@NonNull ConfigSection> findButInTheBukkitAPIStyle(
+            @NonNull Collection<? extends @NonNull ConfigSection> nestedSections, @NonNull String key) {
         Objects.requireNonNull(nestedSections);
         Objects.requireNonNull(key);
         List<String> keys;
