@@ -5,22 +5,39 @@ import com.google.common.reflect.TypeToken;
 import com.pixelatedslice.easyconfig.api.config.node.ConfigNode;
 import com.pixelatedslice.easyconfig.api.config.node.ConfigNodeBuilder;
 import com.pixelatedslice.easyconfig.api.config.section.ConfigSection;
-import com.pixelatedslice.easyconfig.impl.descriptor.node.ConfigNodeDescriptorBuilderImpl;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Objects;
 
 @AutoService(ConfigNodeBuilder.class)
 public class ConfigNodeBuilderImpl<T> implements ConfigNodeBuilder<T> {
-    private final ConfigNodeDescriptorBuilderImpl<T> descriptorBuilder = new ConfigNodeDescriptorBuilderImpl<>();
+    private final List<String> comments = new ArrayList<>();
+    private String key;
+    private TypeToken<T> typeToken;
     private T value;
+    private T defaultValue;
     private ConfigSection parent;
 
-    public ConfigNodeBuilderImpl(@NonNull TypeToken<T> typeToken, @NonNull ConfigSection parent) {
+    public ConfigNodeBuilderImpl(
+            @NonNull String key,
+            @NonNull TypeToken<T> typeToken,
+            @Nullable T value,
+            @Nullable T defaultValue,
+            @NonNull ConfigSection parent
+    ) {
+        Objects.requireNonNull(key);
         Objects.requireNonNull(parent);
+        Objects.requireNonNull(typeToken);
+
+        this.key = key;
+        this.typeToken = typeToken;
+        this.value = value;
+        this.defaultValue = defaultValue;
         this.parent = parent;
-        this.descriptorBuilder.typeToken(typeToken);
     }
 
     public ConfigNodeBuilderImpl() {
@@ -29,7 +46,7 @@ public class ConfigNodeBuilderImpl<T> implements ConfigNodeBuilder<T> {
     @Override
     public @NonNull ConfigNodeBuilder<T> key(@NonNull String key) {
         Objects.requireNonNull(key);
-        this.descriptorBuilder.key(key);
+        this.key = key;
         return this;
     }
 
@@ -42,14 +59,14 @@ public class ConfigNodeBuilderImpl<T> implements ConfigNodeBuilder<T> {
 
     @Override
     public @NonNull ConfigNodeBuilder<T> defaultValue(@Nullable T defaultValue) {
-        this.descriptorBuilder.defaultValue(defaultValue);
+        this.defaultValue = defaultValue;
         return this;
     }
 
     @Override
     public @NonNull ConfigNodeBuilder<T> typeToken(@NonNull TypeToken<T> typeToken) {
         Objects.requireNonNull(typeToken);
-        this.descriptorBuilder.typeToken(typeToken);
+        this.typeToken = typeToken;
         return this;
     }
 
@@ -58,22 +75,21 @@ public class ConfigNodeBuilderImpl<T> implements ConfigNodeBuilder<T> {
     public @NonNull ConfigNodeBuilder<T> parent(@NonNull ConfigSection parent) {
         Objects.requireNonNull(parent);
         this.parent = parent;
-        this.descriptorBuilder.parent(parent.descriptor());
         return this;
     }
 
 
     @Override
-    public @NonNull ConfigNodeBuilder<T> comments(@NonNull String @NonNull ... comment) {
-        Objects.requireNonNull(comment);
-        this.descriptorBuilder.comments(comment);
+    public @NonNull ConfigNodeBuilder<T> comments(@NonNull String @NonNull ... comments) {
+        Objects.requireNonNull(comments);
+        Collections.addAll(this.comments, comments);
         return this;
     }
 
     @Override
     public @NonNull ConfigNodeBuilder<T> addComment(@NonNull String comment) {
         Objects.requireNonNull(comment);
-        this.descriptorBuilder.addComment(comment);
+        this.comments.add(comment);
         return this;
     }
 
@@ -81,9 +97,12 @@ public class ConfigNodeBuilderImpl<T> implements ConfigNodeBuilder<T> {
     @Override
     public @NonNull ConfigNode<T> build() {
         return new ConfigNodeImpl<>(
-                this.descriptorBuilder.build(),
+                Objects.requireNonNull(this.key),
+                Objects.requireNonNull(this.typeToken),
                 this.value,
-                this.parent
+                this.defaultValue,
+                this.parent,
+                Objects.requireNonNull(this.comments)
         );
     }
 }

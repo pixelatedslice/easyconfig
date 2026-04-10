@@ -1,10 +1,12 @@
 package com.pixelatedslice.easyconfig.api.config.node;
 
+import com.pixelatedslice.easyconfig.api.comments.MutableAndCommentable;
 import com.pixelatedslice.easyconfig.api.mutability.immutable.WithImmutableVariant;
 import com.pixelatedslice.easyconfig.api.mutability.mutable.MutableVariant;
 import org.jspecify.annotations.Nullable;
 
 public interface MutableConfigNode<T>
-        extends MutableVariant, WithImmutableVariant<ConfigNode<T>> {
+        extends MutableVariant, WithImmutableVariant<ConfigNode<T>>, MutableAndCommentable {
     void setValue(@Nullable T value);
 }
+

@@ -1,9 +1,10 @@
 package com.pixelatedslice.easyconfig.impl.config.node;
 
 import com.pixelatedslice.easyconfig.api.config.node.MutableConfigNode;
+import com.pixelatedslice.easyconfig.impl.comments.AbstractMutableAndCommentable;
 import org.jspecify.annotations.Nullable;
 
-public class MutableConfigNodeImpl<T> implements MutableConfigNode<T> {
+public class MutableConfigNodeImpl<T> extends AbstractMutableAndCommentable implements MutableConfigNode<T> {
     private final ConfigNodeImpl<? super T> originalNode;
     private T value;
 
@@ -18,6 +19,6 @@ public class MutableConfigNodeImpl<T> implements MutableConfigNode<T> {
 
     @Override
     public void apply() {
-        this.originalNode.addValueUpdateTask(this.value);
+        this.originalNode.pushChangesToQueue(new MutableConfigNodeValueUpdateImpl<>(this.value), this.commentUpdates);
     }
 }

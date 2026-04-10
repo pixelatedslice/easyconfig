@@ -5,28 +5,28 @@ import com.google.common.reflect.TypeToken;
 import com.pixelatedslice.easyconfig.api.config.node.ConfigNodeBuilder;
 import com.pixelatedslice.easyconfig.api.config.section.ConfigSection;
 import com.pixelatedslice.easyconfig.api.config.section.ConfigSectionBuilder;
-import com.pixelatedslice.easyconfig.api.config.section.descriptor.ConfigSectionDescriptorBuilder;
 import com.pixelatedslice.easyconfig.api.exception.ComplexInsteadOfSimpleTypeUsedException;
 import com.pixelatedslice.easyconfig.api.utils.type_token.TypeTokenUtils;
 import com.pixelatedslice.easyconfig.impl.config.node.ConfigNodeBuilderImpl;
-import com.pixelatedslice.easyconfig.impl.descriptor.section.ConfigSectionDescriptorBuilderImpl;
 import org.jspecify.annotations.NonNull;
 
 import java.util.ArrayList;
-import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 import java.util.Objects;
 import java.util.function.Consumer;
 
 @AutoService(ConfigSectionBuilder.class)
 public class ConfigSectionBuilderImpl implements ConfigSectionBuilder {
-    private final ConfigSectionDescriptorBuilder descriptorBuilder = new ConfigSectionDescriptorBuilderImpl();
-    private final Collection<ConfigNodeBuilder<?>> childNodes = new ArrayList<>();
-    private final Collection<ConfigSectionBuilder> nestedSections = new ArrayList<>();
-    private ConfigSection parentSection;
+    private final List<ConfigNodeBuilder<?>> childNodes = new ArrayList<>();
+    private final List<ConfigSectionBuilder> nestedSections = new ArrayList<>();
+    private final List<String> comments = new ArrayList<>();
+    private String key;
+    private ConfigSection parent;
 
-    public ConfigSectionBuilderImpl(@NonNull ConfigSection parentSection) {
-        Objects.requireNonNull(parentSection);
-        this.parentSection = parentSection;
+    public ConfigSectionBuilderImpl(@NonNull ConfigSection parent) {
+        Objects.requireNonNull(parent);
+        this.parent = parent;
     }
 
     public ConfigSectionBuilderImpl() {
@@ -34,14 +34,13 @@ public class ConfigSectionBuilderImpl implements ConfigSectionBuilder {
 
     @Override
     public @NonNull ConfigSectionBuilder key(@NonNull String key) {
-        this.descriptorBuilder.key(key);
+        this.key = key;
         return this;
     }
 
     @Override
     public @NonNull ConfigSectionBuilder parent(@NonNull ConfigSection parent) {
-        this.parentSection = parent;
-        this.descriptorBuilder.parent(parent.descriptor());
+        this.parent = parent;
         return this;
     }
 
@@ -137,14 +136,14 @@ public class ConfigSectionBuilderImpl implements ConfigSectionBuilder {
     @Override
     public @NonNull ConfigSectionBuilder comments(@NonNull String @NonNull ... comments) {
         Objects.requireNonNull(comments);
-        this.descriptorBuilder.comments(comments);
+        Collections.addAll(this.comments, comments);
         return this;
     }
 
     @Override
     public @NonNull ConfigSectionBuilder addComment(@NonNull String comment) {
         Objects.requireNonNull(comment);
-        this.descriptorBuilder.addComment(comment);
+        this.comments.add(comment);
         return this;
     }
 
@@ -177,22 +176,24 @@ public class ConfigSectionBuilderImpl implements ConfigSectionBuilder {
     @Override
     public @NonNull ConfigSection build() {
         var section = new ConfigSectionImpl(
-                Objects.requireNonNull(this.descriptorBuilder.build()),
-                this.parentSection,
+                Objects.requireNonNull(this.key),
+                this.parent,
                 new ArrayList<>(),
-                new ArrayList<>()
+                new ArrayList<>(),
+                Objects.requireNonNull(this.comments)
         );
 
-        for (var childNode : this.childNodes) {
-            childNode.parent(section);
-            section.addNodes(childNode.build());
-        }
+        try (var mutable = section.mutable()) {
+            for (var childNode : this.childNodes) {
+                childNode.parent(section);
+                mutable.addNodes(childNode.build());
+            }
 
-        for (var nestedSection : this.nestedSections) {
-            nestedSection.parent(section);
-            section.addSections(nestedSection.build());
+            for (var nestedSection : this.nestedSections) {
+                nestedSection.parent(section);
+                mutable.addSections(nestedSection.build());
+            }
+            return section;
         }
-
-        return section;
     }
 }

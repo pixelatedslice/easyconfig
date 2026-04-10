@@ -22,12 +22,12 @@ final class YamlFileFormatProviderEmitter {
         }
 
         for (ConfigSection nested : section.sections()) {
-            emitComments(emitter, nested.descriptor().comments());
+            emitComments(emitter, nested.comments());
 
             emitter.emit(new ScalarEvent(
                     null, null,
                     new ImplicitTuple(true, false),
-                    nested.descriptor().key(), null, null,
+                    nested.key(), null, null,
                     DumperOptions.ScalarStyle.DOUBLE_QUOTED
             ));
             emitSection(emitter, nested);
@@ -41,11 +41,11 @@ final class YamlFileFormatProviderEmitter {
                 ? node.value().get()
                 : node.defaultValue().orElse(null);
 
-        emitComments(emitter, node.descriptor().comments());
+        emitComments(emitter, node.comments());
         emitter.emit(new ScalarEvent(
                 null, null,
                 new ImplicitTuple(true, false),
-                node.descriptor().key(),
+                node.key(),
                 null, null,
                 DumperOptions.ScalarStyle.DOUBLE_QUOTED
         ));

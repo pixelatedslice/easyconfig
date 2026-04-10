@@ -2,7 +2,7 @@ package com.pixelatedslice.easyconfig.api.exception;
 
 public final class EmptyTypeTokenException extends RuntimeException {
     private EmptyTypeTokenException(String message) {
-        super();
+        super(message);
     }
 
     public static EmptyTypeTokenException emptyNodeTypeToken() {

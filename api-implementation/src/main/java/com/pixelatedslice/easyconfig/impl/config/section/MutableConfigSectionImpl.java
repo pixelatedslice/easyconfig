@@ -3,6 +3,7 @@ package com.pixelatedslice.easyconfig.impl.config.section;
 import com.pixelatedslice.easyconfig.api.config.node.ConfigNode;
 import com.pixelatedslice.easyconfig.api.config.section.ConfigSection;
 import com.pixelatedslice.easyconfig.api.config.section.MutableConfigSection;
+import com.pixelatedslice.easyconfig.impl.comments.AbstractMutableAndCommentable;
 import org.jspecify.annotations.NonNull;
 
 import java.util.ArrayList;
@@ -10,7 +11,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.function.Consumer;
 
-public class MutableConfigSectionImpl implements MutableConfigSection {
+public class MutableConfigSectionImpl extends AbstractMutableAndCommentable implements MutableConfigSection {
     private final ConfigSectionImpl originalSection;
     private final @NonNull Collection<@NonNull Consumer<@NonNull Collection<@NonNull ConfigNode<?>>>>
             nodeUpdates = new ArrayList<>();
@@ -41,7 +42,7 @@ public class MutableConfigSectionImpl implements MutableConfigSection {
     public void removeNodes(@NonNull String @NonNull ... keys) {
         this.nodeUpdates.add((@NonNull Collection<@NonNull ConfigNode<?>> list) -> {
             for (var key : keys) {
-                list.removeIf((ConfigNode<?> node) -> node.descriptor().key().equals(key));
+                list.removeIf((ConfigNode<?> node) -> node.key().equals(key));
             }
         });
     }
@@ -71,7 +72,7 @@ public class MutableConfigSectionImpl implements MutableConfigSection {
     public void removeSections(@NonNull String @NonNull ... keys) {
         this.sectionUpdates.add((Collection<@NonNull ConfigSection> list) -> {
             for (var key : keys) {
-                list.removeIf((ConfigSection section) -> section.descriptor().key().equals(key));
+                list.removeIf((ConfigSection section) -> section.key().equals(key));
             }
         });
     }
@@ -83,6 +84,6 @@ public class MutableConfigSectionImpl implements MutableConfigSection {
 
     @Override
     public void apply() {
-        this.originalSection.pushChangesToQueue(this.nodeUpdates, this.sectionUpdates);
+        this.originalSection.pushChangesToQueue(this.nodeUpdates, this.sectionUpdates, this.commentUpdates);
     }
 }

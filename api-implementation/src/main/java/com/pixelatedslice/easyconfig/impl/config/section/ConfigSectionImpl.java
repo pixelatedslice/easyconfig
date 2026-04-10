@@ -1,9 +1,10 @@
 package com.pixelatedslice.easyconfig.impl.config.section;
 
+import com.pixelatedslice.easyconfig.api.EasyConfig;
 import com.pixelatedslice.easyconfig.api.config.node.ConfigNode;
 import com.pixelatedslice.easyconfig.api.config.section.ConfigSection;
-import com.pixelatedslice.easyconfig.api.config.section.descriptor.ConfigSectionDescriptor;
-import com.pixelatedslice.easyconfig.impl.descriptor.section.ConfigSectionDescriptorImpl;
+import com.pixelatedslice.easyconfig.api.config.section.MutableConfigSection;
+import com.pixelatedslice.easyconfig.impl.comments.AbstractCommentable;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
@@ -12,10 +13,8 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.function.Consumer;
 
-public class ConfigSectionImpl implements ConfigSection {
-    public static final int DRAINED_INITIAL_CAPACITY = 32;
-    private final String key;
-    private final @NonNull ConfigSectionDescriptor descriptor;
+public class ConfigSectionImpl extends AbstractCommentable implements ConfigSection {
+    private final @NonNull String key;
     private final @NonNull List<@NonNull ConfigNode<?>> nodes;
     private final @NonNull List<@NonNull ConfigSection> sections;
     private final @Nullable ConfigSection parent;
@@ -26,13 +25,15 @@ public class ConfigSectionImpl implements ConfigSection {
             sectionUpdateQueue = new LinkedBlockingQueue<>();
 
     public ConfigSectionImpl(
-            @NonNull ConfigSectionDescriptor descriptor,
+            @NonNull String key,
             @Nullable ConfigSection parent,
             @NonNull List<@NonNull ConfigNode<?>> nodes,
-            @NonNull List<@NonNull ConfigSection> sections
+            @NonNull List<@NonNull ConfigSection> sections,
+            @NonNull List<@NonNull String> comments
     ) {
-        this.key = descriptor.key();
-        this.descriptor = descriptor;
+        super(key, comments);
+
+        this.key = key;
         this.parent = parent;
         this.nodes = nodes;
         this.sections = sections;
@@ -40,17 +41,10 @@ public class ConfigSectionImpl implements ConfigSection {
         this.startProcessorThreads();
     }
 
-    public ConfigSectionImpl(ConfigSection other) {
-        this.key = other.descriptor().key();
-        this.descriptor = other.descriptor();
-        this.parent = other.parent().orElse(null);
-        this.nodes = new ArrayList<>(other.nodes());
-        this.sections = new ArrayList<>(other.sections());
-    }
-
     public static ConfigSection newRootSection() {
-        return new ConfigSectionImpl(ConfigSectionDescriptorImpl.newRootSectionDescriptor(),
+        return new ConfigSectionImpl("root",
                 null,
+                new ArrayList<>(),
                 new ArrayList<>(),
                 new ArrayList<>()
         );
@@ -73,7 +67,8 @@ public class ConfigSectionImpl implements ConfigSection {
                 synchronized (this.nodes) {
                     consumer.accept(this.nodes);
 
-                    Collection<Consumer<Collection<ConfigNode<?>>>> drained = new ArrayList<>(DRAINED_INITIAL_CAPACITY);
+                    Collection<Consumer<Collection<ConfigNode<?>>>> drained =
+                            new ArrayList<>(EasyConfig.QUEUE_DRAINED_INITIAL_CAPACITY);
                     this.nodeUpdateQueue.drainTo(drained);
 
                     for (var drainedConsumer : drained) {
@@ -95,7 +90,8 @@ public class ConfigSectionImpl implements ConfigSection {
                 synchronized (this.sections) {
                     consumer.accept(this.sections);
 
-                    Collection<Consumer<Collection<ConfigSection>>> drained = new ArrayList<>(DRAINED_INITIAL_CAPACITY);
+                    Collection<Consumer<Collection<ConfigSection>>> drained =
+                            new ArrayList<>(EasyConfig.QUEUE_DRAINED_INITIAL_CAPACITY);
                     this.sectionUpdateQueue.drainTo(drained);
 
                     for (var drainedConsumer : drained) {
@@ -112,7 +108,8 @@ public class ConfigSectionImpl implements ConfigSection {
 
     void pushChangesToQueue(
             @NonNull Iterable<? extends @NonNull Consumer<@NonNull Collection<@NonNull ConfigNode<?>>>> nodeUpdates,
-            @NonNull Iterable<? extends @NonNull Consumer<@NonNull Collection<@NonNull ConfigSection>>> sectionUpdates
+            @NonNull Iterable<? extends @NonNull Consumer<@NonNull Collection<@NonNull ConfigSection>>> sectionUpdates,
+            @NonNull Iterable<? extends @NonNull Consumer<@NonNull Collection<@NonNull String>>> commentUpdates
     ) {
         Thread.ofVirtual().start(() -> {
             try {
@@ -132,6 +129,13 @@ public class ConfigSectionImpl implements ConfigSection {
                 throw new RuntimeException(e);
             }
         });
+        Thread.ofVirtual().start(() -> {
+            try {
+                super.pushChangesToQueue(commentUpdates);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+        });
     }
 
     @Override
@@ -145,8 +149,8 @@ public class ConfigSectionImpl implements ConfigSection {
     }
 
     @Override
-    public @NonNull ConfigSectionDescriptor descriptor() {
-        return this.descriptor;
+    public @NonNull String key() {
+        return this.key;
     }
 
     @Override
@@ -158,12 +162,17 @@ public class ConfigSectionImpl implements ConfigSection {
     public boolean equals(Object o) {
         return (this == o)
                 || ((o instanceof ConfigSection that)
-                && this.descriptor.equals(that.descriptor())
+                && this.key.equals(that.key())
         );
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(this.descriptor, this.parent);
+        return Objects.hash(this.key, this.parent);
+    }
+
+    @Override
+    public MutableConfigSection mutable() {
+        return new MutableConfigSectionImpl(this);
     }
 }

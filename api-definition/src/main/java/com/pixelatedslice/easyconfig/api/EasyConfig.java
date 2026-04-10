@@ -15,6 +15,7 @@ import java.util.regex.Pattern;
 
 public interface EasyConfig {
     Pattern KEY_REGEX = Pattern.compile("^[a-zA-Z0-9._-]*[a-zA-Z0-9]$");
+    int QUEUE_DRAINED_INITIAL_CAPACITY = 32;
 
     @NonNull EasyConfig copy();
 
