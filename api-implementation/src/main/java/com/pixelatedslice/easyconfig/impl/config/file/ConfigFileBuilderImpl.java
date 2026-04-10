@@ -13,7 +13,6 @@ import com.pixelatedslice.easyconfig.impl.config.node.ConfigNodeBuilderImpl;
 import com.pixelatedslice.easyconfig.impl.config.node.ConfigNodeImpl;
 import com.pixelatedslice.easyconfig.impl.config.section.ConfigSectionBuilderImpl;
 import com.pixelatedslice.easyconfig.impl.config.section.ConfigSectionImpl;
-import com.pixelatedslice.easyconfig.impl.descriptor.node.ConfigNodeDescriptorImpl;
 import org.jspecify.annotations.NonNull;
 
 import java.nio.file.Path;
@@ -79,7 +78,7 @@ public class ConfigFileBuilderImpl implements ConfigFileBuilder {
                 typeToken,
                 key,
                 null,
-                this.rootSection.descriptor(),
+                this.rootSection,
                 new ArrayList<>()
         );
 

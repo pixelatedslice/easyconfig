@@ -23,7 +23,7 @@ public interface ConfigSectionIterator extends Iterator<ConfigSection> {
             String wanted = keys.get(i);
             ConfigSection next = null;
             for (ConfigSection section : currentNestedSections) {
-                if (section.descriptor().key().equals(wanted)) {
+                if (section.key().equals(wanted)) {
                     next = section;
                     break;
                 }

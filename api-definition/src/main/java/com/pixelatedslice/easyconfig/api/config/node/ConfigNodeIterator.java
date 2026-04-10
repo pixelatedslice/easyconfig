@@ -25,11 +25,10 @@ public interface ConfigNodeIterator extends Iterator<ConfigNode<?>> {
         if (providedKeys.length == 1) {
             var nodeKey = providedKeys[0];
             for (var node : rootContainer.nodes()) {
-                var descriptor = node.descriptor();
-                if (!descriptor.key().equals(nodeKey)) {
+                if (!node.key().equals(nodeKey)) {
                     continue;
                 }
-                if (!descriptor.typeToken().orElseThrow().equals(typeToken)) {
+                if (!node.typeToken().equals(typeToken)) {
                     throw new IllegalStateException(String.format(
                             "The node (%s) is not of the expected typeToken", nodeKey
                     ));
