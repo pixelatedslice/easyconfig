@@ -22,6 +22,7 @@ public class ConfigNodeImpl<T> extends AbstractCommentable implements ConfigNode
     private final @Nullable ConfigSection parent;
     private final @Nullable T defaultValue;
     private final @NonNull AtomicReference<@Nullable T> value;
+    private final int hashCode;
 
     public ConfigNodeImpl(
             @NonNull String key,
@@ -38,6 +39,8 @@ public class ConfigNodeImpl<T> extends AbstractCommentable implements ConfigNode
         this.value = new AtomicReference<>(value);
         this.defaultValue = defaultValue;
         this.parent = parent;
+
+        this.hashCode = Objects.hash(this.key, this.parent, this.typeToken);
     }
 
     void setValueAndComments(
@@ -94,7 +97,7 @@ public class ConfigNodeImpl<T> extends AbstractCommentable implements ConfigNode
 
     @Override
     public int hashCode() {
-        return Objects.hash(this.key, this.parent, this.typeToken);
+        return this.hashCode;
     }
 
     @Override

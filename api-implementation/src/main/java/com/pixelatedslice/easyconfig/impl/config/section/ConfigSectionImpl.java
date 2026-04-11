@@ -16,6 +16,7 @@ public class ConfigSectionImpl extends AbstractCommentable implements ConfigSect
     private final @NonNull List<@NonNull ConfigNode<?>> nodes;
     private final @NonNull List<@NonNull ConfigSection> sections;
     private final @Nullable ConfigSection parent;
+    private final int hashCode;
 
     public ConfigSectionImpl(
             @NonNull String key,
@@ -30,6 +31,8 @@ public class ConfigSectionImpl extends AbstractCommentable implements ConfigSect
         this.parent = parent;
         this.nodes = nodes;
         this.sections = sections;
+
+        this.hashCode = Objects.hash(this.key, this.parent);
     }
 
     public static ConfigSection newRootSection() {
@@ -107,7 +110,7 @@ public class ConfigSectionImpl extends AbstractCommentable implements ConfigSect
 
     @Override
     public int hashCode() {
-        return Objects.hash(this.key, this.parent);
+        return this.hashCode;
     }
 
     @Override
