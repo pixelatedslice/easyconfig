@@ -12,7 +12,11 @@ public interface Serializer<T> {
         return serializer instanceof BuiltInSerializer<T>;
     }
 
-    @NonNull TypeToken<@NonNull T> forType();
+    @NonNull
+    default TypeToken<@NonNull T> forType() {
+        return new TypeToken<>() {
+        };
+    }
 
     void serialize(@Nullable T value, @NonNull ConfigSectionBuilder sectionBuilder);
 

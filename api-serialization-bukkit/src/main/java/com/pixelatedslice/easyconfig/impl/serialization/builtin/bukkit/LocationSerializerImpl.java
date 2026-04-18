@@ -1,6 +1,5 @@
 package com.pixelatedslice.easyconfig.impl.serialization.builtin.bukkit;
 
-import com.google.common.reflect.TypeToken;
 import com.pixelatedslice.easyconfig.api.config.node.ConfigNode;
 import com.pixelatedslice.easyconfig.api.config.section.ConfigSection;
 import com.pixelatedslice.easyconfig.api.config.section.ConfigSectionBuilder;
@@ -50,17 +49,17 @@ public final class LocationSerializerImpl implements BuiltInBukkitSerializer<Loc
         Objects.requireNonNull(section);
 
         var world = section
-                .node(TypeToken.of(String.class), "world")
+                .node(String.class, "world")
                 .flatMap(ConfigNode::value)
                 .map(Bukkit::getWorld)
                 .orElse(null);
-        var x = section.node(TypeToken.of(Double.class), "x").flatMap(ConfigNode::value).orElseThrow();
-        var y = section.node(TypeToken.of(Double.class), "y").flatMap(ConfigNode::value).orElseThrow();
-        var z = section.node(TypeToken.of(Double.class), "z").flatMap(ConfigNode::value).orElseThrow();
-        var yaw = section.node(TypeToken.of(Float.class), "yaw")
+        var x = section.node(Double.class, "x").flatMap(ConfigNode::value).orElseThrow();
+        var y = section.node(Double.class, "y").flatMap(ConfigNode::value).orElseThrow();
+        var z = section.node(Double.class, "z").flatMap(ConfigNode::value).orElseThrow();
+        var yaw = section.node(Float.class, "yaw")
                 .flatMap(ConfigNode::value)
                 .orElseThrow();
-        var pitch = section.node(TypeToken.of(Float.class), "pitch")
+        var pitch = section.node(Float.class, "pitch")
                 .flatMap(ConfigNode::value)
                 .orElseThrow();
 
@@ -69,12 +68,5 @@ public final class LocationSerializerImpl implements BuiltInBukkitSerializer<Loc
                 x, y, z,
                 yaw, pitch
         );
-    }
-
-    @Override
-    @NonNull
-    public TypeToken<Location> forType() {
-        return new TypeToken<>() {
-        };
     }
 }
