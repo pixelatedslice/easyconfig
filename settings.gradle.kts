@@ -14,5 +14,6 @@ include(
     "api-definition",
     "api-implementation",
     "api-fileformat-jackson-common",
-    "test"
+    "test",
+    "all-in-one"
 )

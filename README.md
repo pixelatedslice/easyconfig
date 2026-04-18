@@ -3,12 +3,26 @@
 <details>
 <summary>AI Usage</summary>
 
-AI is used when I am unfamiliar with a topic so that I can get basic knowledge and for Javadoc generation.
+AI is used when I am unfamiliar with a topic so that I can get basic knowledge and AI is used for Javadoc generation.
 </details>
 
 Easy Config is a Java library designed to bridge the gap between your code and configuration files. By utilizing Guava's
 TypeToken, it ensures that every piece of data you load is exactly the type you expect, even for complex generic
 structures like List<Map<String, Integer>>.
+
+<details>
+<summary>Licenses used</summary>
+- Apache-2.0:
+    - api-definition
+    - api-implementation
+    - api-fileformat-jackson-common
+    - api-fileformat-json
+    - api-fileformat-toml
+    - api-fileformat-yaml-1.2
+
+- GPLv3:
+    - api-serialization-bukkit (*The Bukkit/Spigot API is GPLv3 licensed.*)
+</details>
 
 ## Why use it?
 
@@ -20,7 +34,7 @@ structures like List<Map<String, Integer>>.
 ## Quick Start
 
 Add EasyConfig to your
-project, [see Maven Central](https://central.sonatype.com/artifact/com.pixelatedslice/easyconfig).
+project, [see Maven Central](https://central.sonatype.com/namespace/com.pixelatedslice.easyconfig).
 
 # Usage & Examples
 
