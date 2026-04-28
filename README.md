@@ -41,8 +41,8 @@ structures like List<Map<String, Integer>>.
 ## Quick Start
 
 > [!IMPORTANT]
-> The [AIO Package](https://central.sonatype.com/artifact/com.pixelatedslice.easyconfig/aio) is now deprecated!
-> Use the BOM instead!
+> The [AIO Package](https://central.sonatype.com/artifact/com.pixelatedslice.easyconfig/aio) is now deprecated! <br />
+> Use the [BOM](https://central.sonatype.com/artifact/com.pixelatedslice.easyconfig/bom) instead!
  
 Add EasyConfig to your
 project, [see Maven Central](https://central.sonatype.com/namespace/com.pixelatedslice.easyconfig).
