@@ -30,10 +30,10 @@ public class ConfigNodeImpl<T> extends AbstractCommentable implements ConfigNode
     public ConfigNodeImpl(
             @NonNull String key,
             @NonNull TypeToken<T> typeToken,
+            @Nullable ConfigSection parent,
             @Nullable T value,
             @Nullable T defaultValue,
             @NonNull Validator<T> validator,
-            @NonNull ConfigSection parent,
             @NonNull List<@NonNull String> comments
     ) {
         super(comments);

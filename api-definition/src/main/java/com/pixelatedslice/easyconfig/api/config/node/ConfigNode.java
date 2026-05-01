@@ -2,6 +2,7 @@ package com.pixelatedslice.easyconfig.api.config.node;
 
 import com.google.common.reflect.TypeToken;
 import com.pixelatedslice.easyconfig.api.comments.Commentable;
+import com.pixelatedslice.easyconfig.api.config.node.builder.ConfigNodeBuilder;
 import com.pixelatedslice.easyconfig.api.config.section.ConfigSection;
 import com.pixelatedslice.easyconfig.api.mutability.mutable.WithMutableVariant;
 import com.pixelatedslice.easyconfig.api.validator.Validator;

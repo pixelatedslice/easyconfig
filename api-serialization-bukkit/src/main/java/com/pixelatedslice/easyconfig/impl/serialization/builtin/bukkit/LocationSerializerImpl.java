@@ -2,8 +2,9 @@ package com.pixelatedslice.easyconfig.impl.serialization.builtin.bukkit;
 
 import com.google.common.reflect.TypeToken;
 import com.pixelatedslice.easyconfig.api.config.node.ConfigNode;
+import com.pixelatedslice.easyconfig.api.config.node.builder.ConfigNodeBuilder;
 import com.pixelatedslice.easyconfig.api.config.section.ConfigSection;
-import com.pixelatedslice.easyconfig.api.config.section.ConfigSectionBuilder;
+import com.pixelatedslice.easyconfig.api.config.section.builder.ConfigSectionBuilder;
 import com.pixelatedslice.easyconfig.api.serialization.builtin.BuiltInBukkitSerializer;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -29,14 +30,13 @@ public final class LocationSerializerImpl implements BuiltInBukkitSerializer<Loc
     }
 
     @Override
-    public void serialize(@Nullable Location value, @NonNull ConfigSectionBuilder sectionBuilder) {
+    public void serialize(@Nullable Location value, ConfigSectionBuilder.@NonNull NestedSectionStep sectionBuilder) {
         Objects.requireNonNull(sectionBuilder);
 
-        sectionBuilder.node(
-                "world",
-                ((value != null) && (value.getWorld() != null)) ? value.getWorld().getName() : null,
-                String.class
-        );
+        sectionBuilder.node((ConfigNodeBuilder<String> b) -> {
+            var builderStep = b.key("world").type(String.class);
+            builderStep.value(((value != null) && (value.getWorld() != null)) ? value.getWorld().getName() : null);
+        });
         sectionBuilder.node("x", (value != null) ? value.getX() : null, Double.class);
         sectionBuilder.node("y", (value != null) ? value.getY() : null, Double.class);
         sectionBuilder.node("z", (value != null) ? value.getZ() : null, Double.class);

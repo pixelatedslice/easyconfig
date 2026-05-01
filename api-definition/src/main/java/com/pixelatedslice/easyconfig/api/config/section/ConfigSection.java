@@ -5,6 +5,7 @@ import com.pixelatedslice.easyconfig.api.comments.Commentable;
 import com.pixelatedslice.easyconfig.api.config.node.ConfigNode;
 import com.pixelatedslice.easyconfig.api.config.node.ConfigNodeIterator;
 import com.pixelatedslice.easyconfig.api.config.node.WithConfigNodeChildren;
+import com.pixelatedslice.easyconfig.api.config.section.builder.ConfigSectionBuilder;
 import com.pixelatedslice.easyconfig.api.exception.ComplexInsteadOfSimpleTypeUsedException;
 import com.pixelatedslice.easyconfig.api.mutability.mutable.WithMutableVariant;
 import com.pixelatedslice.easyconfig.api.utils.type_token.TypeTokenUtils;
@@ -20,8 +21,7 @@ public interface ConfigSection
         return ServiceLoader.load(ConfigSectionBuilder.class).findFirst().orElseThrow();
     }
 
-    @NonNull
-    default ConfigSectionBuilder builderForNested(@NonNull String key) {
+    default ConfigSectionBuilder.@NonNull NestedSectionStep builderForNested(@NonNull String key) {
         Objects.requireNonNull(key);
         return builder().key(key).parent(this);
     }

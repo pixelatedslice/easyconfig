@@ -1,4 +1,4 @@
-import com.pixelatedslice.easyconfig.api.config.section.ConfigSectionBuilder;
+import com.pixelatedslice.easyconfig.api.config.section.builder.ConfigSectionBuilder;
 
 module com.pixelatedslice.easyconfig.impl.serialization.builtin.bukkit {
     uses ConfigSectionBuilder;

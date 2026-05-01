@@ -4,7 +4,6 @@ import com.google.common.reflect.TypeToken;
 import com.pixelatedslice.easyconfig.api.config.node.ConfigNode;
 import com.pixelatedslice.easyconfig.api.config.node.EnvConfigNode;
 import com.pixelatedslice.easyconfig.api.config.section.ConfigSection;
-import com.pixelatedslice.easyconfig.api.config.section.ConfigSectionBuilder;
 import com.pixelatedslice.easyconfig.api.serialization.Serializer;
 import org.jspecify.annotations.NonNull;
 import tools.jackson.core.JsonGenerator;
@@ -62,7 +61,7 @@ public class JacksonTreeWriter {
         @SuppressWarnings("unchecked")
         Serializer<Object> serializer = (Serializer<Object>) this.serializers.get(node.typeToken());
         if (serializer != null) {
-            ConfigSectionBuilder tempBuilder = node.parent().builderForNested(node.key());
+            var tempBuilder = node.parent().builderForNested(node.key());
             serializer.serialize(value, tempBuilder);
 
             this.generator.writeStartObject();

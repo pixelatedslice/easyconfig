@@ -3,7 +3,7 @@ package com.pixelatedslice.easyconfig.test.bukkit;
 import com.pixelatedslice.easyconfig.api.CopiedEasyConfig;
 import com.pixelatedslice.easyconfig.api.EasyConfig;
 import com.pixelatedslice.easyconfig.api.config.file.ConfigFile;
-import com.pixelatedslice.easyconfig.api.config.node.ConfigNodeBuilder;
+import com.pixelatedslice.easyconfig.api.config.node.builder.ConfigNodeBuilder;
 import com.pixelatedslice.easyconfig.impl.fileformat.yaml.YamlFileFormatProvider;
 import com.pixelatedslice.easyconfig.impl.serialization.builtin.bukkit.LocationSerializerImpl;
 import org.bukkit.Location;

@@ -3,7 +3,7 @@ package com.pixelatedslice.easyconfig.impl.serialization.builtin.bukkit;
 import com.google.common.reflect.TypeToken;
 import com.pixelatedslice.easyconfig.api.config.node.ConfigNode;
 import com.pixelatedslice.easyconfig.api.config.section.ConfigSection;
-import com.pixelatedslice.easyconfig.api.config.section.ConfigSectionBuilder;
+import com.pixelatedslice.easyconfig.api.config.section.builder.ConfigSectionBuilder;
 import com.pixelatedslice.easyconfig.api.serialization.builtin.BuiltInBukkitSerializer;
 import org.bukkit.util.Vector;
 import org.jspecify.annotations.NonNull;

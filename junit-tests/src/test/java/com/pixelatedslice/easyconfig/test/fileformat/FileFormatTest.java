@@ -2,10 +2,10 @@ package com.pixelatedslice.easyconfig.test.fileformat;
 
 import com.google.common.reflect.TypeToken;
 import com.pixelatedslice.easyconfig.api.CopiedEasyConfig;
-import com.pixelatedslice.easyconfig.api.builder.config.BuilderWithConfigNodes;
+import com.pixelatedslice.easyconfig.api.builder.config.ConfigNodeChildrenStep;
 import com.pixelatedslice.easyconfig.api.config.file.ConfigFile;
 import com.pixelatedslice.easyconfig.api.config.node.ConfigNode;
-import com.pixelatedslice.easyconfig.api.config.node.ConfigNodeBuilder;
+import com.pixelatedslice.easyconfig.api.config.node.builder.ConfigNodeBuilder;
 import com.pixelatedslice.easyconfig.api.format.FileFormatProvider;
 import com.pixelatedslice.easyconfig.impl.EasyConfigImpl;
 import com.pixelatedslice.easyconfig.impl.serialization.builtin.bukkit.LocationSerializerImpl;
@@ -26,7 +26,7 @@ public abstract class FileFormatTest {
                             "Stefan Mark",
                             "Kevin James"
                     )))
-            .section("database", (BuilderWithConfigNodes b) -> {
+            .section("database", (ConfigNodeChildrenStep b) -> {
                 b.node("username", String.class, (ConfigNodeBuilder<String> nb) -> nb.defaultValue("admin"));
                 b.node("password", String.class, (ConfigNodeBuilder<String> nb) -> nb.defaultValue("admin"));
                 b.node("port", Integer.class, (ConfigNodeBuilder<Integer> nb) -> nb.defaultValue(3636));

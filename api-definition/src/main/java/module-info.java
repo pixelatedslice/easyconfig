@@ -1,9 +1,7 @@
 import com.pixelatedslice.easyconfig.api.EasyConfig;
 import com.pixelatedslice.easyconfig.api.config.file.ConfigFileBuilder;
-import com.pixelatedslice.easyconfig.api.config.node.ConfigNodeBuilder;
-import com.pixelatedslice.easyconfig.api.config.node.ConfigNodeIterator;
-import com.pixelatedslice.easyconfig.api.config.section.ConfigSectionBuilder;
-import com.pixelatedslice.easyconfig.api.config.section.ConfigSectionIterator;
+import com.pixelatedslice.easyconfig.api.config.node.builder.ConfigNodeBuilder;
+import com.pixelatedslice.easyconfig.api.config.section.builder.ConfigSectionBuilder;
 
 open module com.pixelatedslice.easyconfig.api {
     requires com.google.common;
@@ -12,8 +10,6 @@ open module com.pixelatedslice.easyconfig.api {
     uses ConfigNodeBuilder;
     uses ConfigFileBuilder;
     uses ConfigSectionBuilder;
-    uses ConfigNodeIterator;
-    uses ConfigSectionIterator;
     uses EasyConfig;
 
     exports com.pixelatedslice.easyconfig.api;
@@ -30,7 +26,10 @@ open module com.pixelatedslice.easyconfig.api {
     exports com.pixelatedslice.easyconfig.api.utils.primitive;
     exports com.pixelatedslice.easyconfig.api.utils.type_token;
     exports com.pixelatedslice.easyconfig.api.builder.config;
+    exports com.pixelatedslice.easyconfig.api.builder;
     exports com.pixelatedslice.easyconfig.api.mutability.immutable;
     exports com.pixelatedslice.easyconfig.api.mutability.mutable;
     exports com.pixelatedslice.easyconfig.api.validator;
+    exports com.pixelatedslice.easyconfig.api.config.node.builder;
+    exports com.pixelatedslice.easyconfig.api.config.section.builder;
 }
