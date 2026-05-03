@@ -1,8 +1,10 @@
 package com.pixelatedslice.easyconfig.api.config.node.container;
 
+import com.google.common.collect.ImmutableList;
 import com.google.common.reflect.TypeToken;
 import com.pixelatedslice.easyconfig.api.config.node.Node;
 import com.pixelatedslice.easyconfig.api.config.node.value.ValueNode;
+import com.pixelatedslice.easyconfig.api.editable.Editable;
 import com.pixelatedslice.easyconfig.api.exception.NodeException;
 import com.pixelatedslice.easyconfig.api.utils.typetoken.TypeTokenUtils;
 import org.jspecify.annotations.NonNull;
@@ -10,7 +12,9 @@ import org.jspecify.annotations.NonNull;
 import java.util.Objects;
 import java.util.Optional;
 
-public non-sealed interface ContainerNode extends Node {
+public non-sealed interface ContainerNode extends Node, Editable<EditableContainerNode> {
+    ImmutableList<Node> children();
+
     default boolean isRootNode() {
         return false;
     }

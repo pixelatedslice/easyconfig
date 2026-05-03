@@ -3,6 +3,10 @@ package com.pixelatedslice.easyconfig.api.format;
 import com.pixelatedslice.easyconfig.api.config.node.Node;
 import org.jspecify.annotations.NonNull;
 
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.Reader;
+import java.io.Writer;
 import java.nio.file.Path;
 import java.util.Objects;
 
@@ -10,13 +14,9 @@ import java.util.Objects;
 public interface Format {
     @NonNull String fileExtension();
 
-    <N extends Node> void save(@NonNull N node);
+    <N extends Node> void write(@NonNull N node, @NonNull Writer writer);
 
-    <N extends Node> void writeToString(@NonNull N node, @NonNull StringBuffer buffer);
-
-    <N extends Node> void load(@NonNull N node);
-
-    <N extends Node> void parseFromString(@NonNull N node, @NonNull String content);
+    <N extends Node> void parse(@NonNull N node, @NonNull Reader reader);
 
     default @NonNull Path pathWithExtension(@NonNull Path path) {
         Objects.requireNonNull(path);

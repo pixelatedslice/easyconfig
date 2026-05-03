@@ -3,7 +3,6 @@ package com.pixelatedslice.easyconfig.impl.fileformat.common;
 import com.google.common.reflect.TypeToken;
 import com.pixelatedslice.easyconfig.api.old.config.node.ConfigNode;
 import com.pixelatedslice.easyconfig.api.old.config.node.EnvConfigNode;
-import com.pixelatedslice.easyconfig.api.old.config.node.WithConfigNodeChildren;
 import com.pixelatedslice.easyconfig.api.old.config.section.ConfigSection;
 import com.pixelatedslice.easyconfig.api.old.serialization.Serializer;
 import org.jspecify.annotations.NonNull;
@@ -50,7 +49,7 @@ public class JacksonTreeReader {
     }
 
     @SuppressWarnings("OptionalGetWithoutIsPresent")
-    public void readNode(@NonNull WithConfigNodeChildren section) throws IOException, IllegalStateException {
+    public void readNode(@NonNull ContainerN section) throws IOException, IllegalStateException {
         var key = this.parser.currentName();
 
         var typeTokenOpt = section.nodeTypeToken(key);
