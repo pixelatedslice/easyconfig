@@ -1,35 +1,31 @@
-import com.pixelatedslice.easyconfig.api.EasyConfig;
-import com.pixelatedslice.easyconfig.api.config.file.ConfigFileBuilder;
-import com.pixelatedslice.easyconfig.api.config.node.builder.ConfigNodeBuilder;
-import com.pixelatedslice.easyconfig.api.config.section.builder.ConfigSectionBuilder;
-
 open module com.pixelatedslice.easyconfig.api {
     requires com.google.common;
     requires org.jspecify;
+    requires com.google.errorprone.annotations;
 
     uses ConfigNodeBuilder;
     uses ConfigFileBuilder;
     uses ConfigSectionBuilder;
     uses EasyConfig;
 
-    exports com.pixelatedslice.easyconfig.api;
-    exports com.pixelatedslice.easyconfig.api.config.file;
-    exports com.pixelatedslice.easyconfig.api.config.node;
-    exports com.pixelatedslice.easyconfig.api.config.section;
-    exports com.pixelatedslice.easyconfig.api.exception;
-    exports com.pixelatedslice.easyconfig.api.format;
-    exports com.pixelatedslice.easyconfig.api.format.builtin;
-    exports com.pixelatedslice.easyconfig.api.serialization;
-    exports com.pixelatedslice.easyconfig.api.serialization.builtin
+    exports com.pixelatedslice.easyconfig.api.old;
+    exports com.pixelatedslice.easyconfig.api.old.config.file;
+    exports com.pixelatedslice.easyconfig.api.old.config.node;
+    exports com.pixelatedslice.easyconfig.api.old.config.section;
+    exports com.pixelatedslice.easyconfig.api.old.exception;
+    exports com.pixelatedslice.easyconfig.api.old.format;
+    exports com.pixelatedslice.easyconfig.api.old.format.builtin;
+    exports com.pixelatedslice.easyconfig.api.old.serialization;
+    exports com.pixelatedslice.easyconfig.api.old.serialization.builtin
             to com.pixelatedslice.easyconfig.impl.serialization.builtin.bukkit;
-    exports com.pixelatedslice.easyconfig.api.comments;
-    exports com.pixelatedslice.easyconfig.api.utils.primitive;
-    exports com.pixelatedslice.easyconfig.api.utils.type_token;
-    exports com.pixelatedslice.easyconfig.api.builder.config;
-    exports com.pixelatedslice.easyconfig.api.builder;
-    exports com.pixelatedslice.easyconfig.api.mutability.immutable;
-    exports com.pixelatedslice.easyconfig.api.mutability.mutable;
-    exports com.pixelatedslice.easyconfig.api.validator;
-    exports com.pixelatedslice.easyconfig.api.config.node.builder;
-    exports com.pixelatedslice.easyconfig.api.config.section.builder;
+    exports com.pixelatedslice.easyconfig.api.old.comments;
+    exports com.pixelatedslice.easyconfig.api.old.utils.primitive;
+    exports com.pixelatedslice.easyconfig.api.old.utils.type_token;
+    exports com.pixelatedslice.easyconfig.api.old.builder.config;
+    exports com.pixelatedslice.easyconfig.api.old.builder;
+    exports com.pixelatedslice.easyconfig.api.old.mutability.immutable;
+    exports com.pixelatedslice.easyconfig.api.old.mutability.mutable;
+    exports com.pixelatedslice.easyconfig.api.old.validator;
+    exports com.pixelatedslice.easyconfig.api.old.config.node.builder;
+    exports com.pixelatedslice.easyconfig.api.old.config.section.builder;
 }

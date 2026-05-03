@@ -1,10 +1,10 @@
 package com.pixelatedslice.easyconfig.impl.fileformat.json;
 
 
-import com.pixelatedslice.easyconfig.api.CopiedEasyConfig;
-import com.pixelatedslice.easyconfig.api.config.file.ConfigFile;
-import com.pixelatedslice.easyconfig.api.format.FileFormatProvider;
-import com.pixelatedslice.easyconfig.api.format.builtin.JsonFormat;
+import com.pixelatedslice.easyconfig.api.old.CopiedEasyConfig;
+import com.pixelatedslice.easyconfig.api.old.config.file.ConfigFile;
+import com.pixelatedslice.easyconfig.api.old.format.FileFormatProvider;
+import com.pixelatedslice.easyconfig.api.old.format.builtin.JsonFormat;
 import com.pixelatedslice.easyconfig.impl.fileformat.common.JacksonTreeReader;
 import com.pixelatedslice.easyconfig.impl.fileformat.common.JacksonTreeWriter;
 import org.jspecify.annotations.NonNull;

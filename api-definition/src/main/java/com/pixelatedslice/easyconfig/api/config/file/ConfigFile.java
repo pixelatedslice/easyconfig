@@ -1,22 +1,27 @@
 package com.pixelatedslice.easyconfig.api.config.file;
 
-import com.pixelatedslice.easyconfig.api.config.section.ConfigSection;
-import com.pixelatedslice.easyconfig.api.config.section.MutableConfigSection;
+import com.pixelatedslice.easyconfig.api.config.node.container.ContainerNode;
+import com.pixelatedslice.easyconfig.api.format.Format;
 import org.jspecify.annotations.NonNull;
 
-import java.nio.file.Path;
-import java.util.ServiceLoader;
-
 public interface ConfigFile {
-    static @NonNull ConfigFileBuilder builder() {
-        return ServiceLoader.load(ConfigFileBuilder.class).findFirst().orElseThrow();
+    @NonNull Format formatInstance();
+
+    ContainerNode.@NonNull Root root();
+
+    default void save() {
+        this.formatInstance().save(this.root());
     }
 
-    @NonNull ConfigSection rootSection();
+    default void writeToString(@NonNull StringBuffer buffer) {
+        this.formatInstance().writeToString(this.root(), buffer);
+    }
 
-    @NonNull Path filePathWithoutExtension();
+    default void load() {
+        this.formatInstance().load(this.root());
+    }
 
-    default MutableConfigSection mutable() {
-        return this.rootSection().mutable();
+    default void parseFromString(@NonNull String content) {
+        this.formatInstance().parseFromString(this.root(), content);
     }
 }

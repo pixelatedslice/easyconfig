@@ -1,11 +1,11 @@
 package com.pixelatedslice.easyconfig.impl.fileformat.common;
 
 import com.google.common.reflect.TypeToken;
-import com.pixelatedslice.easyconfig.api.config.node.ConfigNode;
-import com.pixelatedslice.easyconfig.api.config.node.EnvConfigNode;
-import com.pixelatedslice.easyconfig.api.config.node.WithConfigNodeChildren;
-import com.pixelatedslice.easyconfig.api.config.section.ConfigSection;
-import com.pixelatedslice.easyconfig.api.serialization.Serializer;
+import com.pixelatedslice.easyconfig.api.old.config.node.ConfigNode;
+import com.pixelatedslice.easyconfig.api.old.config.node.EnvConfigNode;
+import com.pixelatedslice.easyconfig.api.old.config.node.WithConfigNodeChildren;
+import com.pixelatedslice.easyconfig.api.old.config.section.ConfigSection;
+import com.pixelatedslice.easyconfig.api.old.serialization.Serializer;
 import org.jspecify.annotations.NonNull;
 import tools.jackson.core.JsonParser;
 import tools.jackson.core.JsonToken;
