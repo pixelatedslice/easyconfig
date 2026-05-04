@@ -9,7 +9,6 @@ import com.pixelatedslice.easyconfig.api.config.node.NodeType;
 import com.pixelatedslice.easyconfig.api.config.node.env.EnvNode;
 import com.pixelatedslice.easyconfig.api.config.node.value.ValueNode;
 import com.pixelatedslice.easyconfig.api.editable.Editable;
-import com.pixelatedslice.easyconfig.api.exception.NodeException;
 import com.pixelatedslice.easyconfig.api.exception.TypeException;
 import com.pixelatedslice.easyconfig.api.utils.typetoken.TypeTokenUtils;
 import org.jspecify.annotations.NonNull;
@@ -20,7 +19,7 @@ import java.util.Optional;
 import java.util.ServiceLoader;
 import java.util.function.Consumer;
 
-public non-sealed interface ContainerNode extends Node, Editable<EditableContainerNode> {
+public interface ContainerNode extends Node, Editable<EditableContainerNode> {
     static ContainerNode.@NonNull Builder builder() {
         return ServiceLoader.load(Builder.class).findFirst().orElseThrow();
     }
@@ -110,8 +109,8 @@ public non-sealed interface ContainerNode extends Node, Editable<EditableContain
         }
 
         @Override
-        default @NonNull ContainerNode parent() {
-            throw NodeException.ROOT_NODE_HAS_NO_PARENT();
+        default @NonNull Optional<@NonNull ContainerNode> parent() {
+            return Optional.empty();
         }
 
         @Override

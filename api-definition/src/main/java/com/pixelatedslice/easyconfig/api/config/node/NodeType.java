@@ -1,32 +1,27 @@
 package com.pixelatedslice.easyconfig.api.config.node;
 
-import org.jspecify.annotations.NonNull;
+import java.util.stream.Stream;
 
 public enum NodeType {
-    PLAIN_NODE("PLAIN NODE"),
-    CONTAINER_NODE("CONTAINER NODE"),
-    VALUE_NODE("VALUE NODE"),
-    ENV_NODE("ENV NODE");
+    PLAIN_NODE(false),
+    CONTAINER_NODE(false),
+    VALUE_NODE(true),
+    ENV_NODE(true);
 
-    private final String stringified;
+    private final boolean isValueBased;
 
-    NodeType(String stringified) {
-        this.stringified = stringified;
+    NodeType(boolean isValueBased) {
+        this.isValueBased = isValueBased;
     }
 
     public static String[] valueNodeBased() {
-        return new String[]{
-                VALUE_NODE.stringified,
-                ENV_NODE.stringified
-        };
+        return Stream.of(values())
+                .filter(NodeType::isValueBased)
+                .map(Enum::toString)
+                .toArray(String[]::new);
     }
 
-    @Override
-    public @NonNull String toString() {
-        return this.stringified;
-    }
-
-    public boolean isValueNodeBased() {
-        return (this == VALUE_NODE) || (this == ENV_NODE);
+    public boolean isValueBased() {
+        return this.isValueBased;
     }
 }

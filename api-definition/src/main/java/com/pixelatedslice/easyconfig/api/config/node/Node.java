@@ -6,15 +6,16 @@ import com.pixelatedslice.easyconfig.api.config.node.value.ValueNode;
 import org.jspecify.annotations.NonNull;
 
 import java.util.ArrayList;
+import java.util.Optional;
 
-public sealed interface Node permits ContainerNode, ValueNode {
+public interface Node {
     default @NonNull NodeType nodeType() {
         return NodeType.PLAIN_NODE;
     }
 
     @NonNull String key();
 
-    @NonNull ContainerNode parent();
+    @NonNull Optional<@NonNull ContainerNode> parent();
 
     default @NonNull String[] fullPath() {
         var list = new ArrayList<String>();
@@ -23,11 +24,11 @@ public sealed interface Node permits ContainerNode, ValueNode {
         while (true) {
             list.add(current.key());
 
-            if ((current instanceof ContainerNode cn) && cn.isRootNode()) {
+            if (current.parent().isEmpty()) {
                 break;
             }
 
-            current = current.parent();
+            current = current.parent().get();
         }
 
         return list.reversed().toArray(String[]::new);

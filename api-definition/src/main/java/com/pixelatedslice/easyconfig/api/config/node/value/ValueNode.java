@@ -20,7 +20,7 @@ import java.util.ServiceLoader;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
 
-public non-sealed interface ValueNode<T> extends Node, Editable<EditableValueNode<T>> {
+public interface ValueNode<T> extends Node, Editable<EditableValueNode<T>> {
     @SuppressWarnings("unchecked")
     static <T> @NonNull Builder<T> builder() {
         return (Builder<T>) ServiceLoader.load(Builder.class).findFirst().orElseThrow();

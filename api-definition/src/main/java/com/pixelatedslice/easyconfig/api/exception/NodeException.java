@@ -20,10 +20,6 @@ public class NodeException extends RuntimeException {
         super(String.format(message, args));
     }
 
-    public static NodeException ROOT_NODE_HAS_NO_PARENT() {
-        return new NodeException("Operation failed: The root node does not have a parent.");
-    }
-
     public static NodeException DID_NOT_EXPECT_NODE_TYPE(
             @NonNull String key,
             @NonNull NodeType expected,
@@ -34,7 +30,7 @@ public class NodeException extends RuntimeException {
         Objects.requireNonNull(received);
 
         var expectedMessage = expected.toString();
-        if (expected.isValueNodeBased()) {
+        if (expected.isValueBased()) {
             expectedMessage = String.join(" / ", NodeType.valueNodeBased());
         }
 
