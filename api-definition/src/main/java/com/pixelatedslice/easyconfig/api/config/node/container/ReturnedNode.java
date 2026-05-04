@@ -2,8 +2,11 @@ package com.pixelatedslice.easyconfig.api.config.node.container;
 
 import com.google.common.reflect.TypeToken;
 import com.pixelatedslice.easyconfig.api.config.node.Node;
+import com.pixelatedslice.easyconfig.api.config.node.NodeType;
+import com.pixelatedslice.easyconfig.api.config.node.env.EnvNode;
 import com.pixelatedslice.easyconfig.api.config.node.value.ValueNode;
 import com.pixelatedslice.easyconfig.api.exception.NodeException;
+import com.pixelatedslice.easyconfig.api.exception.TypeException;
 import com.pixelatedslice.easyconfig.api.utils.typetoken.TypeTokenUtils;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
@@ -11,14 +14,28 @@ import org.jspecify.annotations.Nullable;
 import java.util.Objects;
 import java.util.Optional;
 
-public record ReturnedNode(@Nullable Node node) {
+public class ReturnedNode {
+    private final @Nullable Node plainNode;
+
+    public ReturnedNode(@Nullable Node plainNode) {
+        this.plainNode = plainNode;
+    }
+
+    public @NonNull Optional<@NonNull Node> plainNode() {
+        return Optional.ofNullable(this.plainNode);
+    }
+
     public @NonNull Optional<@NonNull ContainerNode> container() {
-        if (this.node == null) {
+        if (this.plainNode == null) {
             return Optional.empty();
         }
 
-        if (!(this.node instanceof ContainerNode containerNode)) {
-            throw NodeException.EXPECTED_CONTAINER_NODE_GOT_VALUE(this.node.key());
+        if (!(this.plainNode instanceof ContainerNode containerNode)) {
+            throw NodeException.DID_NOT_EXPECT_NODE_TYPE(
+                    this.plainNode.key(),
+                    NodeType.CONTAINER_NODE,
+                    this.plainNode.nodeType()
+            );
         }
 
         return Optional.of(containerNode);
@@ -30,7 +47,7 @@ public record ReturnedNode(@Nullable Node node) {
         var typeToken = TypeToken.of(simpleType);
 
         if (!TypeTokenUtils.isSimpleTypeToken(typeToken)) {
-            throw NodeException.CLASS_USED_IN_PLACE_OF_TYPETOKEN(typeToken, simpleType);
+            throw TypeException.CLASS_USED_IN_PLACE_OF_TYPETOKEN(typeToken, simpleType);
         }
 
         return this.value(typeToken);
@@ -39,18 +56,22 @@ public record ReturnedNode(@Nullable Node node) {
     public <T> @NonNull Optional<@NonNull ValueNode<T>> value(@NonNull TypeToken<T> typeToken) {
         Objects.requireNonNull(typeToken);
 
-        if (this.node == null) {
+        if (this.plainNode == null) {
             return Optional.empty();
         }
 
-        if (!(this.node instanceof ValueNode<?> valueNode)) {
-            throw NodeException.EXPECTED_VALUE_NODE_GOT_CONTAINER(this.node.key());
+        if (!(this.plainNode instanceof ValueNode<?> valueNode)) {
+            throw NodeException.DID_NOT_EXPECT_NODE_TYPE(
+                    this.plainNode.key(),
+                    NodeType.VALUE_NODE,
+                    this.plainNode.nodeType()
+            );
         }
 
         var nodeTypeToken = valueNode.typeToken();
 
         if (!TypeTokenUtils.matches(typeToken, nodeTypeToken)) {
-            throw NodeException.NODE_HAS_WRONG_VALUE_TYPE(this.node.key(), nodeTypeToken, typeToken.toString());
+            throw NodeException.NODE_HAS_WRONG_VALUE_TYPE(this.plainNode.key(), nodeTypeToken, typeToken.toString());
         }
 
         @SuppressWarnings("unchecked") var castedNode = (ValueNode<T>) valueNode;
@@ -58,7 +79,37 @@ public record ReturnedNode(@Nullable Node node) {
     }
 
     public @NonNull Optional<@NonNull ValueNode<?>> unsafeValue() {
-        return (this.node instanceof ValueNode<?> valueNode)
+        return (this.plainNode instanceof ValueNode<?> valueNode)
+                ? Optional.of(valueNode)
+                : Optional.empty();
+    }
+
+    public <T> @NonNull Optional<@NonNull EnvNode<T>> env(@NonNull Class<T> simpleType) {
+        Objects.requireNonNull(simpleType);
+
+        var typeToken = TypeToken.of(simpleType);
+
+        if (!TypeTokenUtils.isSimpleTypeToken(typeToken)) {
+            throw TypeException.CLASS_USED_IN_PLACE_OF_TYPETOKEN(typeToken, simpleType);
+        }
+
+        return this.env(typeToken);
+    }
+
+    public <T> @NonNull Optional<@NonNull EnvNode<T>> env(@NonNull TypeToken<T> typeToken) {
+        var opt = this.value(typeToken);
+        if (opt.isEmpty()) {
+            return Optional.empty();
+        }
+        var node = opt.get();
+        if (!(node instanceof EnvNode<T> envNode)) {
+            throw NodeException.DID_NOT_EXPECT_NODE_TYPE(node.key(), NodeType.ENV_NODE, node.nodeType());
+        }
+        return Optional.of(envNode);
+    }
+
+    public @NonNull Optional<@NonNull ValueNode<?>> unsafeEnv() {
+        return (this.plainNode instanceof EnvNode<?> valueNode)
                 ? Optional.of(valueNode)
                 : Optional.empty();
     }

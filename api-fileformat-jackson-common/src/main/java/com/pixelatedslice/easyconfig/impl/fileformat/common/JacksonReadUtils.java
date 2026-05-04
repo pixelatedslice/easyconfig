@@ -95,7 +95,7 @@ public final class JacksonReadUtils {
         if (parser.currentToken() == JsonToken.VALUE_NULL) {
             return null;
         }
-        
+
         if (parser.currentToken() == JsonToken.VALUE_STRING) {
             var string = parser.getString();
 
@@ -124,7 +124,7 @@ public final class JacksonReadUtils {
             }
         }
 
-        throw new IllegalStateException("Value with unexpected type: " + expectedType);
+        throw new IllegalStateException("Value with unexpected type: " + parser.currentToken().name());
     }
 
     private static <T> @NonNull List<?> readList(

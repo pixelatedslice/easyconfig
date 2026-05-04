@@ -1,11 +1,10 @@
-package com.pixelatedslice.easyconfig.api.config.node.value;
+package com.pixelatedslice.easyconfig.api.config.node.env;
 
 import com.google.common.reflect.TypeToken;
 import com.pixelatedslice.easyconfig.api.builder.BuilderStep;
 import com.pixelatedslice.easyconfig.api.config.node.GenericNodeBuilder;
-import com.pixelatedslice.easyconfig.api.config.node.Node;
 import com.pixelatedslice.easyconfig.api.config.node.NodeType;
-import com.pixelatedslice.easyconfig.api.editable.Editable;
+import com.pixelatedslice.easyconfig.api.config.node.value.ValueNode;
 import com.pixelatedslice.easyconfig.api.exception.TypeException;
 import com.pixelatedslice.easyconfig.api.serialization.Serializer;
 import com.pixelatedslice.easyconfig.api.utils.typetoken.TypeTokenUtils;
@@ -14,44 +13,30 @@ import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
 import java.util.Objects;
-import java.util.Optional;
 import java.util.ServiceLoader;
 
-public non-sealed interface ValueNode<T> extends Node, Editable<EditableValueNode<T>> {
+public interface EnvNode<T> extends ValueNode<T> {
     @SuppressWarnings("unchecked")
     static <T> @NonNull Builder<T> builder() {
         return (Builder<T>) ServiceLoader.load(Builder.class).findFirst().orElseThrow();
     }
 
     default @NonNull NodeType nodeType() {
-        return NodeType.VALUE_NODE;
+        return NodeType.ENV_NODE;
     }
 
-    @NonNull Optional<@NonNull T> value();
-
-    @NonNull Optional<@NonNull T> defaultValue();
-
-    default @NonNull Optional<@NonNull T> valueOrDefault() {
-        return this.value().or(this::defaultValue);
-    }
-
-    @NonNull Optional<@NonNull Serializer<@NonNull T>> serializer();
-
-    @NonNull Validator<T> validator();
-
-    @NonNull TypeToken<T> typeToken();
+    @NonNull String envKey();
 
     @FunctionalInterface
-    interface Builder<T> extends GenericNodeBuilder<Builder.ParentStep<T>> {
+    interface Builder<T> extends GenericNodeBuilder<Builder.TypeStep<T>> {
         interface ParentStep<T> extends GenericNodeBuilder.ParentStep<TypeStep<T>>, TypeStep<T> {
         }
 
         @FunctionalInterface
         interface TypeStep<T> extends BuilderStep {
+            @NonNull EnvStep<@NonNull T> type(@NonNull TypeToken<@NonNull T> typeToken);
 
-            @NonNull ValueStep<@NonNull T> type(@NonNull TypeToken<@NonNull T> typeToken);
-
-            default @NonNull ValueStep<@NonNull T> type(@NonNull Class<@NonNull T> simpleType) {
+            default @NonNull EnvStep<@NonNull T> type(@NonNull Class<@NonNull T> simpleType) {
                 Objects.requireNonNull(simpleType);
 
                 var typeToken = TypeToken.of(simpleType);
@@ -62,14 +47,11 @@ public non-sealed interface ValueNode<T> extends Node, Editable<EditableValueNod
 
                 return this.type(typeToken);
             }
-
         }
 
-        interface ValueStep<T> extends BuilderStep, SerializerStep<T> {
-
-            @NonNull ValueStep<@NonNull T> value(@Nullable T value);
-
-            @NonNull ValueStep<@NonNull T> defaultValue(@Nullable T defaultValue);
+        @FunctionalInterface
+        interface EnvStep<T> extends BuilderStep {
+            @NonNull SerializerStep<@NonNull T> environmentVariable(@Nullable String environmentVariable);
         }
 
         interface SerializerStep<T> extends BuilderStep, ValidatorStep<T> {
@@ -82,11 +64,12 @@ public non-sealed interface ValueNode<T> extends Node, Editable<EditableValueNod
 
         @FunctionalInterface
         interface FinalStep<T> extends BuilderStep {
-            @NonNull ValueNode<@NonNull T> build();
+            @NonNull EnvNode<@NonNull T> build();
         }
 
         interface Handler<T> extends GenericNodeBuilder.Handler<ParentStep<T>, TypeStep<T>>,
-                ParentStep<T>, TypeStep<T>, ValueStep<T>, SerializerStep<T>, ValidatorStep<T>, FinalStep<T> {
+                Builder.ParentStep<T>, Builder.TypeStep<T>, Builder.EnvStep<T>, Builder.SerializerStep<T>,
+                Builder.ValidatorStep<T>, Builder.FinalStep<T> {
         }
     }
 }

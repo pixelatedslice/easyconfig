@@ -8,33 +8,33 @@ import org.jspecify.annotations.NonNull;
 import java.util.Collection;
 
 public interface EditableContainerNode extends EditableVariant {
-    void addNodes(@NonNull Node @NonNull ... nodes);
+    @NonNull EditableContainerNode addNodes(@NonNull Node @NonNull ... nodes);
 
-    void setNodes(@NonNull Collection<? extends @NonNull Node> nodes);
+    @NonNull EditableContainerNode setNodes(@NonNull Collection<? extends @NonNull Node> nodes);
 
-    void removeNodes(@NonNull Node @NonNull ... nodes);
+    @NonNull EditableContainerNode removeNodes(@NonNull Node @NonNull ... nodes);
 
-    void removeNodes(@NonNull String @NonNull ... keys);
+    @NonNull EditableContainerNode removeNodes(@NonNull String @NonNull ... keys);
 
-    void clearNodes();
+    @NonNull EditableContainerNode clearNodes();
 
-    void addValueNodes(@NonNull ValueNode<?> @NonNull ... nodes);
+    @NonNull EditableContainerNode addValueNodes(@NonNull ValueNode<?> @NonNull ... nodes);
 
-    void setValueNodes(@NonNull Collection<? extends @NonNull ValueNode<?>> nodes);
+    @NonNull EditableContainerNode setValueNodes(@NonNull Collection<? extends @NonNull ValueNode<?>> nodes);
 
-    void removeValueNodes(@NonNull ValueNode<?> @NonNull ... nodes);
+    @NonNull EditableContainerNode removeValueNodes(@NonNull ValueNode<?> @NonNull ... nodes);
 
-    void removeValueNodes(@NonNull String @NonNull ... keys);
+    @NonNull EditableContainerNode removeValueNodes(@NonNull String @NonNull ... keys);
 
-    void clearValueNodes();
+    @NonNull EditableContainerNode clearValueNodes();
 
-    void addContainerNodes(@NonNull ContainerNode @NonNull ... nodes);
+    @NonNull EditableContainerNode addContainerNodes(@NonNull ContainerNode @NonNull ... nodes);
 
-    void setContainerNodes(@NonNull Collection<? extends @NonNull ContainerNode> nodes);
+    @NonNull EditableContainerNode setContainerNodes(@NonNull Collection<? extends @NonNull ContainerNode> nodes);
 
-    void removeContainerNodes(@NonNull ContainerNode @NonNull ... nodes);
+    @NonNull EditableContainerNode removeContainerNodes(@NonNull ContainerNode @NonNull ... nodes);
 
-    void removeContainerNodes(@NonNull String @NonNull ... keys);
+    @NonNull EditableContainerNode removeContainerNodes(@NonNull String @NonNull ... keys);
 
-    void clearContainerNodes();
+    @NonNull EditableContainerNode clearContainerNodes();
 }

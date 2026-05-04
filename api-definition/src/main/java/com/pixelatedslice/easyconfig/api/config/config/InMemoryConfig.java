@@ -1,5 +1,6 @@
 package com.pixelatedslice.easyconfig.api.config.config;
 
+import com.pixelatedslice.easyconfig.api.builder.BuilderStep;
 import org.jspecify.annotations.NonNull;
 
 import java.io.StringReader;
@@ -10,9 +11,17 @@ public interface InMemoryConfig extends Config {
         this.formatInstance().write(this.root(), writer);
     }
 
-    default void parseFromString(@NonNull String content) {
+    default void parse(@NonNull String content) {
         try (var reader = new StringReader(content)) {
             this.formatInstance().parse(this.root(), reader);
+        }
+    }
+
+    @FunctionalInterface
+    interface Builder extends Config.Builder<Builder.FinalStep> {
+        @FunctionalInterface
+        interface FinalStep extends BuilderStep {
+            @NonNull InMemoryConfig build();
         }
     }
 }
