@@ -13,6 +13,5 @@ public interface Config {
     @FunctionalInterface
     interface Builder<Next extends BuilderStep> {
         @NonNull Next format(@NonNull Format formatInstance);
-
     }
 }

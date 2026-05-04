@@ -71,6 +71,32 @@ public non-sealed interface ContainerNode extends Node, Editable<EditableContain
         return this.node(path).value(typeToken);
     }
 
+    default <T> @NonNull Optional<@NonNull EnvNode<T>> envNode(
+            @NonNull Class<T> simpleType,
+            @NonNull String @NonNull ... path
+    ) {
+        Objects.requireNonNull(simpleType);
+        Objects.requireNonNull(path);
+
+        var typeToken = TypeToken.of(simpleType);
+
+        if (!TypeTokenUtils.isSimpleTypeToken(typeToken)) {
+            throw TypeException.CLASS_USED_IN_PLACE_OF_TYPETOKEN(simpleType);
+        }
+
+        return this.envNode(typeToken, path);
+    }
+
+    default <T> @NonNull Optional<@NonNull EnvNode<T>> envNode(
+            @NonNull TypeToken<T> typeToken,
+            @NonNull String @NonNull ... path
+    ) {
+        Objects.requireNonNull(typeToken);
+        Objects.requireNonNull(path);
+
+        return this.node(path).env(typeToken);
+    }
+
     interface Root extends ContainerNode {
         @Override
         default @NonNull String key() {
