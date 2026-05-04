@@ -4,6 +4,7 @@ open module com.pixelatedslice.easyconfig.impl {
     requires org.jspecify;
     requires com.pixelatedslice.easyconfig.api;
     requires com.google.auto.service;
+    requires com.google.errorprone.annotations;
 
     exports com.pixelatedslice.easyconfig.impl.serialization;
 
