@@ -5,6 +5,7 @@ import java.util.stream.Stream;
 public enum NodeType {
     PLAIN_NODE(false),
     CONTAINER_NODE(false),
+    COLLECTION_NODE(false),
     VALUE_NODE(true),
     ENV_NODE(true);
 
