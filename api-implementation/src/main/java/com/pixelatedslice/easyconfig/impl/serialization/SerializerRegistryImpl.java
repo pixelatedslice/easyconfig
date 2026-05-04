@@ -63,9 +63,9 @@ public class SerializerRegistryImpl implements SerializerRegistry {
                 if (override) {
                     this.serializers.put(loadedSerializer.forType(), loadedSerializer);
                 } else {
-                    this.serializers.computeIfAbsent(
+                    this.serializers.putIfAbsent(
                             loadedSerializer.forType(),
-                            (@NonNull TypeToken<?> _) -> loadedSerializer
+                            loadedSerializer
                     );
                 }
             }

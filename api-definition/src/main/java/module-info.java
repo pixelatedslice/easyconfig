@@ -26,5 +26,6 @@ open module com.pixelatedslice.easyconfig.api {
     exports com.pixelatedslice.easyconfig.api.utils.primitive;
     exports com.pixelatedslice.easyconfig.api.validator;
 
-    exports com.pixelatedslice.easyconfig.api.serialization.builtin to com.pixelatedslice.easyconfig.impl.serialization, com.pixelatedslice.easyconfig.impl;
+    exports com.pixelatedslice.easyconfig.api.serialization.builtin
+            to com.pixelatedslice.easyconfig.impl.serialization, com.pixelatedslice.easyconfig.impl;
 }
