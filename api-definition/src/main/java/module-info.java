@@ -1,12 +1,13 @@
 import com.pixelatedslice.easyconfig.api.config.node.container.ContainerNode;
 import com.pixelatedslice.easyconfig.api.config.node.env.EnvNode;
 import com.pixelatedslice.easyconfig.api.config.node.value.ValueNode;
+import com.pixelatedslice.easyconfig.api.serialization.SerializerRegistry;
 
 open module com.pixelatedslice.easyconfig.api {
     uses ContainerNode.Builder;
     uses ValueNode.Builder;
     uses EnvNode.Builder;
-    uses com.pixelatedslice.easyconfig.api.serialization.builtin.BuiltInSerializer;
+    uses SerializerRegistry;
     requires com.google.common;
     requires org.jspecify;
     requires com.google.errorprone.annotations;
@@ -24,4 +25,6 @@ open module com.pixelatedslice.easyconfig.api {
     exports com.pixelatedslice.easyconfig.api.utils.typetoken;
     exports com.pixelatedslice.easyconfig.api.utils.primitive;
     exports com.pixelatedslice.easyconfig.api.validator;
+
+    exports com.pixelatedslice.easyconfig.api.serialization.builtin to com.pixelatedslice.easyconfig.impl.serialization, com.pixelatedslice.easyconfig.impl;
 }
