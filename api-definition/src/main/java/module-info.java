@@ -10,11 +10,11 @@ open module com.pixelatedslice.easyconfig.api {
     uses SerializerRegistry;
     requires com.google.common;
     requires org.jspecify;
-    requires com.google.errorprone.annotations;
 
     exports com.pixelatedslice.easyconfig.api.builder;
     exports com.pixelatedslice.easyconfig.api.config.config;
     exports com.pixelatedslice.easyconfig.api.config.node;
+    exports com.pixelatedslice.easyconfig.api.config.node.collection;
     exports com.pixelatedslice.easyconfig.api.config.node.container;
     exports com.pixelatedslice.easyconfig.api.config.node.value;
     exports com.pixelatedslice.easyconfig.api.config.node.env;

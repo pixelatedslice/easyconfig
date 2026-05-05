@@ -6,6 +6,8 @@ import com.pixelatedslice.easyconfig.api.builder.BuilderStep;
 import com.pixelatedslice.easyconfig.api.config.node.GenericNodeBuilder;
 import com.pixelatedslice.easyconfig.api.config.node.Node;
 import com.pixelatedslice.easyconfig.api.config.node.NodeType;
+import com.pixelatedslice.easyconfig.api.config.node.ReturnedNode;
+import com.pixelatedslice.easyconfig.api.config.node.collection.CollectionNode;
 import com.pixelatedslice.easyconfig.api.config.node.env.EnvNode;
 import com.pixelatedslice.easyconfig.api.config.node.value.ValueNode;
 import com.pixelatedslice.easyconfig.api.editable.Editable;
@@ -187,6 +189,18 @@ public interface ContainerNode extends Node, Editable<EditableContainerNode> {
              * @return A new {@link ContainerNode.Builder}
              */
             ContainerNode.@NonNull Builder containerNode();
+
+            CollectionNode.Builder.@NonNull ChildrenStep collectionNode(
+                    @NonNull Consumer<? super CollectionNode.Builder> containerNodeBuilder);
+
+            CollectionNode.Builder.@NonNull ChildrenStep collectionNode(@NonNull CollectionNode containerNodeBuilder);
+
+            /**
+             * Call {@link CollectionNode.Builder.ChildrenStep#collectionNode(CollectionNode)} to add the ContainerNode.
+             *
+             * @return A new {@link ContainerNode.Builder}
+             */
+            CollectionNode.@NonNull Builder collectionNode();
         }
 
         @FunctionalInterface
