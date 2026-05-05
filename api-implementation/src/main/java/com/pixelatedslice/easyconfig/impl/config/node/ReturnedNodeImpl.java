@@ -1,4 +1,4 @@
-package com.pixelatedslice.easyconfig.impl.serialization;
+package com.pixelatedslice.easyconfig.impl.config.node;
 
 import com.google.common.reflect.TypeToken;
 import com.pixelatedslice.easyconfig.api.config.node.Node;

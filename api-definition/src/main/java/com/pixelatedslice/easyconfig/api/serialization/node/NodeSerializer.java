@@ -2,7 +2,7 @@ package com.pixelatedslice.easyconfig.api.serialization.node;
 
 import com.google.common.reflect.TypeToken;
 import com.pixelatedslice.easyconfig.api.config.node.Node;
-import com.pixelatedslice.easyconfig.api.config.node.container.ContainerNode;
+import com.pixelatedslice.easyconfig.api.config.node.container.builder.ContainerNodeBuilderChildrenStep;
 import com.pixelatedslice.easyconfig.api.exception.TypeException;
 import com.pixelatedslice.easyconfig.api.serialization.Serializer;
 import com.pixelatedslice.easyconfig.api.serialization.SerializerType;
@@ -20,7 +20,7 @@ public non-sealed interface NodeSerializer<T> extends Serializer<T> {
         return SerializerType.NODE;
     }
 
-    void serialize(@Nullable T value, ContainerNode.Builder.@NonNull ChildrenStep builder);
+    void serialize(@Nullable T value, @NonNull ContainerNodeBuilderChildrenStep builder);
 
     @Nullable T deserialize(@NonNull Node node);
 
@@ -42,7 +42,7 @@ public non-sealed interface NodeSerializer<T> extends Serializer<T> {
         @FunctionalInterface
         interface SerializeMethodStep<T> {
             @NonNull DeserializeMethodStep<T> serialize(
-                    @NonNull BiConsumer<@NonNull T, ContainerNode.Builder.@NonNull ChildrenStep> serialize
+                    @NonNull BiConsumer<@NonNull T, @NonNull ContainerNodeBuilderChildrenStep> serialize
             );
 
         }

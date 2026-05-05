@@ -1,7 +1,7 @@
 package com.pixelatedslice.easyconfig.api.utils.typetoken;
 
 import com.google.common.reflect.TypeToken;
-import com.pixelatedslice.easyconfig.api.old.utils.primitive.TypeUtils;
+import com.pixelatedslice.easyconfig.api.utils.primitive.TypeUtils;
 import org.jspecify.annotations.NonNull;
 
 import java.lang.reflect.Array;

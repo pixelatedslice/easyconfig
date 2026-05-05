@@ -1,13 +1,15 @@
-import com.pixelatedslice.easyconfig.api.config.node.container.ContainerNode;
-import com.pixelatedslice.easyconfig.api.config.node.env.EnvNode;
-import com.pixelatedslice.easyconfig.api.config.node.value.ValueNode;
+import com.pixelatedslice.easyconfig.api.config.node.collection.builder.CollectionNodeBuilder;
+import com.pixelatedslice.easyconfig.api.config.node.container.builder.ContainerNodeBuilder;
+import com.pixelatedslice.easyconfig.api.config.node.env.builder.EnvNodeBuilder;
+import com.pixelatedslice.easyconfig.api.config.node.value.builder.ValueNodeBuilder;
 import com.pixelatedslice.easyconfig.api.serialization.SerializerRegistry;
 
 open module com.pixelatedslice.easyconfig.api {
-    uses ContainerNode.Builder;
-    uses ValueNode.Builder;
-    uses EnvNode.Builder;
     uses SerializerRegistry;
+    uses EnvNodeBuilder;
+    uses ValueNodeBuilder;
+    uses ContainerNodeBuilder;
+    uses CollectionNodeBuilder;
     requires com.google.common;
     requires org.jspecify;
 
@@ -15,9 +17,13 @@ open module com.pixelatedslice.easyconfig.api {
     exports com.pixelatedslice.easyconfig.api.config.config;
     exports com.pixelatedslice.easyconfig.api.config.node;
     exports com.pixelatedslice.easyconfig.api.config.node.collection;
+    exports com.pixelatedslice.easyconfig.api.config.node.collection.builder;
     exports com.pixelatedslice.easyconfig.api.config.node.container;
+    exports com.pixelatedslice.easyconfig.api.config.node.container.builder;
     exports com.pixelatedslice.easyconfig.api.config.node.value;
+    exports com.pixelatedslice.easyconfig.api.config.node.value.builder;
     exports com.pixelatedslice.easyconfig.api.config.node.env;
+    exports com.pixelatedslice.easyconfig.api.config.node.env.builder;
     exports com.pixelatedslice.easyconfig.api.editable;
     exports com.pixelatedslice.easyconfig.api.exception;
     exports com.pixelatedslice.easyconfig.api.format;
@@ -32,4 +38,5 @@ open module com.pixelatedslice.easyconfig.api {
             to com.pixelatedslice.easyconfig.impl.serialization, com.pixelatedslice.easyconfig.impl;
     exports com.pixelatedslice.easyconfig.api.serialization.format.builtin
             to com.pixelatedslice.easyconfig.impl.serialization, com.pixelatedslice.easyconfig.impl;
+    exports com.pixelatedslice.easyconfig.api.config.node.builder;
 }
