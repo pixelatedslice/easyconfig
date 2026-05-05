@@ -1,6 +1,0 @@
-names = ['Josh Robertson', 'Stefan Mark', 'Kevin James']
-
-database.username = 'admin'
-database.password = 'admin'
-database.port = 3636
-database.url = 'host'
