@@ -6,6 +6,7 @@ import com.pixelatedslice.easyconfig.api.builder.BuilderStep;
 import com.pixelatedslice.easyconfig.api.config.node.GenericNodeBuilder;
 import com.pixelatedslice.easyconfig.api.config.node.Node;
 import com.pixelatedslice.easyconfig.api.config.node.NodeType;
+import com.pixelatedslice.easyconfig.api.config.node.ReturnedNode;
 import com.pixelatedslice.easyconfig.api.config.node.container.ContainerNode;
 import com.pixelatedslice.easyconfig.api.config.node.env.EnvNode;
 import com.pixelatedslice.easyconfig.api.config.node.value.ValueNode;
@@ -13,6 +14,7 @@ import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
 import java.util.function.Consumer;
+import java.util.stream.Stream;
 
 public interface CollectionNode extends Node {
     @Override
@@ -20,9 +22,11 @@ public interface CollectionNode extends Node {
         return NodeType.COLLECTION_NODE;
     }
 
-    ImmutableCollection<Node> nodes();
+    ImmutableCollection<ReturnedNode> nodes();
 
-    ContainerNode atIndex(int index);
+    Stream<ReturnedNode> stream();
+
+    ReturnedNode atIndex(int index);
 
     @FunctionalInterface
     interface Builder extends GenericNodeBuilder<Builder.ParentStep> {
