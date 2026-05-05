@@ -1,5 +1,7 @@
+import com.pixelatedslice.easyconfig.api.serialization.BuiltInSerializer;
+
 open module com.pixelatedslice.easyconfig.impl {
-    uses com.pixelatedslice.easyconfig.api.serialization.builtin.BuiltInSerializer;
+    uses BuiltInSerializer;
     requires com.google.common;
     requires org.jspecify;
     requires com.pixelatedslice.easyconfig.api;

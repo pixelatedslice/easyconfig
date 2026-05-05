@@ -29,14 +29,9 @@ public class NodeException extends RuntimeException {
         Objects.requireNonNull(expected);
         Objects.requireNonNull(received);
 
-        var expectedMessage = expected.toString();
-        if (expected.isValueBased()) {
-            expectedMessage = String.join(" / ", NodeType.valueNodeBased());
-        }
-
         return new NodeException(
                 "Type mismatch for node '%s': Expected %s but encountered %s.",
-                key, expectedMessage, received
+                key, expected.toString(), received
         );
     }
 

@@ -1,7 +1,7 @@
 package com.pixelatedslice.easyconfig.api.format;
 
-import com.pixelatedslice.easyconfig.api.serialization.Serializer;
 import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -9,9 +9,10 @@ import java.util.Collection;
 import java.util.UUID;
 
 public interface FormatWriter {
+
     void writeNull();
 
-    void writeString(String value);
+    void writeString(@NonNull String value);
 
     void writeBoolean(boolean value);
 
@@ -25,43 +26,59 @@ public interface FormatWriter {
 
     void writeFloat(float value);
 
+    void writeByte(byte value);
+
     void writeBigInteger(@NonNull BigInteger value);
 
     void writeBigDecimal(@NonNull BigDecimal value);
 
     void writeUUID(@NonNull UUID value);
 
-    void writeBooleanArray(@NonNull Boolean @NonNull [] array);
+    void writeObject(@Nullable Object object);
+
+    default void writeBooleanArray(@NonNull Boolean @NonNull [] array) {
+        this.writeObjectArray(array);
+    }
 
     void writeBooleanArray(boolean @NonNull [] array);
 
-    void writeShortArray(@NonNull Short @NonNull [] array);
+    default void writeShortArray(@NonNull Short @NonNull [] array) {
+        this.writeObjectArray(array);
+    }
 
     void writeShortArray(short @NonNull [] array);
 
-    void writeIntArray(@NonNull Integer @NonNull [] array);
+    default void writeIntArray(@NonNull Integer @NonNull [] array) {
+        this.writeObjectArray(array);
+    }
 
     void writeIntArray(int @NonNull [] array);
 
-    void writeLongArray(@NonNull Long @NonNull [] array);
+    default void writeLongArray(@NonNull Long @NonNull [] array) {
+        this.writeObjectArray(array);
+    }
 
     void writeLongArray(long @NonNull [] array);
 
-    void writeDoubleArray(@NonNull Double @NonNull [] array);
+    default void writeDoubleArray(@NonNull Double @NonNull [] array) {
+        this.writeObjectArray(array);
+    }
 
     void writeDoubleArray(double @NonNull [] array);
 
-    void writeFloatArray(@NonNull Float @NonNull [] array);
+    default void writeFloatArray(@NonNull Float @NonNull [] array) {
+        this.writeObjectArray(array);
+    }
 
     void writeFloatArray(float @NonNull [] array);
 
-    void writeByteArray(@NonNull Byte @NonNull [] array);
+    default void writeByteArray(@NonNull Byte @NonNull [] array) {
+        this.writeObjectArray(array);
+    }
 
-    void writeByteArray(byte @NonNull [] array);
-
-    void writeObjectArray(@NonNull Object @NonNull [] array);
+    void writeBinary(byte @NonNull [] array);
 
     <T> void writeCollection(@NonNull Collection<T> collection);
 
-    <T> void writeSerializable(@NonNull T value, @NonNull Serializer<@NonNull T> serializer);
+    void writeObjectArray(@NonNull Object @NonNull [] array);
 }

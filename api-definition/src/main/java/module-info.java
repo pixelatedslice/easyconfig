@@ -22,10 +22,14 @@ open module com.pixelatedslice.easyconfig.api {
     exports com.pixelatedslice.easyconfig.api.exception;
     exports com.pixelatedslice.easyconfig.api.format;
     exports com.pixelatedslice.easyconfig.api.serialization;
+    exports com.pixelatedslice.easyconfig.api.serialization.format;
+    exports com.pixelatedslice.easyconfig.api.serialization.node;
     exports com.pixelatedslice.easyconfig.api.utils.typetoken;
     exports com.pixelatedslice.easyconfig.api.utils.primitive;
     exports com.pixelatedslice.easyconfig.api.validator;
 
-    exports com.pixelatedslice.easyconfig.api.serialization.builtin
+    exports com.pixelatedslice.easyconfig.api.serialization.node.builtin
+            to com.pixelatedslice.easyconfig.impl.serialization, com.pixelatedslice.easyconfig.impl;
+    exports com.pixelatedslice.easyconfig.api.serialization.format.builtin
             to com.pixelatedslice.easyconfig.impl.serialization, com.pixelatedslice.easyconfig.impl;
 }
