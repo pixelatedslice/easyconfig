@@ -1,7 +1,6 @@
 package com.pixelatedslice.easyconfig.api.utils.typetoken;
 
 import com.google.common.reflect.TypeToken;
-import com.pixelatedslice.easyconfig.api.old.utils.primitive.TypeUtils;
 import org.jspecify.annotations.NonNull;
 
 import java.lang.reflect.Array;
@@ -38,51 +37,7 @@ final class TypeTokenTypeComparer {
     }
 
     private static boolean iterable(@NonNull Object container, @NonNull TypeToken<?> typeToken) {
-        Objects.requireNonNull(container);
-        Objects.requireNonNull(typeToken);
-
-        var generic = TypeTokenUtils.generics(typeToken).get(0);
-        var genericClass = TypeUtils.primitiveToWrapper(generic.getRawType());
-
-        if (container instanceof Iterable<?> iterable) {
-            if ((container instanceof Collection<?> collection) && collection.isEmpty()) {
-                return true;
-            }
-
-            for (var item : iterable) {
-                if (item == null) {
-                    return false;
-                }
-
-                if (!genericClass.isInstance(item) || !hasCorrectType(item, generic)) {
-                    return false;
-                }
-            }
-
-            return true;
-        }
-
-        if (container.getClass().isArray()) {
-            var length = Array.getLength(container);
-            if (length == 0) {
-                return true;
-            }
-
-            for (var i = 0; i < length; i++) {
-                var item = Array.get(container, i);
-                if (item == null) {
-                    return false;
-                }
-
-                if (!genericClass.isInstance(item) || !hasCorrectType(item, generic)) {
-                    return false;
-                }
-            }
-
-            return true;
-        }
-
-        return false;
+        throw  new RuntimeException();
     }
 
     private static boolean map(@NonNull Map<?, ?> map, @NonNull TypeToken<?> typeToken) {
