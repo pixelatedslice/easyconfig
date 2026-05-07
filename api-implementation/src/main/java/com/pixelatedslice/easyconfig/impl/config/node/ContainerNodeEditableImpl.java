@@ -1,15 +1,11 @@
 package com.pixelatedslice.easyconfig.impl.config.node;
 
 import com.pixelatedslice.easyconfig.api.config.node.Node;
-import com.pixelatedslice.easyconfig.api.config.node.NodeType;
-import com.pixelatedslice.easyconfig.api.config.node.container.ContainerNode;
 import com.pixelatedslice.easyconfig.api.config.node.container.EditableContainerNode;
-import com.pixelatedslice.easyconfig.api.config.node.value.ValueNode;
 import com.pixelatedslice.easyconfig.impl.utils.DistinctByGatherer;
 import org.jspecify.annotations.NonNull;
 
 import java.util.Collection;
-import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.LinkedTransferQueue;

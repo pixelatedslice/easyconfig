@@ -2,14 +2,16 @@ package com.pixelatedslice.easyconfig.impl.utils;
 
 import org.jspecify.annotations.NonNull;
 
+import java.util.Collection;
 import java.util.Objects;
-import java.util.concurrent.LinkedTransferQueue;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.function.BiConsumer;
 import java.util.function.BinaryOperator;
 import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.Gatherer;
 
-public class DistinctByGatherer<V, K> implements Gatherer<V, LinkedTransferQueue<V>, V> {
+public class DistinctByGatherer<V, K> implements Gatherer<V, LinkedBlockingQueue<V>, V> {
 
     private final Function<V, K> by;
 
@@ -18,29 +20,38 @@ public class DistinctByGatherer<V, K> implements Gatherer<V, LinkedTransferQueue
     }
 
     @Override
-    public Supplier<LinkedTransferQueue<V>> initializer() {
-        return LinkedTransferQueue::new;
+    public Supplier<LinkedBlockingQueue<V>> initializer() {
+        return LinkedBlockingQueue::new;
     }
 
     @Override
-    public Integrator<LinkedTransferQueue<V>, V, V> integrator() {
+    public Integrator<LinkedBlockingQueue<V>, V, V> integrator() {
         return (vs, v, downstream) -> {
-            var incomingBy = by.apply(v);
-            var containsAny = vs.stream().map(by).anyMatch(value -> value.equals(incomingBy));
-            if (!containsAny) {
+            if (check(vs, v)) {
                 vs.add(v);
-                downstream.push(v);
             }
             return true;
         };
     }
 
+    private boolean check(Collection<V> compare, V checking) {
+        var incomingBy = by.apply(checking);
+        return compare.stream().map(by).noneMatch(value -> value.equals(incomingBy));
+    }
+
     @Override
-    public BinaryOperator<LinkedTransferQueue<V>> combiner() {
+    public BinaryOperator<LinkedBlockingQueue<V>> combiner() {
         return (vs, vs2) -> {
-            vs.addAll(vs2);
-            //MAY DUPE -> NEED TO TEST
+            var vs1Filter = vs2.stream().filter(value -> check(vs, value)).toList();
+            vs.addAll(vs1Filter);
             return vs;
+        };
+    }
+
+    @Override
+    public BiConsumer<LinkedBlockingQueue<V>, Downstream<? super V>> finisher() {
+        return (vs, downstream) -> {
+            vs.forEach(downstream::push);
         };
     }
 }

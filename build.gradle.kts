@@ -1,9 +1,11 @@
 plugins {
     `java-library`
+    jacoco
     id("com.vanniktech.maven.publish") version "0.36.0" apply false
 }
 
 subprojects {
+    apply(plugin = "jacoco")
     if (name == "api-bom") {
         pluginManager.apply("java-platform")
     } else {
@@ -66,6 +68,7 @@ fun Project.applyDeps() {
 
     tasks.test {
         useJUnitPlatform()
+        finalizedBy(tasks.jacocoTestReport)
     }
 
     java {

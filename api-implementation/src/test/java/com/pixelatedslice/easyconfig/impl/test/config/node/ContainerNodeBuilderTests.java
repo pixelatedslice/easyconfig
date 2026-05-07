@@ -48,4 +48,24 @@ public class ContainerNodeBuilderTests {
         Assertions.assertTrue(opNode.isPresent());
         Assertions.assertEquals(secondKey, opNode.get().key());
     }
+
+    @Test
+    public void NodeBuilder_should_append_child_with_provided_key() {
+        //ARRANGE
+        var key = "My first key";
+        var secondKey = "My second key";
+        var thirdKey = "My third key";
+
+        //ACT
+        var result = builder().key(key).append(secondKey).append(thirdKey).complete().complete().build();
+
+        //ASSERT
+        Assertions.assertEquals(key, result.key());
+        var opNode = result.containerNode(secondKey);
+        Assertions.assertTrue(opNode.isPresent());
+        Assertions.assertEquals(secondKey, opNode.get().key());
+        var opSecondNode = opNode.get().containerNode(thirdKey);
+        Assertions.assertTrue(opSecondNode.isPresent());
+        Assertions.assertEquals(thirdKey, opSecondNode.get().key());
+    }
 }

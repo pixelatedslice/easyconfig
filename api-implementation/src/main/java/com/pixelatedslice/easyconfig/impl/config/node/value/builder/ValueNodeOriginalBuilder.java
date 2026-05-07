@@ -2,7 +2,6 @@ package com.pixelatedslice.easyconfig.impl.config.node.value.builder;
 
 import com.google.common.reflect.TypeToken;
 import com.pixelatedslice.easyconfig.api.config.node.NodeBuilder;
-import com.pixelatedslice.easyconfig.api.config.node.value.ValueNode;
 import com.pixelatedslice.easyconfig.impl.config.node.value.ValueNodeImpl;
 import org.jspecify.annotations.NonNull;
 

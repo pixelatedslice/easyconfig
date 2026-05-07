@@ -5,9 +5,4 @@ open module com.pixelatedslice.easyconfig.impl {
     requires com.pixelatedslice.easyconfig.api;
     requires com.google.auto.service;
     requires com.google.errorprone.annotations;
-
-    exports com.pixelatedslice.easyconfig.impl.serialization;
-
-    provides com.pixelatedslice.easyconfig.api.serialization.SerializerRegistry
-            with com.pixelatedslice.easyconfig.impl.serialization.SerializerRegistryImpl;
 }
