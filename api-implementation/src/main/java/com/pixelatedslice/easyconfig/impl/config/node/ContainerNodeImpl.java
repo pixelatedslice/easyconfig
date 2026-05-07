@@ -2,22 +2,32 @@ package com.pixelatedslice.easyconfig.impl.config.node;
 
 import com.google.common.collect.ImmutableList;
 import com.pixelatedslice.easyconfig.api.config.node.Node;
+import com.pixelatedslice.easyconfig.api.config.node.NodeBuilder;
+import com.pixelatedslice.easyconfig.api.config.node.ReturnedNode;
 import com.pixelatedslice.easyconfig.api.config.node.container.ContainerNode;
 import com.pixelatedslice.easyconfig.api.config.node.container.EditableContainerNode;
-import com.pixelatedslice.easyconfig.api.config.node.container.ReturnedNode;
+import com.pixelatedslice.easyconfig.impl.config.node.container.builder.ContainerNodeOriginalBuilder;
 import org.jspecify.annotations.NonNull;
-import org.jspecify.annotations.Nullable;
 
 import java.util.Collection;
-import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.LinkedBlockingQueue;
 
 public class ContainerNodeImpl extends AbstractNode implements ContainerNode {
 
     private final Collection<Node> immediateChildren = new LinkedBlockingQueue<>();
 
-    public ContainerNodeImpl(@NonNull String key, @Nullable ContainerNode parent) {
-        super(key, parent);
+    public ContainerNodeImpl(@NonNull InternalNodeBuilder<?> builder) {
+        super(builder);
+    }
+
+    @Override
+    protected void internalAppendChild(@NonNull AbstractNode node) {
+        this.immediateChildren.add(node);
+    }
+
+    @Override
+    public NodeBuilder.ContainerFinalStep.@NonNull Original toBuilder() {
+        return new ContainerNodeOriginalBuilder().config(this.config()).parent(this.parent).key(this.key());
     }
 
     @Override
@@ -41,6 +51,6 @@ public class ContainerNodeImpl extends AbstractNode implements ContainerNode {
 
     @Override
     public EditableContainerNode editable() {
-        return null;
+        return new ContainerNodeEditableImpl(this);
     }
 }

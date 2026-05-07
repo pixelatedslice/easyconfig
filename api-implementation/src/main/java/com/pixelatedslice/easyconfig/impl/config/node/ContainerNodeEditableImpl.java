@@ -26,10 +26,9 @@ public class ContainerNodeEditableImpl implements EditableContainerNode {
         this.target = Objects.requireNonNull(target);
     }
 
-
     @Override
-    public @NonNull EditableContainerNode addNodes(@NonNull Node @NonNull ... nodes) {
-        this.addingNodes.addAll(List.of(nodes));
+    public @NonNull EditableContainerNode addNodes(@NonNull Collection<? extends @NonNull Node> nodes) {
+        this.addingNodes.addAll(nodes);
         return this;
     }
 
@@ -45,6 +44,11 @@ public class ContainerNodeEditableImpl implements EditableContainerNode {
     }
 
     @Override
+    public @NonNull EditableContainerNode removeNodes(@NonNull Collection<? extends @NonNull Node> nodes) {
+        return removeNodes(nodes.stream().map(Node::key), t -> t);
+    }
+
+    @Override
     public @NonNull EditableContainerNode removeNodes(@NonNull String @NonNull ... keys) {
         return removeNodes(Stream.of(keys), t -> t);
     }
@@ -55,68 +59,11 @@ public class ContainerNodeEditableImpl implements EditableContainerNode {
         return this;
     }
 
-    @Override
-    @Deprecated
-    public @NonNull EditableContainerNode addValueNodes(@NonNull ValueNode<?> @NonNull ... nodes) {
-        return null;
-    }
-
-    @Override
-    @Deprecated
-    public @NonNull EditableContainerNode setValueNodes(@NonNull Collection<? extends @NonNull ValueNode<?>> nodes) {
-        return null;
-    }
-
-    @Override
-    public @NonNull EditableContainerNode removeValueNodes(@NonNull ValueNode<?> @NonNull ... nodes) {
-        return removeNodes(Stream.of(nodes).map(Node::key), stream -> stream.filter(n -> n.nodeType() == NodeType.VALUE_NODE));
-    }
-
-    @Override
-    public @NonNull EditableContainerNode removeValueNodes(@NonNull String @NonNull ... keys) {
-        return removeNodes(Stream.of(keys), stream -> stream.filter(n -> n.nodeType() == NodeType.VALUE_NODE));
-    }
-
-    @Override
-    public @NonNull EditableContainerNode clearValueNodes() {
-        var nodes = this.removingNode.stream().filter(n -> n.nodeType() == NodeType.VALUE_NODE).toList();
-        this.removingNode.addAll(nodes);
-        return this;
-    }
-
-    @Override
-    @Deprecated
-    public @NonNull EditableContainerNode addContainerNodes(@NonNull ContainerNode @NonNull ... nodes) {
-        return null;
-    }
-
-    @Override
-    @Deprecated
-    public @NonNull EditableContainerNode setContainerNodes(@NonNull Collection<? extends @NonNull ContainerNode> nodes) {
-        return null;
-    }
-
-    @Override
-    public @NonNull EditableContainerNode removeContainerNodes(@NonNull ContainerNode @NonNull ... nodes) {
-        return removeNodes(Stream.of(nodes).map(Node::key), stream -> stream.filter(n -> n.nodeType() == NodeType.CONTAINER_NODE));
-    }
-
-    @Override
-    public @NonNull EditableContainerNode removeContainerNodes(@NonNull String @NonNull ... keys) {
-        return removeNodes(Stream.of(keys), stream -> stream.filter(n -> n.nodeType() == NodeType.CONTAINER_NODE));
-    }
-
     private @NonNull EditableContainerNode removeNodes(Stream<String> keys, Function<Stream<Node>, Stream<Node>> function) {
         var targetChildren = this.target.children().stream().toList();
         var removingFilter = keys.map(key -> targetChildren.stream().filter(n -> n.key().equals(key)).findFirst()).filter(Optional::isPresent).map(Optional::orElseThrow);
         function.apply(removingFilter);
         this.removingNode.addAll(removingFilter.toList());
-        return this;
-    }
-
-    @Override
-    public @NonNull EditableContainerNode clearContainerNodes() {
-        this.removingNode.addAll(this.target.children().stream().filter(n -> n.nodeType() == NodeType.CONTAINER_NODE).toList());
         return this;
     }
 
