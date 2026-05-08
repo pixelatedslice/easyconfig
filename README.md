@@ -51,7 +51,7 @@ project, [see Maven Central](https://central.sonatype.com/namespace/com.pixelate
 
 ## Config File
 
-[Open File](./api-definition/src/main/java/com/pixelatedslice/easyconfig/api/config/file/ConfigFile.java) <br />
+[Open File](./api-definition/src/main/java/com/pixelatedslice/easyconfig/api/config/config/ConfigFile.java) <br />
 [Open Implementation File](./api-implementation/src/main/java/com/pixelatedslice/easyconfig/impl/config/file/ConfigFileImpl.java)
 
 ### Usage Examples
@@ -59,7 +59,7 @@ project, [see Maven Central](https://central.sonatype.com/namespace/com.pixelate
 <details>
 <summary>Creating a Config File</summary>
 
-[Also see ConfigFileBuilder.java](./api-definition/src/main/java/com/pixelatedslice/easyconfig/api/config/file/ConfigFileBuilder.java) <br />
+[Also see ConfigFileBuilder.java](./api-definition/src/main/java/com/pixelatedslice/easyconfig/api/config/config/ConfigFileBuilder.java) <br />
 [Also see ConfigFileBuilderImpl.java](./api-implementation/src/main/java/com/pixelatedslice/easyconfig/impl/config/file/ConfigFileBuilderImpl.java) <br />
 [Also see ConfigSectionBuilderImpl.java](./api-implementation/src/main/java/com/pixelatedslice/easyconfig/impl/config/section/ConfigSectionBuilderImpl.java) <br />
 [Also see ConfigNodeBuilderImpl.java](./api-implementation/src/main/java/com/pixelatedslice/easyconfig/impl/config/node/ConfigNodeBuilderImpl.java)

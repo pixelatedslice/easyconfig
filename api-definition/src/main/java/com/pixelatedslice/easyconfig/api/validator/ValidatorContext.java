@@ -6,5 +6,5 @@ import org.jspecify.annotations.Nullable;
 public interface ValidatorContext {
     void error(@NonNull String message, @Nullable Object @NonNull ... variables);
 
-    void throwIfErrors();
+    void throwIfErrorsExist();
 }
