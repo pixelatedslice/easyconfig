@@ -11,9 +11,13 @@ import java.util.ServiceLoader;
 import java.util.stream.Stream;
 
 public interface CollectionNode extends Node {
+
     static @NonNull CollectionNodeBuilder builder() {
         return ServiceLoader.load(CollectionNodeBuilder.class).findFirst().orElseThrow();
     }
+
+    @Override
+    @NonNull CollectionNodeBuilder toBuilder();
 
     @Override
     default @NonNull NodeType nodeType() {

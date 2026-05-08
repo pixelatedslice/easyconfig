@@ -14,7 +14,6 @@ open module com.pixelatedslice.easyconfig.api {
     requires org.jspecify;
 
     exports com.pixelatedslice.easyconfig.api.builder;
-    exports com.pixelatedslice.easyconfig.api.config.config;
     exports com.pixelatedslice.easyconfig.api.config.node;
     exports com.pixelatedslice.easyconfig.api.config.node.collection;
     exports com.pixelatedslice.easyconfig.api.config.node.collection.builder;
@@ -39,4 +38,5 @@ open module com.pixelatedslice.easyconfig.api {
     exports com.pixelatedslice.easyconfig.api.serialization.format.builtin
             to com.pixelatedslice.easyconfig.impl.serialization, com.pixelatedslice.easyconfig.impl;
     exports com.pixelatedslice.easyconfig.api.config.node.builder;
+    exports com.pixelatedslice.easyconfig.api.config;
 }

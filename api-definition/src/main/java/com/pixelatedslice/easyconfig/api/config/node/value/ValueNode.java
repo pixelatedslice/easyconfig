@@ -18,6 +18,9 @@ public interface ValueNode<T> extends Node, Editable<EditableValueNode<T>> {
         return (ValueNodeBuilder<T>) ServiceLoader.load(ValueNodeBuilder.class).findFirst().orElseThrow();
     }
 
+    @Override
+    @NonNull ValueNodeBuilder<T> toBuilder();
+
     default @NonNull NodeType nodeType() {
         return NodeType.VALUE_NODE;
     }

@@ -13,6 +13,10 @@ public interface EnvNode<T> extends ValueNode<T> {
         return (EnvNodeBuilder<T>) ServiceLoader.load(EnvNodeBuilder.class).findFirst().orElseThrow();
     }
 
+    // TODO: Make EnvNodeBuilder extend ValueNodeBuilder somehow.
+    //    @Override
+    //    @NonNull EnvNodeBuilder<T> toBuilder();
+
     default @NonNull NodeType nodeType() {
         return NodeType.ENV_NODE;
     }

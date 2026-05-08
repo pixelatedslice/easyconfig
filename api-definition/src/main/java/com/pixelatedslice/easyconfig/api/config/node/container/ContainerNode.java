@@ -23,6 +23,9 @@ public interface ContainerNode extends Node, Editable<EditableContainerNode> {
         return ServiceLoader.load(ContainerNodeBuilder.class).findFirst().orElseThrow();
     }
 
+    @Override
+    @NonNull ContainerNodeBuilder toBuilder();
+
     default @NonNull ContainerNodeBuilderChildrenStep childContainerBuilder(@NonNull String key) {
         return builder().key(key).parent(this);
     }

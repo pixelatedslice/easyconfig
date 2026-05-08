@@ -1,4 +1,4 @@
-package com.pixelatedslice.easyconfig.api.config.config;
+package com.pixelatedslice.easyconfig.api.config;
 
 import com.pixelatedslice.easyconfig.api.builder.BuilderStep;
 import com.pixelatedslice.easyconfig.api.config.node.container.ContainerNode;

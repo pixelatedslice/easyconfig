@@ -1,5 +1,6 @@
 package com.pixelatedslice.easyconfig.api.config.node;
 
+import com.pixelatedslice.easyconfig.api.config.node.builder.GenericNodeBuilder;
 import com.pixelatedslice.easyconfig.api.config.node.container.ContainerNode;
 import org.jspecify.annotations.NonNull;
 
@@ -7,6 +8,8 @@ import java.util.ArrayList;
 import java.util.Optional;
 
 public interface Node {
+    @NonNull GenericNodeBuilder<?> toBuilder();
+
     default @NonNull NodeType nodeType() {
         return NodeType.PLAIN_NODE;
     }
