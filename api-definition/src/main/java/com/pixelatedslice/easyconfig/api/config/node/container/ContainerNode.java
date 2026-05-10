@@ -27,9 +27,7 @@ public interface ContainerNode extends Node, Editable<EditableContainerNode> {
 
     ImmutableList<Node> children();
 
-    default boolean isRootNode() {
-        return false;
-    }
+    boolean isRootNode();
 
     @NonNull ReturnedNode node(@NonNull String @NonNull ... path);
 
@@ -87,23 +85,5 @@ public interface ContainerNode extends Node, Editable<EditableContainerNode> {
         Objects.requireNonNull(path);
 
         return this.node(path).env(typeToken);
-    }
-
-    interface Root extends ContainerNode {
-        @Override
-        default @NonNull String key() {
-            return "root";
-        }
-
-        @Override
-        @NonNull
-        default String[] fullPath() {
-            return new String[]{"root"};
-        }
-
-        @Override
-        default boolean isRootNode() {
-            return true;
-        }
     }
 }

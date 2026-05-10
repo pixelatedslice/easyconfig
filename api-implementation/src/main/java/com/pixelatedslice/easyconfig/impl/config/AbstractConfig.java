@@ -9,10 +9,10 @@ import java.util.Objects;
 
 class AbstractConfig implements Config {
 
-    private @NonNull Format format;
-    private ContainerNode.@NonNull Root root;
+    private final @NonNull Format format;
+    private @NonNull ContainerNode root;
 
-    AbstractConfig(@NonNull Format format){
+    AbstractConfig(@NonNull Format format) {
         this.format = Objects.requireNonNull(format);
 
     }
@@ -23,7 +23,7 @@ class AbstractConfig implements Config {
     }
 
     @Override
-    public ContainerNode.@NonNull Root root() {
+    public @NonNull ContainerNode root() {
         return this.root;
     }
 }

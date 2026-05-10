@@ -36,7 +36,6 @@ subprojects {
                 return@doLast;
             }
             Files.copy(from.toPath(), to.toPath(), StandardCopyOption.REPLACE_EXISTING)
-            System.out.println("Copied " + from.absolutePath + " to " + to.absolutePath)
         }
     }
 
@@ -78,6 +77,7 @@ fun Project.applyDeps() {
     dependencies {
         compileOnly("com.google.auto.service:auto-service-annotations:1.1.1")
         annotationProcessor("com.google.auto.service:auto-service:1.1.1")
+        testImplementation("org.mockito:mockito-core:5.23.0")
         testImplementation(platform("org.junit:junit-bom:5.10.0"))
         testImplementation("org.junit.jupiter:junit-jupiter")
         testRuntimeOnly("org.junit.platform:junit-platform-launcher")

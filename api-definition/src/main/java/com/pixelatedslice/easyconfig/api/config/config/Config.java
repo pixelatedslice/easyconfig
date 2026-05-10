@@ -8,7 +8,7 @@ import org.jspecify.annotations.NonNull;
 public interface Config {
     @NonNull Format formatInstance();
 
-    ContainerNode.@NonNull Root root();
+    @NonNull ContainerNode root();
 
     @FunctionalInterface
     interface Builder<Next extends BuilderStep> {

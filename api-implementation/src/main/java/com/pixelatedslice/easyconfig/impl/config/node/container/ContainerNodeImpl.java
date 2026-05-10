@@ -23,6 +23,11 @@ public class ContainerNodeImpl extends AbstractNode implements ContainerNode {
     }
 
     @Override
+    public boolean isRootNode() {
+        return this.parent == null;
+    }
+
+    @Override
     protected synchronized void internalAppendChild(@NonNull AbstractNode node) {
         this.immediateChildren.add(node);
     }

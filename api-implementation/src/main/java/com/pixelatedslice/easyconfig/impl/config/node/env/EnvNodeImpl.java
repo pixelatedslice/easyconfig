@@ -33,8 +33,10 @@ public class EnvNodeImpl<T> extends AbstractNode implements EnvNode<T> {
     @Override
     public Optional<T> value() {
         var envValue = System.getenv(this.envKey);
-
-        return Optional.empty();
+        if (envValue == null) {
+            return Optional.empty();
+        }
+        return Optional.ofNullable(this.adapter.apply(envValue));
     }
 
     @Override
@@ -54,6 +56,6 @@ public class EnvNodeImpl<T> extends AbstractNode implements EnvNode<T> {
 
     @Override
     public @NonNull OriginalEnvNodeBuilder<T> toBuilder() {
-        return new OriginalEnvNodeBuilder<>(this.key(), this.typeToken(), this.envKey()).config(this.attached).parent(this.parent);
+        return new OriginalEnvNodeBuilder<>(this.key(), this.typeToken(), this.envKey()).config(this.attached).parent(this.parent).adapter(this.adapter);
     }
 }
