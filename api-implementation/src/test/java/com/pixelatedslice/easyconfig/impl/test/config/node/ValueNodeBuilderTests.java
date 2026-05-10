@@ -55,6 +55,8 @@ public class ValueNodeBuilderTests {
         //ARRANGE
         var key = "My Key";
 
+        System.getenv("");
+
         //ACT - ASSERT
         //noinspection DataFlowIssue
         Assertions.assertThrows(NullPointerException.class, () ->
@@ -72,7 +74,7 @@ public class ValueNodeBuilderTests {
         var type = TypeToken.of(String.class);
 
         //ACT
-        NodeBuilder.ValueFinalStep.Child<String, NodeBuilder.ContainerFinalStep.Original> builder = builder().key(key).append(secondKey).of(String.class);
+        var builder = builder().key(key).append(secondKey).of(String.class);
         NodeBuilder.ContainerFinalStep.Original originalBuilder = builder.complete();
         ContainerNode result = originalBuilder.build();
 
@@ -82,7 +84,7 @@ public class ValueNodeBuilderTests {
         Optional<@NonNull ValueNode<String>> opNode = result.valueNode(String.class, secondKey);
         Assertions.assertTrue(opNode.isPresent());
         Assertions.assertEquals(secondKey, opNode.get().key());
-        Assertions.assertInstanceOf(ValueNode.class,opNode.get());
+        Assertions.assertInstanceOf(ValueNode.class, opNode.get());
         Assertions.assertEquals(type, opNode.get().typeToken());
     }
 }

@@ -72,7 +72,7 @@ public class ReturnKnownNodeImpl implements ReturnedNode {
     }
 
     @Override
-    public @NonNull Optional<@NonNull ValueNode<?>> unsafeEnv() {
+    public @NonNull Optional<@NonNull EnvNode<?>> unsafeEnv() {
         return node(EnvNode.class).map(node -> (EnvNode<?>)node);
     }
 }

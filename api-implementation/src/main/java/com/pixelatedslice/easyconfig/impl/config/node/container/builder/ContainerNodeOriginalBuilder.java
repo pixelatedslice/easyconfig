@@ -2,6 +2,7 @@ package com.pixelatedslice.easyconfig.impl.config.node.container.builder;
 
 import com.google.common.reflect.TypeToken;
 import com.pixelatedslice.easyconfig.api.config.node.NodeBuilder;
+import com.pixelatedslice.easyconfig.impl.config.node.collection.builder.CollectionNodeOriginalBuilder;
 import com.pixelatedslice.easyconfig.impl.config.node.container.ContainerNodeImpl;
 import com.pixelatedslice.easyconfig.impl.config.node.value.builder.ValueNodeOriginalBuilder;
 import org.jspecify.annotations.NonNull;
@@ -17,19 +18,24 @@ public class ContainerNodeOriginalBuilder extends AbstractContainerNodeBuilder<C
     }
 
     @Override
+    public @NonNull ContainerNodeOriginalBuilder key(@NonNull String key) {
+        this.key = key;
+        return this;
+    }
+
+    @Override
+    public CollectionStep.@NonNull Original collection() {
+        return new CollectionNodeOriginalBuilder(this);
+    }
+
+    @Override
     public @NonNull Child<Original> append(@NonNull String key) {
         //noinspection RedundantCast,unchecked
         return (Child<Original>) (Object) new ContainerNodeChildBuilder<>(this, key);
     }
 
     @Override
-    public <T> ValueFinalStep.@NonNull Original<T> of(@NonNull TypeToken<T> token) {
-        return new ValueNodeOriginalBuilder<T>(token, Objects.requireNonNull(key)).config(config).parent(parent);
-    }
-
-    @Override
-    public @NonNull Original key(@NonNull String key) {
-        this.key = key;
-        return this;
+    public <T> ValueNodeOriginalBuilder<T> of(@NonNull TypeToken<T> token) {
+        return new ValueNodeOriginalBuilder<>(token, Objects.requireNonNull(key)).config(config).parent(parent);
     }
 }

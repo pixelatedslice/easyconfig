@@ -63,7 +63,7 @@ public class ValueNodeImpl<T> extends AbstractNode implements ValueNode<T> {
     }
 
     @Override
-    public NodeBuilder.ValueFinalStep.@NonNull Original<T> toBuilder() {
+    public @NonNull ValueNodeOriginalBuilder<T> toBuilder() {
         return new ValueNodeOriginalBuilder<>(this.token, this.key())
                 .defaultValue(this.defaultValue)
                 .value(this.value)

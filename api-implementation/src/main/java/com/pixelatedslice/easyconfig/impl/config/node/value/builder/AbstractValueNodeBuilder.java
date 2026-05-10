@@ -15,7 +15,7 @@ import java.util.Collections;
 import java.util.Objects;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-public abstract class AbstractValueNodeBuilder<Self extends AbstractValueNodeBuilder<Self, T>, T> implements NodeBuilder.ValueFinalStep<T>, InternalNodeBuilder<Self> {
+public abstract class AbstractValueNodeBuilder<Self extends AbstractValueNodeBuilder<Self, T>, T> implements NodeBuilder.ValueFinalStep<T>, NodeBuilder.ValueSafeStep<T>, InternalNodeBuilder<Self> {
 
     @NonNull String key;
     @Nullable T defaultValue;

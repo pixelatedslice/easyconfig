@@ -1,3 +1,6 @@
+import java.nio.file.Files
+import java.nio.file.StandardCopyOption
+
 plugins {
     `java-library`
     jacoco
@@ -21,6 +24,20 @@ subprojects {
 
     repositories {
         mavenCentral()
+    }
+
+    tasks.register("mose-jacoco-style") {
+        description = "Gives jacoco a darker theme"
+        doLast {
+            val to = project.file("build/reports/jacoco/test/html/jacoco-resources/report.css")
+            val from = project.rootProject.file("gradleBuild/report.css")
+
+            if (!to.exists()) {
+                return@doLast;
+            }
+            Files.copy(from.toPath(), to.toPath(), StandardCopyOption.REPLACE_EXISTING)
+            System.out.println("Copied " + from.absolutePath + " to " + to.absolutePath)
+        }
     }
 
     configure<com.vanniktech.maven.publish.MavenPublishBaseExtension> {
@@ -69,6 +86,7 @@ fun Project.applyDeps() {
     tasks.test {
         useJUnitPlatform()
         finalizedBy(tasks.jacocoTestReport)
+
     }
 
     java {

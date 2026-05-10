@@ -4,6 +4,7 @@ import com.google.common.reflect.TypeToken;
 import com.pixelatedslice.easyconfig.api.config.node.NodeBuilder;
 import com.pixelatedslice.easyconfig.impl.config.node.AbstractNode;
 import com.pixelatedslice.easyconfig.impl.config.node.InternalNodeBuilder;
+import com.pixelatedslice.easyconfig.impl.config.node.collection.builder.CollectionNodeChildBuilder;
 import com.pixelatedslice.easyconfig.impl.config.node.container.ContainerNodeImpl;
 import com.pixelatedslice.easyconfig.impl.config.node.value.builder.ValueNodeChildBuilder;
 import org.jspecify.annotations.NonNull;
@@ -31,13 +32,18 @@ public class ContainerNodeChildBuilder<Previous extends InternalNodeBuilder<?>> 
     }
 
     @Override
+    public CollectionStep.@NonNull Child<Previous> collection() {
+        return new CollectionNodeChildBuilder<>(this, this.previous);
+    }
+
+    @Override
     public @NonNull Previous complete() {
         this.previous.appendChild(this);
         return this.previous;
     }
 
     @Override
-    public <T> ValueFinalStep.@NonNull Child<T, Previous> of(@NonNull TypeToken<T> token) {
+    public <T> ValueNodeChildBuilder<T, Previous> of(@NonNull TypeToken<T> token) {
         return new ValueNodeChildBuilder<>(token, Objects.requireNonNull(this.key()), this.previous);
     }
 

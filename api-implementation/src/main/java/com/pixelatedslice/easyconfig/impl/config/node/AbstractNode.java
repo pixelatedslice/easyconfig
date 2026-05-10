@@ -42,12 +42,15 @@ public abstract class AbstractNode implements Node {
             return container.children().stream();
         }
         if (node instanceof CollectionNode collection) {
-            return collection.nodes().stream();
+            return collection.nodes().stream().map(t -> t.plainNode().orElseThrow());
         }
         return Stream.empty();
     }
 
     protected abstract void internalAppendChild(@NonNull AbstractNode node);
+
+    @Override
+    public abstract @NonNull InternalNodeBuilder<?> toBuilder();
 
     @Override
     public @NonNull String key() {

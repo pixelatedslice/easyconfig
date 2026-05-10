@@ -4,16 +4,17 @@ import com.google.common.reflect.TypeToken;
 import com.pixelatedslice.easyconfig.api.config.node.NodeBuilder;
 import com.pixelatedslice.easyconfig.impl.config.node.AbstractNode;
 import com.pixelatedslice.easyconfig.impl.config.node.InternalNodeBuilder;
+import com.pixelatedslice.easyconfig.impl.config.node.env.builder.ChildEnvNodeBuilder;
 import com.pixelatedslice.easyconfig.impl.config.node.value.ValueNodeImpl;
 import org.jspecify.annotations.NonNull;
 
-public class ValueNodeChildBuilder<T, Parent extends InternalNodeBuilder<?>> extends AbstractValueNodeBuilder<ValueNodeChildBuilder<T, Parent>, T> implements NodeBuilder.ValueFinalStep.Child<T, Parent> {
+public class ValueNodeChildBuilder<T, Previous extends InternalNodeBuilder<?>> extends AbstractValueNodeBuilder<ValueNodeChildBuilder<T, Previous>, T> implements NodeBuilder.ValueFinalStep.Child<T, Previous>, NodeBuilder.ValueSafeStep.Child<T, Previous> {
 
-    private final Parent parent;
+    private final Previous previous;
 
-    public ValueNodeChildBuilder(@NonNull TypeToken<T> token, @NonNull String key, Parent parent) {
+    public ValueNodeChildBuilder(@NonNull TypeToken<T> token, @NonNull String key, Previous previous) {
         super(token, key);
-        this.parent = parent;
+        this.previous = previous;
     }
 
     @Override
@@ -22,8 +23,13 @@ public class ValueNodeChildBuilder<T, Parent extends InternalNodeBuilder<?>> ext
     }
 
     @Override
-    public @NonNull Parent complete() {
-        this.parent.appendChild(this);
-        return this.parent;
+    public @NonNull Previous complete() {
+        this.previous.appendChild(this);
+        return this.previous;
+    }
+
+    @Override
+    public EnvAdapterStep.Child<T, Previous> env(@NonNull String env) {
+        return new ChildEnvNodeBuilder<>(this, this.previous, env);
     }
 }

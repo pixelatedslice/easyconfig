@@ -53,7 +53,7 @@ public class ContainerNodeImpl extends AbstractNode implements ContainerNode {
     }
 
     @Override
-    public NodeBuilder.ContainerFinalStep.@NonNull Original toBuilder() {
+    public @NonNull ContainerNodeOriginalBuilder  toBuilder() {
         return new ContainerNodeOriginalBuilder().parent(this.parent).config(this.attached).key(this.key());
     }
 }

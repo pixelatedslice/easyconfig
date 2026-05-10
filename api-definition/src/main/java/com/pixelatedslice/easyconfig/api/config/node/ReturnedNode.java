@@ -26,5 +26,5 @@ public interface ReturnedNode {
 
     <T> @NonNull Optional<@NonNull EnvNode<T>> env(@NonNull TypeToken<T> typeToken);
 
-    @NonNull Optional<@NonNull ValueNode<?>> unsafeEnv();
+    @NonNull Optional<@NonNull EnvNode<?>> unsafeEnv();
 }
